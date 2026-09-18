@@ -207,6 +207,64 @@
 | `anim_10_import_batch.py` | 批量导入 FBX 动画到指定骨架（`FbxImportUI.skeleton` 必须显式指定） |
 | `anim_12_import_snap.py` | 同上，但开启 `snap_to_closest_frame_boundary`（30fps 帧边界对齐） |
 | `disable_throttling.py` | 关闭视口后台节流（`t.IdleWhenNotForeground 0`），解决截图冻结假帧。 |
+| `ik_01_import_source.py` | 把净化后的 LOL 源骨架（59 骨 + 46 动画）导入 `/Game/Character/Darius/LOL_Source/` |
+| `ik_03_target_rig.py` / `ik_04_src_rig.py` | 建目标 / 源 IK Rig（含链定义） |
+| `ik_05_retargeter.py` / `ik_06_verify_map.py` / `ik_07_default_ops.py` | 建 IK Retargeter、加 op 栈、自动映射链 |
+| **`ik_11_batch_retarget.py`** | **★ 批量重定向**（`IKRetargetBatchOperation`） |
+
+### 3.5 IK Rig / IK Retargeter 的 Python 自动化（2026-09-18 打通）
+
+**已建成资产**（`/Game/Character/Darius/Retarget/`）：
+
+| 资产 | 内容 |
+| :--- | :--- |
+| `IK_LOL_Source` | 源 IK Rig。骨架 `SK_LOL_Darius`（59 骨）；**9 条链**；retarget root = `Root` |
+| `IK_Darius_Target` | 目标 IK Rig。骨架 `SK_Darius_GodKing`（309 骨）；**29 条链**（`apply_auto_generated_retarget_definition()` 生成）；retarget root = `pelvis` |
+| `RTG_LOL_to_Darius` | IK Retargeter。5 个默认 op；**9/9 链已自动映射** |
+
+**源链定义**（链名必须与目标一模一样，Retargeter 才能配对）：
+
+| 链名 | 源 start → end | 目标 start → end |
+| :--- | :--- | :--- |
+| `Spine` | `Spine1` → `Spine2` | `spine_01` → `spine_03` |
+| `Neck` | `Neck` → `Neck` | `neck_01` → `neck_01` |
+| `Head` | `Head` → `Head` | `head` → `head` |
+| `LeftLeg` / `RightLeg` | `L_Hip` → `L_Foot` | `thigh_l` → `foot_l` |
+| `LeftClavicle` / `RightClavicle` | `L_Clavicle` → `L_Clavicle` | `clavicle_l` → `clavicle_l` |
+| `LeftArm` / `RightArm` | `L_Shoulder` → `L_Hand` | `upperarm_l` → `hand_l` |
+
+⚠️ 注意目标侧 `LeftArm` **从 `upperarm_l` 起**（不含 clavicle）；`Neck`/`Clavicle` 是**单骨链**。
+⚠️ `Spine` 链目标 3 骨、源 2 骨（源骨架脊椎只有 `Spine1/Spine2`）—— 数量不等，待评估影响。
+
+**API 速查（全部实测签名）**
+
+| 步骤 | 调用 |
+| :--- | :--- |
+| 建 IK Rig | `at.create_asset(name, dir, unreal.IKRigDefinition, unreal.IKRigDefinitionFactory())` |
+| 取控制器 | `unreal.IKRigController.get_controller(rig)` |
+| 指定骨架 | `ctrl.set_skeletal_mesh(mesh)` —— 要 **SkeletalMesh**，不是 Skeleton |
+| 自动建链 | `ctrl.apply_auto_generated_retarget_definition()`（Mannequin 命名有效） |
+| 手动建链 | `ctrl.add_retarget_chain(chain_name, start_bone, end_bone, goal_name)` —— **4 参** |
+| 设 root | `ctrl.set_retarget_root(bone_name)` |
+| 建 Retargeter | `at.create_asset(name, dir, unreal.IKRetargeter, unreal.IKRetargetFactory())` |
+| 绑定 IK Rig | `ctrl.set_ik_rig(unreal.RetargetSourceOrTarget.SOURCE, rig)` —— **枚举在前** |
+| 🔴 **加 op 栈** | `ctrl.add_default_ops()` ← **必须先做，否则 `auto_map_chains` 静默不生效** |
+| 自动映射链 | `ctrl.auto_map_chains(unreal.AutoMapChainType.EXACT, True)` |
+| 查映射 | `ctrl.get_source_chain(target_chain_name)` |
+| 批量重定向 | `unreal.IKRetargetBatchOperation.run_batch_retarget(inputs)`，`inputs` 是 `IKRetargetBatchOperationInputs` 结构（字段：`assets_to_retarget` / `ik_retarget_asset` / `target_path` / `search` / `replace` / `prefix` / `suffix` / `overwrite_existing_files` / `include_referenced_assets`） |
+
+**UE 5.8 的架构变化**：IK Retargeter 已改为 **Op Stack**。`add_default_ops()` 会加入
+`Pelvis Motion / FK Chains / Run IK Rig / Root Motion / Remap Curves` 五个 op。
+旧属性 `chain_settings` / `global_settings` / `root_settings` / `chain_map` **全部废弃**
+（读它们只会得到 DeprecationWarning，且 `chain_map` 已不可读）。
+
+**🔴 资产路径格式陷阱（会让编辑器崩溃）**
+`EditorAssetLibrary.list_assets()` 返回的是 **`package.object`** 形式
+（`/Game/X/A.A`），而 `find_asset_data()` / `rename_asset()` 需要**纯 package 路径**
+（`/Game/X/A`）。把带 `.object` 的串拼进路径交给 `rename_asset()` ⇒
+**EXCEPTION_ACCESS_VIOLATION，编辑器整个挂掉**（2026-09-18 实测崩溃一次）。
+⇒ 一律先 `pkg = a.split(".")[0]`。
+⇒ 另外 `rename_asset()` 即使传对路径，**未 save 前效果会回退**（实测返回 True 但列表未变）。
 
 ---
 

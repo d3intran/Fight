@@ -151,6 +151,22 @@
    并误判为路径 ⇒ 脚本 docstring/注释里写自己的文件名就**静默不执行**。
    已改为落盘后传路径、失败回退传内容。
 
+**UE 侧 IK Rig / Retargeter 契约（2026-09-18 打通，`/Game/Character/Darius/Retarget/`）**
+- `IK_LOL_Source`（59 骨 / 9 链 / root=`Root`）· `IK_Darius_Target`（309 骨 / 29 链 / root=`pelvis`）
+  · `RTG_LOL_to_Darius`（5 个默认 op，**9/9 链已映射**）
+- 源链：`Spine: Spine1→Spine2` · `Neck: Neck→Neck` · `Head: Head→Head` ·
+  `Left/RightLeg: L/R_Hip→L/R_Foot` · `Left/RightClavicle: L/R_Clavicle→自身` ·
+  `Left/RightArm: L/R_Shoulder→L/R_Hand`
+- 🔴 **UE 5.8 的 Retargeter 是 Op Stack 架构**：必须先 `ctrl.add_default_ops()`，
+  否则 `auto_map_chains` **静默不生效**（返回 None、映射 0，不报错）。旧属性
+  `chain_settings`/`global_settings`/`root_settings`/`chain_map` 全废弃。
+- API 签名：`add_retarget_chain(name, start, end, goal_name)`（4 参）·
+  `set_ik_rig(source_or_target, rig)`（**枚举在前**）· `auto_map_chains(type, force_remap)`（2 参）·
+  批量用 `IKRetargetBatchOperation.run_batch_retarget(inputs)`。
+- 🔴 **`list_assets()` 返回 `package.object`**，而 `find_asset_data`/`rename_asset` 要**纯 package 路径**。
+  混用会让编辑器 **EXCEPTION_ACCESS_VIOLATION 崩溃**。一律 `pkg = a.split(".")[0]`。
+  且 `rename_asset` **未 save 会回退** ⇒ 不改源资产名，输出名用 batch inputs 的 `search`/`replace`。
+
 **验证器两条硬规矩**：① **跨会话**比对（源与产物各导入一次），同进程自比发现不了导出/导入损失；
 ② 标尺用**固定骨集合 + 只用 `head`**（用「全部骨」会因道具骨 `Gem`(z=836)/`Axe_Handle`(z=−90.8)
 算出 927 的荒谬身高，两侧骨集合不同时还会得出 2.36 倍的假缩放因子）。优先用**缩放不变量**（关节间距）作判据。
