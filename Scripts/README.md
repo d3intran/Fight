@@ -26,7 +26,16 @@
   - **程序化插槽添加 (Sockets)**: 通过 `unreal.StaticMeshSocket` 自动在武器 StaticMesh 上添加刀刃尖端（`Socket_Blade_Tip`）、刀刃中段打击点（`Socket_Blade_Edge`）和握柄底部（`Socket_Pommel`），为后续近战攻击判定（Trace/Hitbox）做好数据准备。
   - 自动绑定材质实例 `MI_Darius_Axe`。
 
-### 3. `ue_remote.py`
+### 3. `extract_godking_assets.py`
+- **功能**: **一键全量解包与转换神王德莱厄斯全套官方资产**（动画、音效、全量中英文语音、特效粒子）。
+- **执行内容**:
+  - 自动扫描本地 LOL 客户端 WAD 包（`Darius.wad.client`、`Darius.zh_CN.wad.client`、`Darius.en_US.wad.client`）。
+  - 提取 46 个 `.anm` 动画并通过 `lol2gltf` 自动转换为标准 `.glb`（包含 46 动作合辑与 Run/Q/W/E/R 独立动画）。
+  - 自动解密并转换 Wwise `.bnk` 音效为 56 个标准无损 `.wav` 音频。
+  - 自动解包并转换 Riot `.wpk` 语音包为 225 个纯正中文语音 `.wav` 及 225 个英文语音 `.wav`。
+  - 产物集中归档至 `E:\UE\Assets\Darius_GodKing_LOL_Original`。
+
+### 4. `ue_remote.py`
 - **功能**: **轻量级虚幻引擎 Python 远程执行网关**。
 - **原理与机制**:
   - 无需安装第三方 HTTP 插件，利用 UE 内置的 `Python Remote Execution` 协议。

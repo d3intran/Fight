@@ -34,3 +34,9 @@ Desktop.ini
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Extraction & Tool Binaries
+Scripts/darius_extracted/
+Scripts/tools/
+*.exe
+*.zip
