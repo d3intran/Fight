@@ -4,9 +4,12 @@
 - **代码规范**：Python 走 `uv`（`uv run --no-project python`），JS/TS 走 `deno`。
 - **Bash 工具 PATH 残缺**：每条命令前加 `export PATH="/usr/bin:/bin:/mingw64/bin:$PATH"`；`/tmp` 在 git-bash 与 python 之间不互通，临时脚本写成项目内文件。
 - **改资产前先备份**到 `Saved/Backup_*/`。
+- **动资产前先 git 提交检查点**（根 `MEMORY.md` §8 有目录契约表）：
+  报告/文档 → `Docs/<主题>/`；截图/日志/中转 FBX/导出 OBJ → `Saved/`（**不进 git**）；
+  管线脚本 → `Scripts/`。**交付物严禁放 `Saved/`**（已二次复发，写报告前先看契约表）。
 - **关卡基线 actor 只有 7 个**：`StaticMeshActor_1` / `DirectionalLight_0` / `RectLight_1` / `SkyLight_1` /
   `ExponentialHeightFog_0` / `PostProcessVolume_1` / `PlayerStart_0`。任何脚本跑完必须清理临时 actor 回到这个基线
-  （用 `Scripts/axe_22_cleanup.py` 的清理模式）。
+  （用 `Scripts/axe_22_cleanup.py` 的清理模式）。临时 UE 资产也别留在 `Content/`（已 gitignore `Content/Temp/`）。
 
 ## UE 自动化（踩坑固化）
 - **编辑器截图**：`HighResShot` 不可靠（静默失败、一次只认最后一条、落地延迟 1~4 分钟）。
