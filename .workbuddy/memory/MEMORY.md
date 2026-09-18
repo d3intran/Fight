@@ -75,9 +75,15 @@
 **源侧契约（LOL skin15 神王，`Animations_GLB/standalone/*.glb`）**
 - 179 骨，但身体形变链仅 ~30；必须**白名单裁剪**才能用（剔 `Lion_*` 四足 / `Throne|Gem|Piece_*` 王座道具 / `*Buffbone*` VFX 挂点）。
 - 纯 FK 形变骨（无 twist / ik / ctrl）。
-- **坑 1**：膝/肘是等长 Upper/Lower 双骨（`L_Hip→L_KneeUpper→L_KneeLower`），三点链几何帧易退化 → 腿部误差最大 63°。
-- **坑 2**：`L_Foot` / `L_Toe` 是 0.014 微骨 → 踝点用 `L_KneeLower.tail`，别用 `L_Foot.head`。
-- 30fps、in-place、单动作极短（run 29 帧）；**没有 walk**。
+- **坑 1（方向勿搞反）**：膝/肘是**几何完全重合的孪生双骨**（head 坐标逐位相同）。实测 run 的 matrix_basis 漂移：
+  `L_KneeUpper` 旋转恒 **0.000°**（只有 8.94 平移），`L_KneeLower` 旋转 **60.9°**（R 侧 103.5°）
+  ⇒ **删 `*Upper`、保 `*Lower`**。反了会丢掉整条腿 60~103° 的膝弯。
+- **坑 2（2026-09-18 实测更正）**：`L_Foot`/`L_Toe` 是 0.014 微骨。
+  **踝关节 = `L_Foot.head`（z=16.93）**、趾 = `L_Toe.head`（z=8.05）；
+  而 `L_KneeLower.tail` 的 z=**56.54**，**不是踝**（差 39.6 单位 ≈半条小腿，旧笔记写反了）。
+  **`bone.tail` 与 `bone.length` 在 glTF 导入后一律不可信**（`L_Hip.tail` 指向 −Y 前方，真实髋→膝是 −Z 下方）
+  ⇒ **关节真值只能取 `head_local`**。
+- 30fps、in-place、46 个动作。实测帧数：run 0~35、run_fast 0~39、attack1 0~73、spell1 0~16、idle1 0~65；**没有 walk**。
 - **俯视补偿的真相（实测，勿信"脊柱后仰"的流行说法）**：
   先锚定 forward = **−Y**（披风在 +Y、斧刃在 −Y）。相对 bind pose 的偏离：
 
@@ -106,6 +112,42 @@
 | 髋宽 | 0.0077 | **−22%** | thigh 加 6°~8° 外展偏移（反解膝间距） |
 | 颈长 | 0.0182 | **+84%** | spine 关缩放；neck 不重定向平移；head 下压偏移 |
 | 臂长/身高 | 0.0099 | +0.1% | 无需处理 |
+
+**M1-① 净化产物（2026-09-18 完成，可直接喂 UE IK Rig）**
+- 文件 `Saved/Retarget/Clean/Darius_SrcClean.fbx`：**59 骨 / 46 动作 / 30fps / 25.26 MB**，bind pose 正确。
+- 报告 `Docs/Retarget/M1-1_Source_Clean_Report.html`；主管线 `Scripts/plan_10_src_clean.py`。
+- 保留链：`Root→Pelvis→{L/R_Hip→KneeLower→Foot→Toe}`、`Root→Spine1→Spine2→{Neck→Head→Jaw}`
+  `→{L/R_Clavicle→Shoulder→Elbow→Hand→5×2 手指}`、`Root→Cape→(C|L|R)_Cape1~5`。
+- **四层验收**：L1 结构 OK ｜ L2 会话内 46×3078 帧×27 关节（旋转偏差 **0.000000°**、位置 0.0135 单位）｜
+  L3 **跨会话端到端**（关节间距相对差 **5.353e-07**、46/46 帧数一致、轨迹偏差 **7.130e-05**）｜
+  **L4 UE 侧消费者验证**（导入产出 **48 资产** = 1 Skeleton + 1 Mesh + **46 AnimSequence**，帧数逐个对应）。
+- 残留：`R_Foot` rest `matrix_local` 偏 2.68e-04（= 世界 0.135mm，G2 阈值的 1/214，已接受）。
+
+**UE 侧契约（本产物导入 UE 后实测）**
+- 骨架 **60 骨**（Blender 读 FBX 是 59）：多出的 1 根是 Blender `armature_nodetype='NULL'`
+  造的 NULL 根节点被 UE 当成骨，在原点、单位变换，**不引入偏移** ⇒ 建 IK Rig 时忽略最外层。
+- action 名带前缀 `SrcCleanskinned_mesh_darius_skin15_*`（= UE destination_name + Blender
+  armature 对象名 + action 名），正式导入时统一重命名。
+- 帧数换算：`sequence_length`(秒) × 30 + 1 = 帧数（attack1 2.4333s → 74 帧）。
+
+**🔴 DCC / 网关侧三条硬坑（已写入 `AGENTS.md` §5）**
+1. **FBX 导出前必须复位 rest pose**：否则 Blender 把**当前 pose** 写成骨架节点变换，
+   产物 bind pose 全错（实测 `R_Hand` 偏 58.5 单位）。修法：`action=None` +
+   逐个 `pb.matrix_basis = Matrix.Identity(4)`。
+   **`blender_51_retarget_v4.py` / `blender_30` / `blender_50` / `blender_10` 四个脚本全部中招**
+   （设了 `action=None` 但循环内又挂回去），M1-② 前须修并重新导出。
+2. **改 `edit_bone.parent` 会触发 `Bone.matrix_local` 重建**，对短骨有数值损失。
+   删骨后要用快照写回 `head/tail/roll`，且**先用两趟循环把全部 `use_connect=False` 再写**
+   （否则设父骨 tail 时会拉走子骨 head）。
+3. **纯骨架 FBX 在 UE 侧产出 0 资产**（不报错）。UE 需要至少一个 SkeletalMesh 作骨架载体 ⇒
+   导出时保留源网格（清空材质槽 + 删失效顶点组），选择集 = armature + 网格。
+4. **`ue_remote.py` 的 `.py` 字样陷阱**（已在网关修复）：传「内容」时 UE 会嗅探 `xxx.py`
+   并误判为路径 ⇒ 脚本 docstring/注释里写自己的文件名就**静默不执行**。
+   已改为落盘后传路径、失败回退传内容。
+
+**验证器两条硬规矩**：① **跨会话**比对（源与产物各导入一次），同进程自比发现不了导出/导入损失；
+② 标尺用**固定骨集合 + 只用 `head`**（用「全部骨」会因道具骨 `Gem`(z=836)/`Axe_Handle`(z=−90.8)
+算出 927 的荒谬身高，两侧骨集合不同时还会得出 2.36 倍的假缩放因子）。优先用**缩放不变量**（关节间距）作判据。
 
 **工具选型**
 - 主力：**UE5 IK Retargeter**（Retarget Pose / Chain Scaling / Stride Warping / Speed Planting）。

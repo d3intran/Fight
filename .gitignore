@@ -48,3 +48,4 @@ Scripts/tools/
 Content/Temp/
 Content/Character/Darius/Blueprints/ABP_NodeTest.uasset
 Content/Character/Darius/Blueprints/ABP_Darius_Test.uasset
+Scripts/_ue_remote_run.py

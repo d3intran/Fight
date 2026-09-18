@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>M1-① 源骨架净化 · 交付报告</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --panel:#ffffff; --ink:#1a1d21; --ink2:#4a5058; --ink3:#7b828c;
+    --line:#e2e5ea; --accent:#1f6feb; --ok:#0f7b3f; --okbg:#e8f6ed;
+    --warn:#8a5a00; --warnbg:#fdf3e0; --bad:#b3261e; --badbg:#fdecea;
+    --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Consolas",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 30px 90px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:.2px}
+  .sub{color:var(--ink3);font-size:13.5px;margin-bottom:30px}
+  h2{font-size:19px;margin:44px 0 14px;padding-bottom:9px;border-bottom:2px solid var(--line)}
+  h3{font-size:15.5px;margin:26px 0 9px;color:var(--ink2)}
+  p{margin:10px 0}
+  code{font-family:var(--mono);font-size:12.8px;background:#eef0f4;
+    padding:1.5px 5px;border-radius:4px;color:#243b53}
+  pre{font-family:var(--mono);font-size:12.5px;background:#f2f4f8;border:1px solid var(--line);
+    border-radius:8px;padding:14px 16px;overflow-x:auto;line-height:1.6;color:#243b53}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.6px;background:var(--panel)}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f2f6;font-weight:600;color:var(--ink2)}
+  td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.6px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:18px 20px;margin:16px 0}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 16px}
+  .kpi .v{font-size:22px;font-weight:650;font-family:var(--mono);letter-spacing:-.5px}
+  .kpi .k{font-size:12px;color:var(--ink3);margin-top:3px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:1.5px 8px;
+    border-radius:20px;font-weight:600}
+  .p-ok{background:var(--okbg);color:var(--ok)}
+  .p-warn{background:var(--warnbg);color:var(--warn)}
+  .p-bad{background:var(--badbg);color:var(--bad)}
+  .note{border-left:3px solid var(--accent);background:#eef4fd;padding:12px 16px;
+    border-radius:0 8px 8px 0;margin:16px 0}
+  .note.alarm{border-left-color:var(--bad);background:var(--badbg)}
+  .note.good{border-left-color:var(--ok);background:var(--okbg)}
+  .note b{color:var(--ink)}
+  ul,ol{margin:10px 0;padding-left:24px}
+  li{margin:5px 0}
+  .tree{font-family:var(--mono);font-size:12.4px;line-height:1.62;white-space:pre;
+    background:#f2f4f8;border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:#243b53}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .cap{color:var(--ink3);font-size:12.5px;margin-top:6px}
+  hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>M1-① 源骨架净化 · 交付报告</h1>
+<div class="sub">
+  管线阶段：<b>M1 垂直切片 · 第 ① 步</b>（定稿计划见 <code>Docs/Retarget/FINAL_Retarget_Plan.html</code>）<br>
+  输入：<code>E:\UE\Assets\Darius_GodKing_LOL_Original\Animations_GLB\darius_skin15_all_anims.glb</code><br>
+  输出：<code>Saved\Retarget\Clean\Darius_SrcClean.fbx</code>（25.26 MB）<br>
+  日期：2026-09-18 ｜ 工具：Blender 5.2.1 LTS（无头）
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">179 → 59</div><div class="k">骨骼（剔 120 根道具/占位骨）</div></div>
+  <div class="kpi"><div class="v">46 / 46</div><div class="k">动画全部保留，帧数逐个一致</div></div>
+  <div class="kpi"><div class="v">5.4e-07</div><div class="k">关节间距最大相对差（往返后）</div></div>
+  <div class="kpi"><div class="v">1.4e-05</div><div class="k">关节位置最大相对偏差 = 0.0135 单位（0.135 mm）</div></div>
+</div>
+
+<div class="note good">
+<b>一句话结论：</b>源骨架已净化为 IK Retargeter 可直接使用的 59 骨版本。46 个动作的逐帧关节位置在
+「净化 → 导出 FBX → 重新导入 Blender → 导入 UE」全程走完后，与源的最大偏差为身高的 <b>7.1e-05</b>，
+UE 侧一次导入即得 48 个可用资产。过程中<b>发现并修复了三个会静默毁掉交付物的陷阱</b>
+（一个影响项目历史上所有逐动作导出脚本，另两个分别是 UE 导入与自动化网关的坑），
+验收标准也据此从「同会话自比」升级为<b>四层：结构 → 会话内 → 跨会话 → 最终消费者</b>。
+</div>
+
+<h2>一、三条被实测推翻的既有认知</h2>
+
+<p>动手前先做全量实测（<code>plan_10_probe_src.py</code> → <code>Saved/Retarget/probe_src_bones.txt</code>，671 行）。
+结果推翻了三处在项目文档/记忆中已经写成结论的说法：</p>
+
+<table>
+<tr><th style="width:26%">既有说法</th><th style="width:37%">实测</th><th>后果</th></tr>
+<tr>
+  <td><b>踝关节 = <code>L_KneeLower.tail</code></b></td>
+  <td><code>L_KneeLower.tail</code> 的 z = <b>56.54</b>；真正踝关节 = <code>L_Foot.head</code>，z = <b>16.93</b>。相差 <b>39.6 单位</b>（≈半条小腿）。</td>
+  <td><span class="pill p-bad">致命</span> 三点链会被截断成「大腿 + 9.7 单位的残段」，
+      弯曲平面参考完全错位。这大概率是上一次腿部误差高达 63° 的共因之一。</td>
+</tr>
+<tr>
+  <td><b>删 <code>L_KneeLower</code>、保 <code>L_KneeUpper</code></b>（我本轮最初的方案）</td>
+  <td>实测 matrix_basis 漂移（run 动画）：<code>L_KneeUpper</code> 旋转 <b>0.000°</b>（只有 8.94 平移），
+      <code>L_KneeLower</code> 旋转 <b>60.9°</b>。<b>方向完全相反</b>。</td>
+  <td><span class="pill p-bad">致命</span> 若按原方案执行，会丢掉整条腿 60~103° 的膝弯，
+      腿会变成两根僵直木棍。</td>
+</tr>
+<tr>
+  <td>用 <code>bone.tail</code> / <code>bone.length</code> 判断骨骼走向</td>
+  <td><code>L_Hip.tail</code> 指向 <b>−Y（正前方）</b>，而真实髋→膝方向是 <b>−Z（正下方）</b>。
+      骨长也自相矛盾：<code>L_KneeUpper</code> 的 48.84 等于大腿长，<code>L_KneeLower</code> 的
+      50.63 等于小腿长，但两者 head 逐位相同。</td>
+  <td><span class="pill p-warn">高</span> 这是 glTF 导入后 tail 被任意设定的必然结果。
+      <b>关节真值只能取 <code>head_local</code></b>，tail 与 length 一律不可信。</td>
+</tr>
+</table>
+
+<div class="note alarm">
+<b>方法论教训：</b>这三条都是「已经写进文档的结论」，但都经不起一次全量实测。
+凡是没标注<b>可复现脚本 + 原始输出</b>的数字，都不应当作为下游设计的输入。
+</div>
+
+<h3>1.1 另一个必须知道的结构事实</h3>
+<p>腿与臂各有一对<b>几何完全重合的孪生骨</b>：</p>
+<div class="tree">L_Hip ──▶ L_KneeUpper ──▶ L_KneeLower ──▶ L_Foot ──▶ L_Toe
+          head=(-19.5149, 0.9463, 66.1976)   ↑
+                    head=(-19.5149, 0.9462, 66.1976)   ← 坐标逐位相同
+
+L_Shoulder ──▶ L_ElbowUpper ──▶ L_Elbow ──▶ L_Hand
+               head=(-51.0677,12.1482,148.9247)
+                         head=(-51.0678,12.1483,148.9246)  ← 坐标逐位相同</div>
+<p>两骨的 head 坐标逐位相同、rest 朝向相差约 0.5°。真正承载关节弯曲的是 <code>*Lower</code> / <code>L_Elbow</code>，
+而 <code>*Upper</code> 是纯占位（旋转恒为 0）。这个「分工」不实测是猜不到的。</p>
+
+<h2>二、手术方案</h2>
+
+<h3>2.1 白名单：179 → 59</h3>
+<p>源骨架里 120 根与人体无关，全部剔除。它们不是「多余的小骨头」，而是完整的功能子树：</p>
+
+<table>
+<tr><th style="width:30%">子树 / 骨</th><th class="num" style="width:10%">骨数</th><th>说明</th></tr>
+<tr><td><code>Lion_Root</code> 子树</td><td class="num">70</td><td>四足狼灵（含 <code>Lion_*</code> 脊柱/尾/耳/舌/眼、<code>L/R_Lion_*</code> 前后肢）。<b>它自带一套完整的四足运动链</b>，不裁剪会被当成人体骨骼重定向。</td></tr>
+<tr><td><code>Weapon</code> 子树</td><td class="num">15</td><td>原版插地战斧（<code>Axe_Head/Jaw/Handle</code> + 9 个 <code>BuffBone_Cstm_Weapon_*</code> + TrailFX）。本项目用独立 SM 战斧，保留会出现「两根斧头」。</td></tr>
+<tr><td><code>Throne</code> / <code>L_Throne</code> / <code>R_Throne</code> / <code>Gem</code> / <code>Piece_1~3</code></td><td class="num">7</td><td>神王王座与宝石道具。<code>Gem</code> 的 tail 在 z=836，是「身高被算成 927 单位」的元凶。</td></tr>
+<tr><td><code>*Buffbone*</code> / <code>*_Loc</code> 挂点</td><td class="num">约 20</td><td>VFX / 血条 / 镜头 / 地面 挂点，纯空骨（长度 1.0 或与父同名）。</td></tr>
+<tr><td><code>L_KneeUpper</code> / <code>R_KneeUpper</code> / <code>L_ElbowUpper</code> / <code>R_ElbowUpper</code></td><td class="num">4</td><td>几何孪生占位骨，见 §1.1。</td></tr>
+<tr><td>肩甲 / 背包 / SnapWeapon</td><td class="num">4+</td><td><code>L/R_ShoulderPad(_Bot)</code>、<code>Backpack_Bot</code>、<code>SnapWeapon2Hand</code>。2XKO 有自己的肩甲与披风链。</td></tr>
+</table>
+
+<p><b>保留的 59 骨</b>（完整清单见脚本 <code>KEEP_BODY + KEEP_FINGERS + KEEP_CAPE</code>）：</p>
+<div class="tree">Root
+└─ Pelvis
+   ├─ L_Hip ─▶ L_KneeLower ─▶ L_Foot ─▶ L_Toe          （大腿 / 小腿 / 踝 / 趾）
+   └─ R_Hip ─▶ R_KneeLower ─▶ R_Foot ─▶ R_Toe
+└─ Spine1 ─▶ Spine2
+   ├─ Neck ─▶ Head ─▶ Jaw
+   ├─ L_Clavicle ─▶ L_Shoulder ─▶ L_Elbow ─▶ L_Hand ─▶ 5×2 手指
+   └─ R_Clavicle ─▶ R_Shoulder ─▶ R_Elbow ─▶ R_Hand ─▶ 5×2 手指
+└─ Cape ─▶ (C│L│R)_Cape1~5                             （3 条 × 5 段）</div>
+
+<p class="cap">骨架层级与真实关节坐标的对应关系（用 <code>head_local</code>，单位≈cm）：
+髋 z=114.62、膝 z=66.20、踝 z=16.93、趾 z=8.05 ⇒ 大腿 48.84 / 小腿 50.63 / 脚长 13.82。</p>
+
+<h3>2.2 孪生骨塌陷方向</h3>
+<p>腿链要从 4 骨压成 3 骨（否则无法与目标的 <code>thigh_l → calf_l → foot_l</code> 一一对应）。
+按实测，必须<b>删 <code>*Upper</code>、保 <code>*Lower</code></b>：</p>
+<pre>删前:  L_Hip ─▶ L_KneeUpper ─▶ L_KneeLower ─▶ L_Foot
+删后:  L_Hip ─────────────────▶ L_KneeLower ─▶ L_Foot
+       （L_KneeLower 的父级重挂到 L_Hip，use_connect = False，head 位置不变）</pre>
+
+<h3>2.3 用世界矩阵回写补偿消失的父级贡献</h3>
+<p>删掉 <code>L_KneeUpper</code> 后 <code>L_KneeLower</code> 的父级换了，它的局部变换语义随之改变。
+不做处理会引入约 8.94 单位（≈9 cm）的位置错误。补偿方式<b>不是</b>手推四元数公式，而是：</p>
+<ol>
+<li><b>采样</b>：净化前，遍历全部 46 个 action 的每一帧，记录 <code>L_KneeLower</code> / <code>R_KneeLower</code> /
+    <code>L_Elbow</code> / <code>R_Elbow</code> 的 <code>pose_bone.matrix</code>（armature space 4×4）。</li>
+<li><b>手术</b>：重挂父级 + 删除 120 骨。</li>
+<li><b>回写</b>：逐帧把采样到的世界矩阵写回，并用 <code>keyframe_insert</code> 同时写
+    <code>location</code> / <code>rotation_quaternion</code> / <code>scale</code> 三个通道。</li>
+</ol>
+<div class="note">
+<b>为什么用「世界矩阵采样-回写」而不是解析公式：</b>解析公式要正确推导 Blender 的
+<code>pose_matrix = parent_pose @ rest_rel @ matrix_basis</code> 三级关系，任何一处符号错误都很难自查。
+而 <code>pose_bone.matrix</code> 的 setter 会自己反解 basis —— 用「把世界矩阵摆回原位」这个
+<b>物理上可验证的目标</b>替代公式推导，正确性由 <b>§3.2 的逐帧回归</b>保证，而不是由推理保证。
+</div>
+
+<div class="note alarm">
+<b>踩坑记录：</b>回写时最初漏了 <code>scale</code> 通道，导致 4 个动作出现 0.0135 单位的位置偏差。
+虽然事后证明该偏差另有来源（见 §6），但 <b>三通道必须一起写</b> —— 源动画确实存在骨骼缩放通道。
+</div>
+
+<h2>三、三层验收</h2>
+
+<p>每层都用<b>可复现脚本 + 原始输出</b>，数字全部来自实际执行。</p>
+
+<h3>3.1 L1 结构验收（<code>plan_10_src_clean.py</code>）</h3>
+<table>
+<tr><th style="width:44%">检查项</th><th>结果</th></tr>
+<tr><td>删除后剩余骨数</td><td><b>59</b>　<span class="pill p-ok">PASS</span></td></tr>
+<tr><td>非白名单骨残留</td><td>无　<span class="pill p-ok">PASS</span></td></tr>
+<tr><td>白名单骨被误删</td><td>无　<span class="pill p-ok">PASS</span></td></tr>
+<tr><td>rest pose（<code>matrix_local</code>）最大元素偏差</td><td>2.680e-04（R_Foot）　见 §6</td></tr>
+<tr><td>edit_bone head/tail/roll 与快照的偏差</td><td>0.000e+00　<span class="pill p-ok">PASS</span></td></tr>
+<tr><td>指向已删骨的 fcurve 清理</td><td>移除 49,460 条；每动画剩余 590 条</td></tr>
+</table>
+
+<h3>3.2 L2 会话内逐帧回归（同进程，净化前 vs 净化后）</h3>
+<p>覆盖 <b>46 个动画 × 3,078 帧 × 27 根关节</b>，逐帧比对 armature-space 世界矩阵：</p>
+<table>
+<tr><th style="width:44%">指标</th><th class="num">实测</th></tr>
+<tr><td>回写质量（重新求值后读回）</td><td class="num">≤ 1.28e-04 单位</td></tr>
+<tr><td>最大旋转偏差</td><td class="num">0.000000°</td></tr>
+<tr><td>最大位置偏差</td><td class="num">0.013458 单位（相对身高 7.02e-05）</td></tr>
+<tr><td>超出容差（0.05 单位 / 0.05°）的动作</td><td class="num">0 / 46　<span class="pill p-ok">全部 PASS</span></td></tr>
+</table>
+
+<p>各关节的最大偏差分布（证明它是<b>链式浮点累积</b>而非某处结构性损伤）：</p>
+<table>
+<tr><th>骨</th><th class="num">Root / Pelvis / Spine / Clavicle / Shoulder / Cape</th><th class="num">KneeLower</th><th class="num">Foot</th><th class="num">Toe</th></tr>
+<tr><td>最大位置偏差</td><td class="num">0.000000</td><td class="num">0.000128 (L) / 0.000091 (R)</td><td class="num">0.000211 (L) / <b>0.013458 (R)</b></td><td class="num">0.000256 (L) / 0.013411 (R)</td></tr>
+</table>
+
+<h3>3.3 L3 跨会话端到端（<code>plan_13_verify_fbx.py</code>）</h3>
+<p>这是<b>最终判据</b>：一次导入源 GLB、一次导入净化后的 FBX，在两个独立会话里各自测量再对比，
+与任何内部实现假设无关。</p>
+<table>
+<tr><th style="width:44%">判据</th><th style="width:22%">阈值</th><th class="num" style="width:16%">实测</th><th>结果</th></tr>
+<tr><td>骨骼关节间距相对差（缩放不变量）</td><td>&lt; 1e-4</td><td class="num">5.353e-07</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>动画帧数一致性</td><td>全部相同</td><td class="num">46/46，帧差全 0</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>关节轨迹归一化偏差</td><td>&lt; 3e-3</td><td class="num">7.130e-05</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>身高标尺（两侧同定义）</td><td>—</td><td class="num">188.5967 vs 188.5967（比 0.99999992）</td><td><span class="pill p-ok">PASS</span></td></tr>
+</table>
+
+<p>关节间距是<b>缩放不变的硬指标</b>，最能反映骨架结构是否被破坏：</p>
+<table>
+<tr><th>关节对</th><th class="num">源 GLB</th><th class="num">净化 FBX</th><th class="num">相对差</th></tr>
+<tr><td>L_Hip — L_KneeLower（大腿）</td><td class="num">48.842070</td><td class="num">48.842078</td><td class="num">1.587e-07</td></tr>
+<tr><td>L_KneeLower — L_Foot（小腿）</td><td class="num">50.629738</td><td class="num">50.629729</td><td class="num">1.868e-07</td></tr>
+<tr><td>L_Shoulder — L_Elbow（上臂）</td><td class="num">40.539818</td><td class="num">40.539817</td><td class="num">3.716e-08</td></tr>
+<tr><td>L_Shoulder — R_Shoulder（肩宽）</td><td class="num">46.684972</td><td class="num">46.684966</td><td class="num">1.120e-07</td></tr>
+<tr><td>Pelvis — Head（躯干链）</td><td class="num">72.401335</td><td class="num">72.401341</td><td class="num">9.169e-08</td></tr>
+</table>
+
+<h3>3.4 L4 UE 侧消费者验证（<code>plan_14_ue_import_test.py</code>）</h3>
+<p>前两层只证明「Blender 里对、FBX 里对」。真正要用的地方是 UE —— 所以最后做一次<b>最终消费者验证</b>：
+把 FBX 导入 UE（临时目录 <code>/Game/Temp_SrcClean</code>），清点资产并核对帧数。</p>
+<table>
+<tr><th style="width:40%">检查项</th><th class="num" style="width:14%">期望</th><th class="num" style="width:14%">实测</th><th>结果</th></tr>
+<tr><td>导入产出的资产总数</td><td>—</td><td class="num">48</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>AnimSequence 数量</td><td>46</td><td class="num">46</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>Skeleton / SkeletalMesh</td><td>各 1</td><td class="num">1 / 1</td><td><span class="pill p-ok">PASS</span></td></tr>
+<tr><td>抽查帧数（秒 × 30 + 1）</td><td>与源一致</td><td class="num">attack1 73→74、run 35→36、turn_l 13→14、spell4_5 33→34、idle1 65→66、dance 129→130</td><td><span class="pill p-ok">PASS</span></td></tr>
+</table>
+
+<div class="note">
+<b>这一层不是走过场 —— 它当场抓到了 §4.5 那个「导入成功但产出 0 资产」的坑。</b>
+如果只做 L1~L3，交付物看起来完美（数字全 PASS），但拿到 UE 里根本用不了。
+</div>
+
+<h2>四、★ 关键发现：三个「静默毁掉交付物」的陷阱</h2>
+
+<div class="note alarm">
+这三条的共同特征：<b>不崩溃、不报错、产出物看起来正常，但拿到下游就不可用。</b>
+它们只能被「跨会话 + 最终消费者」这两层验证抓到 —— 这正是为什么验收必须做到 L3 / L4。
+三条都是本轮实际踩到并修掉的，其中两条还影响项目历史上的既有脚本。
+</div>
+
+<h3>4.A 陷阱一：FBX 导出前未把 armature 复位到 rest pose</h3>
+
+<div class="note alarm">
+这是本轮收益最高的发现。它不只是一个「脚本 bug」，而是<b>项目历史上所有逐动作导出脚本的系统性缺陷</b>。
+</div>
+
+<h3>4.1 现象</h3>
+<p>第一版净化脚本三层验收里，L1 / L2 全 PASS，但 L3 报出：FBX 的
+<code>matrix_world</code> 是单位阵，而<b>骨骼 head 本身整体错位</b>：</p>
+<table>
+<tr><th>关节</th><th class="num">源 GLB（rest）</th><th class="num">错误 FBX</th><th class="num">偏差</th></tr>
+<tr><td>R_Hand</td><td class="num">(68.93, 0.37, 128.29)</td><td class="num">(37.38, 40.48, 99.66)</td><td class="num">58.52</td></tr>
+<tr><td>L_Shoulder</td><td class="num">(-23.34, 12.11, 178.50)</td><td class="num">(-8.46, -15.70, 166.22)</td><td class="num">33.85</td></tr>
+<tr><td>Root</td><td class="num">(0.00, 0.00, 127.37)</td><td class="num">(14.92, -13.34, 121.87)</td><td class="num">20.75</td></tr>
+</table>
+<p>骨骼关节间距也随之变化 2~4%（肩宽 −2.0%、躯干链 −3.9%）—— 这不是数值噪声，是<b>形状改变</b>。</p>
+
+<h3>4.2 根因</h3>
+<p>净化脚本在导出前刚跑完「46 个动画的逐帧验证」循环，此时 <code>armature.animation_data.action</code>
+还挂着最后一个动画，<b>frame 停在最后一帧</b>。Blender 的 FBX 导出器会把<b>当前 pose</b>
+写成骨架的节点变换，而不是 rest pose。</p>
+
+<h3>4.3 影响面（已排查项目全部导出脚本）</h3>
+<table>
+<tr><th style="width:32%">脚本</th><th style="width:26%">有无复位</th><th>判定</th></tr>
+<tr><td><code>blender_51_retarget_v4.py</code>（重定向正式版）</td>
+    <td>第 286 行设了 <code>action = None</code>，<b>但循环内第 289 行又把它挂回去</b>，且循环里没有 <code>frame_set</code></td>
+    <td><span class="pill p-bad">中招</span></td></tr>
+<tr><td><code>blender_30_batch_retarget.py</code></td><td>同模式</td><td><span class="pill p-bad">中招</span></td></tr>
+<tr><td><code>blender_50_retarget_v3.py</code></td><td>同模式</td><td><span class="pill p-bad">中招</span></td></tr>
+<tr><td><code>blender_10_retarget.py</code></td><td>同模式</td><td><span class="pill p-bad">中招</span></td></tr>
+<tr><td><code>blender_21/22_strip_*.py</code></td><td><code>bake_anim=False</code>（不导动画）</td><td><span class="pill p-ok">不受影响</span></td></tr>
+</table>
+<p>也就是说，<b>之前导入 UE 的每一批重定向动画，其 Skeleton 的 bind pose 都是某个动画的某一帧</b>，
+而不是静止姿态。IK Retargeter 会用这个错误的 bind pose 建立骨骼参考系 ——
+这足以单独造成显著的系统性角度误差，很可能是 26.8° 翻车事件的一个共因。</p>
+
+<h3>4.4 修复</h3>
+<pre># 导出前：断开 action 并清空全部 matrix_basis
+if arm.animation_data:
+    arm.animation_data.action = None
+for pb in arm.pose.bones:
+    pb.matrix_basis = Matrix.Identity(4)
+bpy.context.view_layer.update()</pre>
+<p>修复后 L3 全部转为 PASS（§3.3）。脚本内加了 rest 自检：</p>
+<pre>rest 自检：Root.head_local = (0.0000, 0.0000, 127.3700)  [源 rest = (0.0000, 0.0000, 127.3700)]</pre>
+
+<h3>4.B 陷阱二：纯骨架 FBX 在 UE 侧「导入成功但产出 0 个资产」</h3>
+<p>第一版净化脚本出于「IK Rig 不需要网格」的考虑，把源网格一并删掉了。结果 UE 侧：</p>
+<pre>[Info] === 开始导入 ...Darius_SrcClean.fbx ===
+[Info] imported_object_paths = 0 个
+[Info] 资产总数 = 0</pre>
+<p><b>根因</b>：UE 的 FBX 导入需要至少一个 SkeletalMesh 作为载体，才能建出
+Skeleton + AnimSequence。没有网格时它不报错，只是什么都不生成。</p>
+<p><b>修复</b>：保留源网格 <code>Mesh_0</code> 作为骨架载体，但</p>
+<ul>
+<li>清空材质槽（不导入无关贴图 / 材质）</li>
+<li>删除指向已删骨的 <b>120 个失效顶点组</b>（剩 59 组，与骨架一一对应）</li>
+<li>导出选择集 = armature + 该网格</li>
+</ul>
+<p>代价：FBX 从 25.26 MB 增到 25.77 MB。收益：UE 侧一次导入即得 48 个资产（1 Skeleton + 1 Mesh + 46 Anim）。</p>
+
+<h3>4.C 陷阱三：<code>ue_remote.py</code> 的「<code>.py</code> 字样」陷阱</h3>
+<p>写 UE 侧验证脚本时，第一版 <code>plan_14</code> 直接执行失败：</p>
+<pre>[Error] 执行失败:
+Could not load Python file 'E:/UE_5.8/Engine/Binaries/Win64/# -*- coding: utf-8 -*-
+"""
+plan_14_ue_import_test.py' (resolved from '...')</pre>
+<p>UE 把脚本<b>内容</b>当成了<b>文件路径</b>。二分定位（5 组对照测试）：</p>
+<table>
+<tr><th style="width:44%">测试</th><th style="width:14%">大小</th><th>结果</th></tr>
+<tr><td>极简脚本（无注释）</td><td class="num">40 B</td><td><span class="pill p-ok">通过</span></td></tr>
+<tr><td>多行 + <code># -*- coding -*-</code> + docstring + 中文</td><td class="num">≈120 B</td><td><span class="pill p-ok">通过</span></td></tr>
+<tr><td>纯 ASCII 长脚本（60 行填充）</td><td class="num">4964 B</td><td><span class="pill p-ok">通过</span> ⇒ <b>排除长度因素</b></td></tr>
+<tr><td>复刻失败用例头部（docstring 含自己的文件名）</td><td class="num">691 B</td><td><span class="pill p-bad">失败</span></td></tr>
+<tr><td>同上，仅去掉 <code>.py</code> 字样</td><td class="num">691 B</td><td><span class="pill p-ok">通过</span> ⇒ <b>锁定根因</b></td></tr>
+</table>
+<p><b>结论</b>：<code>MODE_EXEC_FILE</code> 下若向 UE 传「内容」，UE 会在内容里嗅探形如
+<code>xxx.py</code> 的字样并误判为路径。所以<b>只要脚本的 docstring / 注释里写了自己的文件名
+（例如用法示例 <code>... Scripts/plan_14_xxx.py</code>），整个脚本就静默不执行</b>。</p>
+<p><b>修复</b>（改在网关里，而不是让每个脚本作者记住这条隐蔽约定）：</p>
+<pre>runner = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_ue_remote_run.py")
+with open(runner, "w", encoding="utf-8") as f:
+    f.write(code)
+success, logs = run_ue_code(runner)          # 一律传「路径」
+if not success and any("Could not load Python file" in l for l in logs):
+    success, logs = run_ue_code(code)        # 回退：传「内容」</pre>
+<p class="cap">验证：修复后原失败用例与回归用例（含中文、长 ASCII、无 <code>.py</code> 字样）全部通过。</p>
+
+<h2>五、方法论沉淀</h2>
+
+<h3>5.1 用对照实验区分「我的操作引入的」与「工具的固有行为」</h3>
+<p>L1 报出 <code>R_Foot</code> 的 rest 偏差 2.68e-4 时，我先提出了一个假设：
+「这是 Blender 对 0.014 单位微骨重算 roll 的固有数值不稳定」。这个假设<b>被对照实验否证</b>：</p>
+<table>
+<tr><th style="width:52%">对照</th><th class="num">rest 偏差 &gt; 1e-5 的骨数</th></tr>
+<tr><td>A. 仅进出 EDIT mode，零修改</td><td class="num">0 / 179　<span class="pill p-warn">否证我的假设</span></td></tr>
+<tr><td>B. 删掉一根无关骨（<code>Piece_1</code>）</td><td class="num">0 / 178</td></tr>
+<tr><td>C. 删 120 骨 <b>+ 改 edit_bone.parent</b></td><td class="num">5 / 59（R_Foot 2.680e-04 最大）</td></tr>
+</table>
+<p>A、B 全 0 而只有 C 出现偏差 ⇒ 偏差由<b>修改 edit_bone 的 parent</b> 触发 <code>Bone.matrix_local</code> 重建所产生，
+且只影响短骨。<b>「零修改对照组」是这类归因里成本最低、判别力最强的一步</b>——
+跑一次不到 30 秒，却把「工具固有」和「我引入的」彻底分开。</p>
+
+<h3>5.2 微骨的数值陷阱（可复用清单）</h3>
+<ul>
+<li><code>L_Foot</code> / <code>L_Toe</code> 长度只有 <b>0.01396 单位</b>。它们的 <code>tail</code>
+    距 head 仅 0.014，<code>(tail−head).normalized()</code> 的相对误差被放大 ~7e4 倍 ⇒ roll 参考系不稳。</li>
+<li>因此：<b>踝关节取 <code>L_Foot.head</code>，绝不取 <code>L_KneeLower.tail</code></b>；脚趾取 <code>L_Toe.head</code>。</li>
+<li>同理，<code>R_Foot</code> 的 Y 轴指向 −Z、<code>L_Foot</code> 指向 +Z，方向不同导致两者在重建时的数值行为不对称
+    （实测 L 侧偏差 2e-4、R 侧 1.3e-2，差 60 倍）。<b>左右不对称本身就是「数值问题而非结构问题」的指纹。</b></li>
+</ul>
+
+<h3>5.3 验收器要「与被验证对象的先验假设无关」</h3>
+<div class="grid2">
+<div class="card">
+<b>弱指标（易假阳性）</b>
+<ul>
+<li>比较 <code>bone.length</code> —— glTF/FBX 对 tail 定义不同</li>
+<li>用「全部骨」的 z 范围当身高标尺 —— GLB 侧混入 <code>Gem</code>(z=396.8) 与
+    <code>Axe_Handle</code>(z=−90.8)，会算出 2.36 倍的假缩放因子</li>
+<li>在同一会话内自比 —— 发现不了导出/导入环节的损失</li>
+</ul>
+</div>
+<div class="card">
+<b>强指标（本轮实际采用）</b>
+<ul>
+<li><b>关节间距</b>（<code>head_local</code> 之差）—— 缩放不变、朝向无关</li>
+<li>固定骨集合算标尺，两侧同定义</li>
+<li>跨会话：源与产物<b>各导入一次</b>再比</li>
+<li>逐帧世界矩阵（46×3078×27），而不是单帧抽查</li>
+</ul>
+</div>
+</div>
+
+<h2>六、残留项与风险</h2>
+
+<table>
+<tr><th style="width:26%">项</th><th style="width:34%">实测</th><th>评估与处置</th></tr>
+<tr>
+  <td><code>R_Foot</code> rest 偏差 2.680e-04</td>
+  <td>使 R_Foot 世界位置偏 0.0135 单位（0.135 mm），相对身高 <b>7.0e-05</b></td>
+  <td><span class="pill p-ok">接受</span> G2 门禁阈值是「中位 &lt; 1.5% 身高」，
+      本项是它的 <b>1/214</b>。为它继续手术的收益远低于风险。已记录归档。</td>
+</tr>
+<tr>
+  <td>手指骨（20 根）是否重定向</td>
+  <td>已保留，未做映射</td>
+  <td><span class="pill p-warn">待定</span> 留给 M1-② 决定。源侧保留无副作用，
+      但「双手握斧」的贴合质量会受益于手指重定向。</td>
+</tr>
+<tr>
+  <td>披风链（<code>Cape</code> + 15 根）</td>
+  <td>已保留</td>
+  <td><span class="pill p-warn">待定</span> 定稿计划倾向于交给 UE 动力学，
+      但源侧保留为重定向留了选项。M1-② 先不映射。</td>
+</tr>
+<tr>
+  <td>源侧无 walk 动画</td>
+  <td>已确认（只有 run / run_fast / run_homeguard）</td>
+  <td><span class="pill p-warn">已知</span> 按定稿计划：用 run 贯通 + 降速重采样出 jog。</td>
+</tr>
+<tr>
+  <td>历史脚本产出的错误 FBX</td>
+  <td><code>blender_51_retarget_v4.py</code> 等 4 个脚本中招</td>
+  <td><span class="pill p-bad">待修</span> 本轮只修了 <code>plan_10_src_clean.py</code>。
+      其余脚本的修复与历史产物的重新导出，建议在 M1-② 之前完成。</td>
+</tr>
+<tr>
+  <td>UE 侧骨骼数为 60（Blender 读 FBX 为 59）</td>
+  <td>多出 1 根，位于原点、单位变换</td>
+  <td><span class="pill p-ok">接受</span> 来源：Blender 用 <code>armature_nodetype='NULL'</code>
+      导出时造的 NULL 根节点，UE 把它当成一根骨。它在原点且无变换，不引入偏移。
+      M1-② 建 IK Rig 时从 <code>Root</code> / <code>L_Hip</code> 起建链即可，忽略最外层。</td>
+</tr>
+<tr>
+  <td>UE 导入后 action 名带前缀</td>
+  <td><code>SrcCleanskinned_mesh_darius_skin15_attack1</code>（UE 的 destination_name + Blender 的 armature 对象名 + action 名）</td>
+  <td><span class="pill p-warn">M1-② 处理</span> 不影响功能，但不利于脚本引用。
+      可在正式导入后用脚本统一重命名，或先把 Blender 的 armature 对象名改短。</td>
+</tr>
+</table>
+
+<h2>七、交付物与下一步</h2>
+
+<h3>7.1 本轮交付</h3>
+<table>
+<tr><th style="width:42%">文件</th><th>说明</th></tr>
+<tr><td><code>Saved/Retarget/Clean/Darius_SrcClean.fbx</code></td><td><b>主产物</b>：59 骨 / 46 动作 / 30 fps / 25.26 MB，bind pose 正确</td></tr>
+<tr><td><code>Scripts/plan_10_src_clean.py</code></td><td>净化主管线（含三层验收与 rest 复位）</td></tr>
+<tr><td><code>Scripts/plan_10_probe_src.py</code></td><td>源骨架全量实测（骨骼/层级/长度/action 清单）</td></tr>
+<tr><td><code>Scripts/plan_11_action_probe.py</code></td><td>slotted action 可切换性 + 孪生骨活动性验证</td></tr>
+<tr><td><code>Scripts/plan_12_rest_stability.py</code></td><td>三组对照实验（A 零修改 / B 删无关骨 / C 全量手术）</td></tr>
+<tr><td><code>Scripts/plan_13_verify_fbx.py</code></td><td>跨会话端到端验收（<b>可复用为后续产物的通用验收器</b>）</td></tr>
+<tr><td><code>Scripts/plan_14_ue_import_test.py</code></td><td>UE 侧最终消费者验证（导入 + 清点资产 + 核对帧数）</td></tr>
+<tr><td><code>Scripts/plan_99_clean_temp.py</code></td><td>清理 UE 临时资产 + 清除临时关卡 actor，把工程拉回基线</td></tr>
+<tr><td><code>Scripts/ue_remote.py</code></td><td><b>已修</b>：改为落盘后传路径，消除 <code>.py</code> 字样陷阱（见 §4.C）</td></tr>
+<tr><td><code>Saved/Retarget/probe_src_bones.txt</code> 等 5 份</td><td>原始输出留档（probe / action API / rest 稳定性 / 净化报告 / 端到端验收）</td></tr>
+</table>
+
+<h3>7.2 下一步（M1-②）</h3>
+<ol>
+<li><b>修历史脚本的 FBX 导出</b>：给 <code>blender_51_retarget_v4.py</code> 等 4 个脚本补 rest 复位，并重新导出一批 FBX。</li>
+<li><b>UE 侧建 IK Rig × 2</b>：目标侧（<code>SK_Darius_GodKing</code>，309 骨，Mannequin 命名）与源侧（本产物，59 骨）。
+    腿链 <code>Hip → KneeLower → Foot</code>（depth 2，止于踝，不含 ball）；臂链同理止于 <code>Hand</code>。</li>
+<li><b>Retarget Pose 标定</b>：FK Translation Mode = <i>Globally Scaled</i>；Pelvis 的 Blend to Source Translation = 1.0 但 Z 权重 = 0。</li>
+<li><b>导入源动画到 UE</b>：用 <code>anim_12_import_snap.py</code>，显式指定 <code>FbxImportUI.skeleton</code>。</li>
+<li><b>量比例补偿</b>：先用本轮的验收器口径测目标侧的膝间距/身高与头顶高度/身高，仅当偏差 &gt; 10% 才加偏移，幅度反解。</li>
+</ol>
+
+<hr>
+<p class="cap">
+本报告的全部数字均可由 <code>Scripts/plan_10_src_clean.py</code> / <code>plan_12_rest_stability.py</code> /
+<code>plan_13_verify_fbx.py</code> 复现，原始输出留档在 <code>Saved/Retarget/</code>。
+依据 <code>AGENTS.md</code> §0.1「相信数据，禁止主观臆断」与 §0.3「验证器须与被验证对象的先验假设无关」编写。
+</p>
+
+</div>
+</body>
+</html>

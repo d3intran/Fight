@@ -99,13 +99,46 @@
 > **行动项**：M0 阶段用一次专门的朝向判定测试（把源/目标都摆到同一场景、同侧相机渲染正/背面）敲定，
 > 敲定后回来更新本表与 Q 值。**在那之前，不要依赖本表的朝向一栏做符号推断。**
 
-### 5.2 两个致命坑（踩过，勿重蹈）
+### 5.2 五个致命坑（踩过，勿重蹈）
 
-1. **两套骨架朝向相差 180°**。直接搬运世界旋转 → 角色左右镜像 + 前后反着跑（实测最大偏差 161°）。
+0. 🔴 **Blender 导出带动画的 FBX 前，必须把 armature 复位到 rest pose**（2026-09-18 实测发现）。
+   **现象**：产物的 `matrix_world` 是单位阵，但**骨骼 head 本身整体错位** —— 实测 `R_Hand` 偏
+   **58.5 单位**、`Root` 偏 **20.8**、肩宽差 2.0%、躯干链差 3.9%。不是数值噪声，是形状改变。
+   **根因**：导出时 `animation_data.action` 还挂着某个 action、frame 停在某帧，
+   Blender 把**当前 pose** 写成骨架的节点变换，而不是 rest pose。
+   **修法**：
+   ```python
+   if arm.animation_data:
+       arm.animation_data.action = None
+   for pb in arm.pose.bones:
+       pb.matrix_basis = Matrix.Identity(4)     # 必须逐个清，光设 action=None 不够稳
+   bpy.context.view_layer.update()
+   ```
+   **影响面（已排查本仓库）**：`blender_51_retarget_v4.py`（第 286 行设了 `action = None`，
+   **但循环内第 289 行又挂回去**，且循环里没有 `frame_set`）、`blender_30_batch_retarget.py`、
+   `blender_50_retarget_v3.py`、`blender_10_retarget.py` —— **四个脚本全部中招**。
+   ⇒ 此前导入 UE 的每一批重定向动画，其 Skeleton bind pose 都是某个动画的某一帧。
+   IK Retargeter 会用这个错误的 bind pose 建参考系，足以独立造成显著的系统性角度误差，
+   **很可能是 26.8° 翻车事件的共因**。`blender_21/22_strip_*.py` 因 `bake_anim=False` 不受影响。
+
+1. 🔴 **纯骨架 FBX 导进 UE 会「导入成功但产出 0 个资产」**（2026-09-18 实测）。
+   UE 报 `imported_object_paths = 0`、不抛错、不生成任何东西 —— 最阴的一种失败。
+   **根因**：UE 的 FBX 导入需要**至少一个 SkeletalMesh 作骨架载体**才能建出 Skeleton + AnimSequence。
+   **修法**：导出时保留源网格，但 `obj.data.materials.clear()` 且删除失效顶点组
+   （骨架裁过就必须清，否则顶点组指向不存在的骨）；`use_selection` 要**同时选中 armature 与网格**。
+
+2. 🔴 **`ue_remote.py` 的「`.py` 字样」陷阱**（2026-09-18，已在网关修复）。
+   **现象**：`[Error] Could not load Python file '<整段脚本内容>'`，脚本完全不执行。
+   **根因**：`MODE_EXEC_FILE` 下若向 UE 传脚本**内容**，UE 会在内容里嗅探形如 `xxx.py` 的字样
+   并误判为文件路径 ⇒ **只要 docstring / 注释里写了自己的文件名（如用法示例），整个脚本静默失败**。
+   二分对照已排除「文件长度」因素（4964 B 纯 ASCII 长脚本通过，691 B 含 `.py` 字样的失败）。
+   **修法**：网关内先落盘到 `Scripts/_ue_remote_run.py` 再传**路径**，失败时回退传内容。
+
+3. **两套骨架朝向相差 180°**。直接搬运世界旋转 → 角色左右镜像 + 前后反着跑（实测最大偏差 161°）。
    **解法**：用各自的「胯骨轴（R_hip.head − L_hip.head，抹平 Z）+ 世界上方 (0,0,1)」叉乘构建基准坐标系
    `B = [right, forward, up]`，求对齐矩阵 `Q = B_tgt · B_src⁻¹`（实测 Q = 绕 Z 轴 180°）。
    旋转增量必须先共轭变换：`D_tgt = Q · D_src · Q⁻¹`。
-2. **中间骨必须继承父级旋转**。只对映射表内的骨骼赋值，会漏掉 `spine_03`、`ball_l` 这类源里没有的中间骨，
+4. **中间骨必须继承父级旋转**。只对映射表内的骨骼赋值，会漏掉 `spine_03`、`ball_l` 这类源里没有的中间骨，
    导致手臂变僵尸直伸。
    **解法**：按目标骨架**全层级**遍历（父级在前，共 309 根），未映射骨骼用 `final_rot = Rp · rest_rel` 递推，
    映射骨骼再用 `basis = rest_rel⁻¹ · Rp⁻¹ · W_tgt` 写入。

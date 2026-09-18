@@ -12,6 +12,7 @@
 =============================================================================
 """
 
+import os
 import sys
 import time
 
@@ -52,8 +53,22 @@ if __name__ == '__main__':
             code = f.read()
     else:
         code = sys.stdin.read()
-        
-    success, logs = run_ue_code(code)
+
+    # ⚠️ 必须把脚本先落成**真实文件**，再向 UE 传「路径」，而不是传「内容」。
+    # 实测（2026-09-18，二分定位）：MODE_EXEC_FILE 下若直接传内容，UE 会在内容里
+    # 嗅探形如 `xxx.py` 的字样并误判成文件路径 —— 只要脚本的 docstring / 注释里
+    # 写了自己的文件名（例如用法示例 `... Scripts/plan_14_xxx.py`），就会报
+    # `Could not load Python file '<整段内容>'` 且完全不执行。
+    # 对照组：同样长度、同样结构但不含 `.py` 字样的脚本一律正常。
+    # 修复：一律落盘后传路径；万一某个 UE 版本反过来只认内容，再回退一次。
+    runner = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_ue_remote_run.py")
+    with open(runner, 'w', encoding='utf-8') as f:
+        f.write(code)
+
+    success, logs = run_ue_code(runner)
+    if not success and any("Could not load Python file" in l for l in logs):
+        success, logs = run_ue_code(code)
+
     for l in logs:
         print(l)
     sys.exit(0 if success else 1)

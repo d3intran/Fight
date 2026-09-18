@@ -51,6 +51,14 @@
 | `blender_70_joint_audit.py` | 逐关节弯曲角逐帧对比表 |
 | **`blender_80_orient_verify.py`** | **★ 绝对朝向误差（最终判据，推荐首选）** |
 | `blender_60/61/62_ab*.py` | A/B 并排渲染（同相机同帧） |
+| **`plan_13_verify_fbx.py`** | **★ 跨会话端到端验收**：源与产物**各导入一次**再比。判据用「关节间距（缩放不变量）」+「逐帧关节轨迹」+「帧数」。**导出/导入环节的损失只有它能发现** |
+| `plan_12_rest_stability.py` | **归因用对照实验器**：分层加压（零修改 → 删无关骨 → 全量手术），把「工具固有行为」与「本次操作引入」分开 |
+
+**验证器的三条硬规矩（2026-09-18 从本轮实践提炼）**
+1. **跨会话，不在同一会话内自比** —— 同进程自比永远发现不了导出/导入环节的损失。
+2. **标尺必须用固定的同一组骨 + 只用关节 `head`** —— 源骨架混有道具骨（`Gem` tail z=836、
+   `Axe_Handle` z=−90.8），用「全部骨」会算出 927 这种荒谬身高，两侧骨集合不同时还会得出 2.36 倍的假缩放因子。
+3. **优先选缩放不变量作判据**（关节间距），它同时免疫单位换算与朝向约定差异。
 
 ### 0.4 假设必须可证伪，被否掉立刻换方向
 
@@ -82,8 +90,13 @@
 
 ### 2.1 训练场与视觉基座 (Stellar Blade 风格)
 - **关卡**: `/Game/Level/Lv-FIght`
-- **关卡 Actor 清单**（**基线，勿动**）：`StaticMeshActor_1`(六边形地砖) / `DirectionalLight_0` /
-  `RectLight_1` / `SkyLight_1` / `ExponentialHeightFog_0` / `PostProcessVolume_1` / `PlayerStart_0`
+- **关卡 Actor 清单**（**基线，7 个，勿动**。以下为 **actor label**，脚本里 `get_actor_label()` 读到的就是这些；
+  内部名 `StaticMeshActor_1` / `DirectionalLight_0` / … 是另一套，别拿来做匹配）：
+  `TrainingGround_Floor`(六边形地砖) / `TrainingGround_KeyLight` / `TrainingGround_Softbox` /
+  `TrainingGround_SkyLight` / `TrainingGround_Fog` / `TrainingGround_PostProcess` / `PlayerStart`
+- **清理**：`Scripts/plan_99_clean_temp.py` 会删 UE 临时目录（`/Game/Temp*`）并清除
+  `SIM_*` / `ABTest_*` / `XYZ_*` / `DBG_*` 等前缀的临时 actor，跑完打印 actor 清单供复核。
+  **每次做完 UE 侧验证都要跑它**（2026-09-18 曾残留一个 `SIM_Darius`）。
 - **科技地砖**: 六边形程序化材质 `M_TrainingGround_Grid`（《剑星》风格高质感浅灰）。
 - **环境光照**: 远景雾霭虚化地平线，消除死黑。
 
@@ -170,6 +183,18 @@
 | `blender_30_batch_retarget.py` | 批量版（v3 逻辑，已由 v4 取代，保留作对照） |
 | `blender_41/42/70/80_*.py` | 验证器组（见 0.3） |
 
+**M1-① 源骨架净化组（2026-09-18 新增，`plan_*` 前缀）**
+
+| 脚本 | 作用 |
+| :--- | :--- |
+| **`plan_10_src_clean.py`** | **★ 源骨架白名单净化主脚本**。采样 → 重挂父级 → 删 120 骨 → 回写世界矩阵 → 三层验收 → rest 复位 → 导出多 take FBX。`blender -b -P ... -- <SRC_GLB> <OUT_FBX> <OUT_REPORT>` |
+| `plan_10_probe_src.py` | 源骨架全量实测：骨名/父级/长度/层级树/前缀分组/46 action 清单/腿臂链深挖 |
+| `plan_11_action_probe.py` | 前置可行性验证：slotted action 可否逐 action 绑定 + 孪生骨活动性 + frame_set 是否真求值 |
+| `plan_12_rest_stability.py` | **三组对照实验**（A 零修改 / B 删无关骨 / C 全量手术），用于把「工具固有行为」与「我的操作引入」分开 |
+| **`plan_13_verify_fbx.py`** | **★ 跨会话端到端验收器**（源 vs 产物各导入一次再比）。**后续所有 FBX 产物都应过这一关** |
+| `plan_01_skel_audit.py` / `plan_02_proportion.py` / `plan_03_lean_audit.py` / `plan_04_facing.py` / `plan_05_headpitch.py` | 骨架结构审计 / 源目标比例对照 / 逐动作躯干倾角 / 前后方向锚定 / 头颈俯仰偏离 |
+| `plan_99_clean_temp.py` | 清理 UE `/Game/Temp` 诊断期临时资产 |
+
 ### 3.4 UE 侧导入 / 诊断
 
 | 脚本 | 作用 |
@@ -186,6 +211,35 @@
 > **正式执行计划已定稿到 `Docs/Retarget/FINAL_Retarget_Plan.html`**，管线为
 > `DCC 净化 → UE IK Retargeter → Control Rig 运行时层 → 门禁验收`，
 > 里程碑 **M0 尺子(0.5d) → M1 垂直切片 idle+run(3.5d) → M2 全量动作与风格(4d)**。
+
+### M1-① 源骨架净化 —— ✅ 已完成（2026-09-18）
+
+**产物**：`Saved/Retarget/Clean/Darius_SrcClean.fbx`（**59 骨 / 46 动作 / 30 fps / 25.26 MB**）
+**报告**：`Docs/Retarget/M1-1_Source_Clean_Report.html`
+**脚本**：`plan_10_src_clean.py`（主管线）、`plan_13_verify_fbx.py`（可复用的跨会话验收器）
+
+**三条被实测推翻的既有认知（重要，勿再沿用旧说法）**
+
+| 旧说法 | 实测 |
+| :--- | :--- |
+| 踝关节 = `L_KneeLower.tail` | ❌ 那里 z=56.54；真正踝 = `L_Foot.head`，z=**16.93**，差 39.6 单位 |
+| 删 `L_KneeLower` 保 `L_KneeUpper` | ❌ **方向反了**。实测 run：`KneeUpper` 旋转恒 **0.000°**（只有 8.94 平移），`KneeLower` 旋转 **60.9°** ⇒ 必须**删 Upper 保 Lower** |
+| 用 `bone.tail` / `bone.length` 判断走向 | ❌ `L_Hip.tail` 指向 −Y（前方），真实髋→膝是 −Z（下方）⇒ **关节真值只能用 `head_local`** |
+
+**手术**：179 → 59 骨。剔除 `Lion_*` 四足子树(70)、`Weapon` 子树(15)、`Throne/Gem/Piece_*`(7)、
+`*Buffbone*`/`*_Loc` 挂点(≈20)、四根孪生 `*Upper` 占位骨、肩甲/背包/SnapWeapon。
+腿链压成 `L_Hip → L_KneeLower → L_Foot`（与目标 `thigh_l → calf_l → foot_l` 一一对应）。
+消失父级的贡献用**世界矩阵采样-回写**补偿（`pose_bone.matrix` setter 自行反解 basis，
+比手推四元数公式可靠）。回写必须**同时写 location / rotation_quaternion / scale 三通道**。
+
+**验收（三层，全 PASS）**
+- L1 结构：59 骨、无残留、无误删、fcurve 清理 49,460 条
+- L2 会话内：46 动画 × **3,078 帧** × 27 关节逐帧比对 — 最大旋转偏差 **0.000000°**，最大位置偏差 0.0135 单位（相对身高 7.0e-05）
+- L3 跨会话端到端（源 GLB vs 产物 FBX 各导入一次）：关节间距相对差 **3.53e-07**、46/46 帧数一致、轨迹归一化偏差 **7.14e-05**
+
+**残留（已评估，接受）**：`R_Foot` 的 rest `matrix_local` 偏 2.680e-04 ⇒ 世界位置 0.0135 单位 = 0.135 mm。
+成因：改 `edit_bone.parent` 触发 `Bone.matrix_local` 重建，对 0.014 单位微骨有数值损失（对照实验见 §5）。
+量级是 G2 门禁阈值（1.5% 身高）的 **1/214**。
 
 ### 历史记录：自研几何帧管线（现已降级为「离线数值验证器」）
 
@@ -259,3 +313,10 @@
 | **`EditorAssetLibrary.unload_asset`** | 该版本不存在 | 复核存盘值重新 `unreal.load_asset` 再读属性即可 |
 | **FBX↔UE 局部轴语义翻转** | Blender 直方图显示大刃在 −Y，UE 里实际在 **+Y**；包围盒 Y 对称，数值上分辨不出 | 用「无遮挡渲染 + 已知机位」反证，别靠数值推断轴的正负 |
 | **"物体好像被删了"** | 单张截图上「真被删」与「被身体挡住」无法区分 | 四步收敛：①顶点计数 ②材质链路 ③同变换无遮挡对照 ④世界坐标核算 |
+| 🔴 **FBX 导出前未复位 rest pose** | Blender 把**当前 pose**（导出时 frame 停在哪帧就是哪帧）写成骨架的节点变换 ⇒ 产出的 FBX **bind pose 完全错误**。实测 R_Hand 偏 58.5 单位、Root 偏 20.8 单位、肩宽差 2.0%。对 IK Retargeter 是致命伤 | 导出前：`arm.animation_data.action = None` + 逐个 `pb.matrix_basis = Matrix.Identity(4)` + `view_layer.update()`。**项目里 `blender_51_retarget_v4.py` / `blender_30` / `blender_50` / `blender_10` 四个脚本均中招**（设了 `action=None` 但循环内又挂回去），M1-② 前须修 |
+| **改 `edit_bone.parent` 会触发 rest 重建** | `Bone.matrix_local` 被重算，对短骨有数值损失（`R_Foot` 0.014 单位 ⇒ 2.68e-04 偏差，经骨链放大成 0.0135 单位世界偏差）。对照实验：零修改进出 edit mode 与「只删骨不改 parent」均为 **0 偏差** | 删除骨后**用快照写回** `head/tail/roll`；先用两趟循环把全部 `use_connect=False` 再写，否则设父骨 tail 时会拉走子骨 head。若仍残留 ~1e-4，量级可忽略，如实记录即可 |
+| **Blender 5.x 的 `Action.fcurves` 已移除** | 4.4 起改用 slotted action：`action.layers[].strips[].channelbags[].fcurves`，直接访问 `action.fcurves` 抛 `AttributeError` | 写兼容读取函数；action 名在 FBX 导入后会带前缀（`skinned_mesh\|skinned_mesh\|xxx`），比对前 `name.split("\|")[-1]` |
+| **身高/标尺类指标不能用「全部骨」** | 源骨架混有道具骨（`Gem` tail z=836、`Axe_Handle` z=−90.8），算出的「身高」是 927 而非 191.6；两侧骨集合不同时会得出 2.36 倍的假缩放因子 | 用**固定的同一组骨** + 只用 `head_local` 算标尺；优先选**缩放不变量**（关节间距）作判据 |
+| 🔴 **`ue_remote.py` 的「`.py` 字样」陷阱** | `MODE_EXEC_FILE` 下若向 UE 传脚本**内容**，UE 会在内容里嗅探形如 `xxx.py` 的字样并误判为文件路径 ⇒ **只要 docstring / 注释里写了自己的文件名（如用法示例），整个脚本静默不执行**，报 `Could not load Python file '<整段内容>'` | **已在网关修复**：一律先落盘到 `Scripts/_ue_remote_run.py` 再传**路径**，失败时回退传内容。二分定位过程见 `Docs/Retarget/M1-1_Source_Clean_Report.html` §4.C（5 组对照实验，已排除长度因素） |
+| **纯骨架 FBX 导进 UE 产出 0 资产** | 只含 armature 的 FBX，UE 报「导入成功」但 `imported_object_paths = 0`，不报错、不生成任何东西 | UE 需要**至少一个 SkeletalMesh** 作骨架载体。导出时保留源网格（清空材质槽 + 删除失效顶点组），`use_selection` 同时选中 armature 与网格 |
+| **UE 侧骨架比 FBX 多 1 根骨** | Blender 读 FBX 得 59 骨，UE 得 60 | Blender `armature_nodetype='NULL'` 造的 NULL 根节点被 UE 当成一根骨（在原点、单位变换，不引入偏移）。建 IK Rig 时从 `Root`/`L_Hip` 起链，忽略最外层 |
