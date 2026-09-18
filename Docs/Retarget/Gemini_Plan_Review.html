@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Gemini 重定向方案 · 技术评审（基于实测数据的逐条校准）</title>
+<style>
+  :root{--bg:#f5f6f8;--panel:#fff;--ink:#1b1f23;--ink2:#525a62;--line:#e1e5ea;
+        --red:#c0392b;--blue:#2b6ca3;--green:#1e8e5a;--amber:#b8860b;--purple:#6b4fa8;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.75;
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 26px 100px}
+  header{border-bottom:3px solid var(--purple);padding-bottom:14px}
+  h1{font-size:25px;margin:0 0 6px}
+  .sub{color:var(--ink2);font-size:13.5px}
+  h2{font-size:20px;margin:44px 0 12px;padding-left:12px;border-left:5px solid var(--blue)}
+  h3{font-size:16px;margin:24px 0 8px;color:var(--blue)}
+  p{margin:9px 0}
+  ul,ol{margin:9px 0 9px 2px;padding-left:22px}
+  li{margin:4px 0}
+  code{background:#eef1f4;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,monospace}
+  pre{background:#20262c;color:#dfe6ec;padding:13px 15px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.55}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:#eef1f4;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+         box-shadow:0 1px 3px rgba(20,30,40,.05)}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:20px;font-weight:600}
+  .tag.ok{background:#e2f5ea;color:var(--green)}
+  .tag.bad{background:#fdeaea;color:var(--red)}
+  .tag.warn{background:#fdf3dd;color:var(--amber)}
+  .tag.info{background:#e6f0f8;color:var(--blue)}
+  .tag.p{background:#efe9fa;color:var(--purple)}
+  .callout{border-left:4px solid var(--blue);background:#eff5fa;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.red{border-color:var(--red);background:#fdf1ef}
+  .callout.green{border-color:var(--green);background:#eef8f2}
+  .callout.amber{border-color:var(--amber);background:#fdf8ec}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:800px){.grid3{grid-template-columns:1fr}}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:center}
+  .kpi b{display:block;font-size:22px;line-height:1.3}
+  .kpi span{color:var(--ink2);font-size:12px}
+  .mono{font-family:Consolas,monospace;font-size:12.5px}
+  .verdict{font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Gemini 重定向方案 · 技术评审</h1>
+  <div class="sub">评审方式：不靠印象，用本项目已解包的源/目标资产<b>逐条实测校准</b>｜2026-09-18</div>
+</header>
+
+<div class="callout red">
+<b>总评：结构是这一版三份方案里最"交付化"的，可以说形式上是加分项；但它的核心机理被实测推翻，而且漏掉了比它所述更严重的问题。</b><br>
+① <b>「脊柱刻意后仰 15°~30°」——部位错、量级错。</b>实测：脊柱在 idle 里<b>几乎完全不动</b>（相对 bind pose 仅 +0.4°），后仰全部集中在 <b>颈段 −32° + 头骨 −12°（合计 ≈44°）</b>。<br>
+② <b>它完全没发现在 run 家族上真正的夸张是「大幅前冲」</b>——躯干 +34°~+62°、颈段 +52°~+64°，累计 86°~126°。这比 idle 的抬头问题在第三人称下更致命。<br>
+③ 按它给的权重（spine 30/35/25%，neck −60%）执行，在 idle 上会<b>把本来正确的躯干推成前倾</b>，在 run 上则是"歪打正着"地减小前倾——<b>本质上是拿错了手术刀</b>。
+</div>
+
+<h2>1. 实测校准：Gemini 的前提对了一半</h2>
+<p>方法：<code>plan_03/04/05</code> 三个脚本。前后方向先由两个独立锚点锁死——<b>披风链在 +Y（身后）、斧刃在 −Y（身前）</b>，故 forward = −Y，不依赖任何骨骼朝向约定。倾角只用关节坐标计算。</p>
+
+<h3>1.1 姿态偏离 bind pose 的实测值（正 = 前倾）</h3>
+<table>
+<tr><th>动作</th><th>帧数</th><th>躯干轴（pelvis→neck）</th><th>颈段（neck→head）</th><th>头骨自身轴</th><th>判读</th></tr>
+<tr><td>bind pose</td><td>—</td><td>−7.6°</td><td>+7.2°</td><td>0.0°</td><td>基准：躯干略后、颈略前</td></tr>
+<tr><td><b>idle1</b></td><td>53</td><td><b>−2.7 / +0.4 / +3.0</b></td><td><b>−37.2 / −32.1 / −28.7</b></td><td><b>−16.8 / −12.1 / −8.3</b></td><td><span class="tag bad">脊柱不动，颈+头后仰 ≈44°</span></td></tr>
+<tr><td><b>idle2</b></td><td>177</td><td>−2.7 / −0.3 / +2.9</td><td>−40.3 / −35.1 / −28.7</td><td>−17.0 / −15.2 / −5.9</td><td><span class="tag bad">同上</span></td></tr>
+<tr><td>idlein</td><td>113</td><td>−2.8 / +38.7 / +47.0</td><td>−37.0 / +29.8 / +39.6</td><td>−21.5 / −2.8 / +22.2</td><td>战斗中前倾</td></tr>
+<tr><td><b>run</b></td><td>29</td><td><b>+30.5 / +34.3 / +44.8</b></td><td><b>+27.7 / +52.3 / +62.9</b></td><td>+8.9 / +10.8 / +13.1</td><td><span class="tag bad">累计 ~86° 前冲</span></td></tr>
+<tr><td><b>run_fast</b></td><td>32</td><td><b>+56.8 / +61.9 / +68.3</b></td><td><b>+53.1 / +63.8 / +82.0</b></td><td>+19.6 / +22.4 / +28.5</td><td><span class="tag bad">累计 ~126°，几乎趴平</span></td></tr>
+<tr><td>run_homeguard</td><td>32</td><td>+44.7 / +52.4 / +56.6</td><td>+51.7 / +65.7 / +79.8</td><td>+8.9 / +11.3 / +14.1</td><td>同上</td></tr>
+<tr><td>attack1</td><td>59</td><td>−18.3 / +16.8 / +54.3</td><td>−8.5 / +34.4 / +69.4</td><td>−23.6 / +0.2 / +1.7</td><td>帧内摆幅极大，属设计意图</td></tr>
+<tr><td>spell1 / spell4_5</td><td>13 / 27</td><td>+23.8 / +2.8（中位）</td><td>+2.9 / +24.6（中位）</td><td>−8.1 / +17.0（中位）</td><td>动作瞬间，保留</td></tr>
+<tr><td>recall</td><td>209</td><td>−59.6 / −3.5 / +38.2</td><td>−95.1 / −23.1 / +31.0</td><td>−52.9 / −11.4 / +4.7</td><td>回城，保留</td></tr>
+</table>
+<p class="mono" style="color:#525a62">格式：min / 中位 / max，单位度。相对 bind pose 的差值。</p>
+
+<h3>1.2 结论</h3>
+<div class="callout green">
+<b>Gemini 说对的部分：</b>LOL 确实为俯视相机做了人工畸变，而且确实发生在"抬头"这件事上（34°+ 相机俯角下要露脸，必须把头抬起来）。<br><br>
+<b>Gemini 说错的部分（三处，都很关键）：</b>
+<ol>
+<li><b>部位错。</b>它说"脊柱链（Spine1~Neck）被刻意向后仰"。实测脊柱链在 idle 上<b>零位移</b>（−2.7°~+3.0°，中位 +0.4°）。后仰 100% 来自 <code>Neck</code> 骨本身 + <code>Head</code> 骨。</li>
+<li><b>量级错。</b>它说 15°~30°。实测颈段 −32°~−35°、头骨再叠加 −12°~−15°，<b>合计 ≈44°~50°</b>。是它估计的 1.5~3 倍。</li>
+<li><b>漏掉了更严重的一半：run 家族是「前倾」不是"后仰"。</b>run_fast 躯干 +62° + 颈段 +64° ≈ 126° 累计前冲。放到第三人称上不是"望天"，是<b>"趴着跑、脸朝地"</b>。这一条它整份方案零提及。</li>
+</ol>
+</div>
+
+<h3>1.3 按它的方案执行会怎样（推演）</h3>
+<table>
+<tr><th>动作</th><th>实际需要</th><th>Gemini 权重（spine 30/35/25%，neck −60%）会给什么</th><th>结果</th></tr>
+<tr><td>idle1 / idle2</td><td>spine <b>0</b>；neck −32°；head −12°</td><td>spine 上施加 −90% 的反向补偿 → 躯干被推向前倾 ~20°+</td><td><span class="tag bad">制造新错误</span></td></tr>
+<tr><td>run / run_fast</td><td>spine −15°~−45°；neck −25°~−55°</td><td>方向碰巧一致，但因脊柱权重大头没归位而收敛不足</td><td><span class="tag warn">歪打正着，精度不够</span></td></tr>
+<tr><td>attack / spell</td><td>保留（攻击本就该大幅），只做限位软压缩</td><td>同样施加反向补偿 → 削弱攻击力度</td><td><span class="tag bad">劣化</span></td></tr>
+</table>
+
+<h2>2. 事实性错误清单（逐条对照实测）</h2>
+<table>
+<tr><th>#</th><th>Gemini 的说法</th><th>实测</th><th>判定</th></tr>
+<tr><td>1</td><td>「身高约 2.47 米（8.5~9 头身）」</td><td>网格 z 上限 <b>2.06 m</b>（UE SK bounds z = 3.8~206.2 cm）；2.47 这个数字源自 <code>AGENTS.md</code> 里一句未核实的旧注，属<b>继承性错误</b>，现在应当一并修正文档</td><td><span class="tag bad">错</span></td></tr>
+<tr><td>2</td><td>「头大、四肢短粗」，"短腿步幅复制到大长腿"</td><td>腿长/身高：LOL <b>0.5281</b> vs 目标 <b>0.5050</b> —— <b>LOL 的腿相对更长</b>；臂长/身高 0.3677 vs 0.3681，几乎相同；肩宽比 0.2494 vs 0.2385。真正的比例陷阱是<b>髋宽 −22%、颈长 +84%</b></td><td><span class="tag bad">方向反了</span></td></tr>
+<tr><td>3</td><td>「毁灭性溜冰」的量化依据"1.0~1.2m 步幅 vs 2.47m 身高的长腿"</td><td>腿长比只差 4.4%；滑步风险真实存在，但成因是<b>动画隐含速度与胶囊速度不匹配</b>，不是"短腿对长腿"</td><td><span class="tag warn">结论对、机理错</span></td></tr>
+<tr><td>4</td><td>阶段 1 要「根运动归一化与提取，生成 Root Motion FBX」；§6 又推荐 in-place 方案 A</td><td>自相矛盾。且源 LOL 动画<b>本来就是 in-place</b>（位移交给游戏代码），若采纳 A，这一步是<b>纯白做</b></td><td><span class="tag bad">内部冲突</span></td></tr>
+<tr><td>5</td><td>「选取最核心的 7 个代表性动作」，随后列出 10 个名字</td><td>数量不符（idle1/idle2/run/run_fast/turn_l/turn_r/attack1/attack2/spell1/spell4_5）</td><td><span class="tag warn">小疵</span></td></tr>
+<tr><td>6</td><td>导入到 <code>/Game/Character/Darius/Animations/</code></td><td>实际目录是 <code>/Game/Character/Darius/<b>Anims</b>/</code>，未核对</td><td><span class="tag warn">小疵</span></td></tr>
+<tr><td>7</td><td>「UE <b>内置</b>物理（Chaos Cloth 或 AnimDynamics / <b>KawaiiPhysics</b>）」</td><td>Chaos Cloth、AnimDynamics 是内置；<b>KawaiiPhysics 是第三方插件</b>，不是内置。且 6 骨披风用 Chaos Cloth 过重，AnimDynamics 才是对的</td><td><span class="tag warn">表述不严谨</span></td></tr>
+<tr><td>8</td><td>「普攻/Q 技能前摇仅 1~2 帧拉满」</td><td>实测 attack1 = 2.433s（73 帧）、attack2 = 2.300s（69 帧）、spell1 = 0.533s（16 帧）。"1~2 帧"是修辞不是数据</td><td><span class="tag warn">夸大</span></td></tr>
+<tr><td>9</td><td>引用「Riot Games 官方 GDC 动画讲座（Animation Workflow Hacks）」、「暴雪《守望先锋》FPP tricks」、《破败之王》作为 MOBA→动作衍生案例</td><td>该 GDC 讲座名无法核实，有编造风险；<b>Overwatch 是 FPP</b>，其技巧是"藏住身体避免穿模"，与 TPP 要"暴露身体"正好反向，属<b>范畴错误</b>；《破败之王》是回合制 RPG，不是 MOBA→动作衍生</td><td><span class="tag bad">引用不可靠</span></td></tr>
+<tr><td>10</td><td>（未提及）源骨架里混着 <code>Lion_*</code> 四足、<code>Throne/L/R_Throne/Gem/Piece_1~3</code> 王座道具、<code>*Buffbone*</code> VFX 挂点</td><td>179 骨里身体链只有 ~30 根，<b>不白名单裁剪就会把王座/狮子当骨骼重定向</b></td><td><span class="tag bad">重大遗漏</span></td></tr>
+<tr><td>11</td><td>（未提及）<code>L_Foot</code> / <code>L_Toe</code> 是长度仅 <b>0.014</b> 的微骨</td><td>它的脚部锁地方案要"采样双脚世界坐标高度 Z"，若用 <code>L_Foot.head</code> 当接触点，<b>接触面在定义上就是错的</b>（正确踝点是 <code>L_KneeLower.tail</code>）</td><td><span class="tag bad">重大遗漏</span></td></tr>
+<tr><td>12</td><td>（未提及）目标侧 <b>24 根 twist 骨</b> + <code>kneepad_jnt_*</code>/<code>ankle_front|back_jnt_*</code>/<code>shoulderpad_jnt_*</code></td><td>这些是硬质护具骨，<b>护膝穿模的真凶</b>。它只讨论了披风</td><td><span class="tag warn">遗漏</span></td></tr>
+<tr><td>13</td><td>（未提及）<b>LOL 根本没有 walk 动画</b></td><td>实测 46 个动作里只有 idle1/idle2/idlein/run/run_fast/run_homeguard。<br>但它的 BlendSpace 写「Idle1 → Run → RunFast」、ABP 写「Idle ↔ Walk/Run ↔ Turns」——<b>walk 被凭空假设存在</b></td><td><span class="tag bad">重大遗漏</span></td></tr>
+<tr><td>14</td><td>「配置 BP_DariusCharacter 的 AnimClass 为 ABP_Darius」（当前是骨架不匹配的 <code>ABP_Unarmed</code>）</td><td>属实</td><td><span class="tag ok">正确</span></td></tr>
+<tr><td>15</td><td>动作名核对：spell4_5 / turn_l / turn_r</td><td>实测全部存在（spell4_5 = 1.1s 的确有）—— <b>我上一版曾误判 spell4_5 不存在，这一条 Gemini 是对的</b></td><td><span class="tag ok">正确</span></td></tr>
+</table>
+
+<h2>3. 方案设计上的四个实质问题</h2>
+
+<h3>3.1 G2 门禁「视线 |Pitch| ≤ 5°」是个危险约束</h3>
+<p>逐帧强制头部前向绝对水平，会<b>剥夺头部随动作的自然点头</b>——跑步时头本来就应该随躯干有 3°~8° 的周期性起伏。更危险的是：如果按它自己 idlen/attack 的实测（颈段最大 +39°/+69°）去做硬约束，会在发力帧产生明显的"头部卡住"感。</p>
+<p><b>修正：</b>改成两级——① 慢变偏置消除（用低通滤波估出"俯视补偿基线"，只减去它）；② 关键帧约束（idle 站立帧 |pitch| ≤ 6°，发力帧放宽到 ≤ 25°）。指标改为「<b>头部相对躯干的偏置在整段动画上的标准差 &lt; 4°</b>」——这才对应"没有卡住"。</p>
+
+<h3>3.2 G3 只测动画内部脚滑，测不到世界空间滑步 —— 验收门禁有真实漏洞</h3>
+<p>脚部锁地解决的是<b>动画帧内</b>脚掌相对骨盆的漂移。但 in-place 动画 + <code>CharacterMovement</code> 是两层独立速度：动画隐含速度（步幅 × 周期）与胶囊移动速度。<b>两者不匹配时照样溜冰，而 G3 完全看不见这件事。</b></p>
+<div class="callout red">
+这意味着：按 Gemini 的门禁，一个"G3 满分但引擎里疯狂溜冰"的交付物<b>可以通过验收</b>。必须补一条：<br>
+<b>G3b 动画隐含速度 vs <code>MaxWalkSpeed</code> 误差 &lt; 5%</b>（脚本从支撑相的骨盆位移推算）。
+</div>
+
+<h3>3.3 G4「左手腕与斧柄插槽 ≤ 0.5cm」过严</h3>
+<p>源骨架没有任何 IK/极向量骨（实测 twist/ik/ctrl 全为 0），目标前臂还有 2 根 twist 骨需要程序化分配。在这种条件下要求 0.5cm 贴合，实际会逼出"用 IK 硬拉导致肩肘姿势崩坏"。建议改为 <b>≤ 2cm</b>，或按斧柄直径定义（贴合即"掌面与柄面接触且不穿透"），并把判据放在<b>视觉关键帧</b>而不是全帧。</p>
+
+<h3>3.4 最大的战略性缺失：没用目标骨架的最大优势</h3>
+<div class="callout amber">
+<b>2XKO 主干是完全的 UE Mannequin 命名</b>（<code>pelvis / spine_01~03 / clavicle_l / upperarm_l / lowerarm_l / hand_l / thigh_l / calf_l / foot_l / ball_l / toe_l</code>，本次实测确认）。<br><br>
+这意味着 <b>UE5 IK Retargeter 可以直接用</b>，白拿四件它正在手写重造的东西：
+<ul>
+<li><b>Edit Retarget Pose</b> —— 就是它方案里 Q（绕 Z 180°）与 K（逐骨基准差补偿）的可视化版本；</li>
+<li><b>Chain Scaling = Globally Scaled</b> —— 按源/目标骨长比自动缩放（我们实测腿长差 4.4%、臂长差 0.1%，正好需要分链）；</li>
+<li><b>Stride Warping</b> —— 步幅自动适配腿长，正对"滑步"；</li>
+<li><b>Speed Planting</b>（配 <code>MotionExtractorModifier</code> 生成脚速曲线）—— Epic 官方的滑步标准解法。</li>
+</ul>
+Gemini 全篇只走自研 Blender 管线，等于<b>放弃了官方维护的步幅与脚部方案</b>，全部自己造。另外它也没提到两条降维路径：<br>
+· <b>Aventurine: League Tools</b> —— 原生读写 <code>.anm</code>，绕开 glTF 骨骼朝向污染（正是「matrix_local 平均差 84.9°」的根源）；<br>
+· <b>2XKO 本体可解包（UE5.4）</b>，Darius 的第三人称动画真实存在（<code>darius_base_nav_std_*</code>）——locomotion 用它 = 零重定向误差。
+</div>
+
+<h2>4. 值得吸收的优点（这些比我的上一版做得好）</h2>
+<table>
+<tr><th>它的做法</th><th>为什么值得吸收</th></tr>
+<tr><td><b>双手主从武器约束 + 斧柄副握插槽</b>（Master-Slave Weapon IK + <code>Socket_LeftHand_Grip</code>）</td>
+    <td><b>我上一版确实漏了。</b>2XKO 只有 <code>weapon_jnt_r</code> 一个武器骨，源侧左手又没有独立握持信息。这是第三方称特写最容易露馅的点，必须补进计划</td></tr>
+<tr><td>风险矩阵的「根因与案发表现 / 防御与解决策略」三段式</td><td>比单纯列风险可读性强，便于逐条验收</td></tr>
+<tr><td>验收门禁的"一票否决"形式（G1~G5，不过不许进下一阶段）</td><td>与项目铁律 0.1 完全一致，形式正确</td></tr>
+<tr><td>阶段划分里明确写出产出脚本名（<code>blender_55_retarget_v5.py</code>）</td><td>可执行性强，便于排期</td></tr>
+<tr><td>「绝不靠整体放慢播放速度掩盖滑步」</td><td>正确且重要，值得写进规范</td></tr>
+<tr><td>根运动 A/B、披风 A/B 的用户确认项</td><td>格式好，把决策权交给用户而不是替他决定</td></tr>
+<tr><td>twist flip 的"退化时以大臂/大腿平面作滚转锚点"</td><td>方向正确（虽然没定位到源侧 Upper/Lower 双骨这个真因）</td></tr>
+</table>
+
+<h2>5. 修正后的去倾斜策略（可直接替代它的 Spine_Pitch_Compensation）</h2>
+<div class="callout green">
+原则：<b>不是"统一反向补偿"，而是按实测逐动作反解</b>。脊柱链与颈/头要分开处理——实测已证明它们的行为完全不同。
+</div>
+<table>
+<tr><th>动作</th><th>实测偏离 bind</th><th>处理</th><th>目标值</th></tr>
+<tr><td>idle1 / idle2</td><td>躯干 0°，颈 −32°，头 −12°</td><td><b>spine 链：不动</b><br>neck：−32°<br>head：−12°</td><td>躯干 −7.6°（与 bind 一致），颈段回 +7.2°，头顶竖直</td></tr>
+<tr><td>run</td><td>躯干 +34°，颈 +52°，头 +11°</td><td>spine 链路 −15°~−25°<br>neck −25°~−40°</td><td>躯干前倾落到 12°~20°，颈段前伸 ≤25°</td></tr>
+<tr><td>run_fast</td><td>躯干 +62°，颈 +64°，头 +22°</td><td>spine 链路 −35°~−45°<br>neck −40°~−55°</td><td>躯干前倾 18°~25°（人体冲刺上限），颈段 ≤30°</td></tr>
+<tr><td>run_homeguard</td><td>躯干 +52°，颈 +66°</td><td>同 run_fast</td><td>同上</td></tr>
+<tr><td>attack1 / attack2 / spell*</td><td>帧内摆幅 −18°~+69°</td><td><b>不做去倾斜</b>，只做生理限位软压缩</td><td>保留 ≥75% 幅度</td></tr>
+<tr><td>dance / recall / taunt</td><td>设计意图</td><td>不动</td><td>—</td></tr>
+</table>
+<p><b>实现建议：</b>不要用固定百分比权重（现在的 <code>spine_01 45% / spine_02 35% / spine_03 20% / neck −60%</code> 以及 Gemini 改的 30/35/25/−60 都是<b>无出处的魔数</b>）。改为：<b>先跑 <code>plan_05</code> 量出每个动作的实测偏离，再按目标值反解出逐骨补偿角</b>，把数字和来源一起写进配置。</p>
+
+<h2>6. 分项评分</h2>
+<table>
+<tr><th>维度</th><th>评分</th><th>说明</th></tr>
+<tr><td>工程结构与可交付性</td><td><b>A−</b></td><td>阶段/产出物/风险矩阵/门禁/用户确认项齐全，形式最完整</td></tr>
+<tr><td>对源资产的实际掌握</td><td><b>D</b></td><td>核心机理被实测推翻；未发现 179 骨里的道具子树、微骨陷阱；比例分析方向反了</td></tr>
+<tr><td>事实准确度</td><td><b>D+</b></td><td>身高、体型、根运动逻辑、第三方插件归类、引用来源均有问题；但也有 2 条核对正确</td></tr>
+<tr><td>工具选型</td><td><b>C−</b></td><td>完全无视 UE IK Retargeter / Aventurine / 2XKO 官方动画三条更高性价比路径</td></tr>
+<tr><td>验证严谨度</td><td><b>B−</b></td><td>有量化门禁（难得），但 G2 设计危险、G3 存在真实漏洞、G4 过严</td></tr>
+<tr><td>可执行性</td><td><b>B+</b></td><td>步骤具体、有脚本名，但执行方向需按本评审修正</td></tr>
+<tr><td colspan="2"><b>综合</b></td><td><b>形式上可用作骨架，机理与数据层面必须整体返工。</b>建议：保留它的阶段结构与风险矩阵形式，把「去倾斜」一章换成第 5 节的反解表，补上 G3b 隐含速度门禁，并把工具链切到 IK Retargeter 为主。</td></tr>
+</table>
+
+<h2>附录 · 本次新增的实测脚本</h2>
+<table>
+<tr><th>脚本</th><th>用途</th><th>关键产出</th></tr>
+<tr><td><code>plan_03_lean_audit.py</code></td><td>逐动作躯干轴倾角（min/中位/max/均值）</td><td>发现 run 家族是前倾 29°~54°</td></tr>
+<tr><td><code>plan_04_facing.py</code></td><td>用「披风在身后 + 斧刃在身前」锚定 forward 符号</td><td>forward = −Y 确立，倾角符号不再有歧义</td></tr>
+<tr><td><code>plan_05_headpitch.py</code></td><td>躯干/颈段/头骨 相对 bind pose 的俯仰偏离</td><td>定位"仰面望天"在颈+头（≈44°），脊柱为 0</td></tr>
+</table>
+
+</div>
+</body>
+</html>

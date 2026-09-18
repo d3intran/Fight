@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>动画绑定尝试汇报 · 假设-验证-推翻 全记录</title>
+<style>
+  :root{--bg:#f5f6f8;--panel:#fff;--ink:#1b1f23;--ink2:#525a62;--line:#e1e5ea;
+        --red:#c0392b;--blue:#2b6ca3;--green:#1e8e5a;--amber:#b8860b;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;line-height:1.72}
+  .wrap{max-width:1080px;margin:0 auto;padding:38px 26px 90px}
+  header{border-bottom:3px solid var(--red);padding-bottom:16px;margin-bottom:30px}
+  h1{font-size:26px;margin:0 0 8px}
+  .sub{color:var(--ink2);font-size:14px}
+  h2{font-size:20px;margin:44px 0 12px;padding-left:12px;border-left:5px solid var(--blue)}
+  h3{font-size:16px;margin:24px 0 8px;color:var(--blue)}
+  p,li{font-size:14.5px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+         padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(20,30,40,.05)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:#eef1f4;font-weight:600}
+  code{background:#eef1f4;padding:1px 6px;border-radius:4px;font-size:13px;
+       font-family:Consolas,"Courier New",monospace}
+  pre{background:#20262c;color:#dfe6ec;padding:14px 16px;border-radius:8px;
+      overflow-x:auto;font-size:12.5px;line-height:1.55}
+  .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:20px;margin-right:6px}
+  .tag.ok{background:#e2f5ea;color:var(--green)}
+  .tag.bad{background:#fdeaea;color:var(--red)}
+  .tag.warn{background:#fdf3dd;color:var(--amber)}
+  .tag.info{background:#e6f0f8;color:var(--blue)}
+  .callout{border-left:4px solid var(--red);background:#fdf1ef;padding:12px 16px;
+           border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.ok{border-color:var(--green);background:#eef8f2}
+  .callout.info{border-color:var(--blue);background:#eff5fa}
+  .big{font-size:26px;font-weight:700}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center}
+  .kpi .n{font-size:26px;font-weight:700;line-height:1.2}
+  .kpi .l{font-size:12.5px;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>动画绑定尝试汇报 · 假设 → 验证 → 推翻 全记录</h1>
+  <div class="sub">Fight 项目 · 2026-09-18 · 面向「先预处理 LOL 资产、再往 UE 套」的新计划</div>
+</header>
+
+<div class="callout">
+  <b>一句话总结：</b>我第一版重定向交付得太草率（只验了"骨骼名对上、能导入、脚不穿地"就宣布完成），
+  实际存在 <b>26.8° 的系统性角度偏斜</b>。停下来用数据重做后，
+  找到了真因（两套骨架的<b>静止姿态基准差</b>），误差降到 <b>9.7°</b>。
+  <b>但离"可交付"还有距离，且我不再在 UE 里打补丁，改回 DCC 先做干净。</b>
+</div>
+
+<h2>一、时间线：我做了什么、错在哪</h2>
+
+<table>
+  <tr><th style="width:70px">阶段</th><th>动作</th><th>结果</th></tr>
+  <tr>
+    <td>①</td>
+    <td>修斧头 100× 缩放 + 剔除描边壳里的斧头副本</td>
+    <td><span class="tag ok">有效</span>已落盘，数据可验收（世界缩放 100→1；地面以下顶点 2444→0）</td>
+  </tr>
+  <tr>
+    <td>②</td>
+    <td>v1/v2 重定向：旋转增量法 <code>D = W_pose · matrix_local⁻¹</code>，导出 8 支动画进 UE</td>
+    <td><span class="tag bad">草率交付</span>只验了导入成功，<b>没验姿态角度</b>。实测偏斜 26.8°</td>
+  </tr>
+  <tr>
+    <td>③</td>
+    <td>v3：怀疑 glTF 骨骼朝向不可靠，改纯几何帧驱动</td>
+    <td><span class="tag bad">假设被否</span>误差 35.5° → 37.1°，毫无改善</td>
+  </tr>
+  <tr>
+    <td>④</td>
+    <td>建立客观验证器 + 逐关节审计，定位真因</td>
+    <td><span class="tag ok">找到根因</span>静止姿态基准差</td>
+  </tr>
+  <tr>
+    <td>⑤</td>
+    <td>v4：加入逐骨骼静止基准对齐矩阵 K</td>
+    <td><span class="tag ok">大幅改善</span>26.8° → <b>9.7°</b>（2.8×）</td>
+  </tr>
+</table>
+
+<h2>二、被数据否掉的两个假设（重要：别再走这两条路）</h2>
+
+<h3>假设 A：Blender glTF 导入的骨骼朝向 <code>matrix_local</code> 不可靠</h3>
+<div class="panel">
+  <p><b>测量结果 —— 假设的"事实部分"成立：</b></p>
+  <pre>【源 LOL (glTF 导入)】matrix_local 的 Y 轴 vs 真实关节几何方向
+   Root      → Pelvis       Y轴=(0,0,+1)   几何=(0,+0.12,-0.99)   173.0°  完全相反
+   L_Hip     → L_KneeUpper  Y轴=(0,-1,0)   几何=(-0.13,-0.03,-0.99)  89.9°
+   L_Clavicle→ L_Shoulder   Y轴=(0,0,+1)   几何=(-0.98,+0.21,+0.04)  88.0°
+   平均 84.9°  中位 90.0°  最大 173.0°
+
+【目标 2XKO (FBX 导入)】
+   thigh_l   → calf_l       Y轴=(0.22,-0.01,-0.97)  几何=同  0.0°  ✓
+   upperarm_l→ lowerarm_l   Y轴=(0.71,0.12,-0.69)   几何=同  0.0°  ✓</pre>
+  <p><b>但推论被否：</b>把公式换成纯几何帧驱动（v3）后，误差 35.5° → 37.1°，<b>没有任何改善</b>。</p>
+  <div class="callout">
+    <b>教训：</b>"某个量测出来是错的" ≠ "它是误差来源"。必须做<b>对照实验</b>验证因果，不能凭推理下结论。
+  </div>
+</div>
+
+<h3>假设 B：帧没对齐（FBX 往返有 1 帧偏移）</h3>
+<div class="panel">
+  <p>确实存在 1 帧偏移（源 0~28 / 重定向 1~29），但修正对齐后数字不变。<span class="tag bad">假设被否</span></p>
+</div>
+
+<h2>三、真因：两套骨架的「静止姿态基准差」</h2>
+
+<div class="panel">
+  <p>用 <b>绝对朝向误差</b> 这个与静止姿态无关的指标（`angle(Q·源骨方向, 目标骨方向)`，只用关节坐标）
+  量化后发现：<b>两套骨架在静止姿态下，同名骨骼的朝向本来就不同</b>。</p>
+  <pre>逐骨骼静止方向差（源 A-Pose 经 Q 对齐后 vs 目标 A-Pose）
+   thigh_l      5.9°   OK
+   upperarm_l   7.6°   OK
+   spine_02    12.7°   补偿
+   calf_l      20.0°   补偿
+   spine_01    22.4°   补偿
+   head        28.9°   补偿
+   lowerarm_l  39.1°   补偿      ← 前臂
+   hand_l      39.1°   补偿
+   pelvis      41.1°   补偿      ← 骨盆-胯
+   clavicle_l  43.4°   补偿      ← 锁骨
+   foot_l     118.9°   大幅补偿
+   root       175.8°   大幅补偿</pre>
+  <p><b>旋转增量法 <code>W_t = D · R_t_rest</code> 只能搬"增量"，搬不动"基准差"</b> ——
+  每帧都恒定带着这个偏斜。这就是你看到的"整体有角度偏斜"。</p>
+</div>
+
+<h3>修正公式（v4）</h3>
+<pre>D_src = F_src_pose · F_src_rest⁻¹          # 源骨骼世界旋转增量（F = 关节坐标构造的几何朝向帧）
+D'    = Q · D_src · Q⁻¹                     # Q = 两套骨架基准系对齐矩阵（实测绕 Z 180°）
+K     = u_tgt.rotation_difference(u_src)    # ★ 逐骨骼「静止基准对齐」最小弧旋转
+W_tgt = D' · K · R_tgt_rest                 # 目标骨骼世界朝向
+
+  u_tgt = F_tgt_rest · (0,1,0)              # 目标静止骨方向
+  u_src = Q · F_src_rest · (0,1,0)          # 源静止骨方向（映射到目标系）</pre>
+
+<div class="callout">
+  <b>⚠️ 一个差点翻车的细节：</b>K 一开始我写成整个矩阵 <code>Q·F_src·F_tgt⁻¹</code>，
+  结果 K 的角度全是 175°~180° —— 因为几何帧的<b>滚转参考方向天然差 180°</b>，
+  整矩阵对齐会把骨骼直接翻转。必须降为<b>最小弧旋转</b>（只对齐骨方向，不动滚转）。
+  这是靠打印 K 的角度分布发现的，不是靠推理。
+</div>
+
+<h2>四、当前精度实测（run 动画，504 样本）</h2>
+
+<div class="grid3">
+  <div class="kpi"><div class="n" style="color:var(--red)">26.8°</div><div class="l">v3 均值（旧）</div></div>
+  <div class="kpi"><div class="n" style="color:var(--green)">9.7°</div><div class="l">v4 均值（新）</div></div>
+  <div class="kpi"><div class="n" style="color:var(--green)">2.8×</div><div class="l">改善倍数</div></div>
+</div>
+
+<table>
+  <tr><th>关节</th><th>v3 均值</th><th>v4 均值</th><th>判定</th></tr>
+  <tr><td>下脊椎 spine_01→02</td><td>23.5°</td><td><b>4.7°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>上脊椎 spine_02→03</td><td>13.5°</td><td><b>5.5°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>颈头</td><td>29.2°</td><td><b>7.4°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>右锁骨</td><td>43.8°</td><td><b>4.7°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>右上臂</td><td>7.9°</td><td><b>4.0°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>右前臂</td><td>39.2°</td><td><b>5.2°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>骨盆-左胯</td><td>43.9°</td><td><b>7.2°</b></td><td><span class="tag ok">优秀</span></td></tr>
+  <tr><td>左锁骨</td><td>43.0°</td><td>9.0°</td><td><span class="tag ok">良好</span></td></tr>
+  <tr><td>左大腿</td><td>12.5°</td><td>11.0°</td><td><span class="tag ok">良好</span></td></tr>
+  <tr><td>左上臂</td><td>14.7°</td><td>11.1°</td><td><span class="tag ok">良好</span></td></tr>
+  <tr><td>左前臂</td><td>40.8°</td><td>12.4°</td><td><span class="tag ok">良好</span></td></tr>
+  <tr><td>右小腿</td><td>17.6°</td><td>14.3°</td><td><span class="tag ok">良好</span></td></tr>
+  <tr><td><b>右大腿</b></td><td>17.9°</td><td><b>17.3°</b>（最大 63.3°）</td><td><span class="tag warn">待优化</span></td></tr>
+  <tr><td><b>左小腿</b></td><td>28.3°</td><td><b>22.2°</b>（最大 54.1°）</td><td><span class="tag warn">待优化</span></td></tr>
+</table>
+
+<div class="callout info">
+  <b>读数：</b>躯干（脊椎/颈头）和右臂已经进入"优秀"区间（4°~7°），
+  说明算法主干正确。但 <b>腿部仍有 17°~22° 的残留</b>，且极限帧最大到 63° ——
+  <b>这还没到可交付标准</b>。
+</div>
+
+<h2>五、当前资产状态</h2>
+
+<table>
+  <tr><th>产物</th><th>路径</th><th>状态</th></tr>
+  <tr><td>骨骼网格体（已剔除斧头几何）</td><td><code>SK_Darius_GodKing</code>（7 材质槽）</td>
+      <td><span class="tag ok">已落盘</span>包围盒 z = +3.8~206.2，地面以下顶点 0</td></tr>
+  <tr><td>武器插槽尺度契约</td><td><code>hand_rSocket.relative_scale = 0.01</code></td>
+      <td><span class="tag ok">已落盘</span></td></tr>
+  <tr><td>隐形材质阴影修正</td><td><code>M_Invisible.cast_dynamic_shadow_as_masked = True</code></td>
+      <td><span class="tag ok">已落盘</span></td></tr>
+  <tr><td><b>v4 重定向动画 ×8</b></td><td><code>Saved/Retarget/V4/*.fbx</code></td>
+      <td><span class="tag warn">精度未达标</span>均值 9.7°，腿部残留 17~22°</td></tr>
+  <tr><td>UE 内动画（v2 版本，偏斜 26.8°）</td><td><code>/Game/Character/Darius/Anims/</code></td>
+      <td><span class="tag bad">应作废重导</span>建议清空重来</td></tr>
+  <tr><td>BlendSpace</td><td><code>BS_Darius_Locomotion</code></td>
+      <td><span class="tag info">已建但依赖未定稿动画，先搁置</span></td></tr>
+</table>
+
+<h2>六、重新制定的计划（已写入 AGENTS.md）</h2>
+
+<div class="callout ok">
+  <b>总原则：</b>先把 LOL 资产在 DCC 里处理到<b>数据达标</b>，再往 UE 里套。
+  <b>不在 UE 里做本该在 DCC 做的修补。</b>
+</div>
+
+<h3>阶段 A：DCC 侧重定向精度收敛（当前）</h3>
+<table>
+  <tr><th>编号</th><th>任务</th><th>验收指标</th><th>状态</th></tr>
+  <tr><td>A1</td><td>建立可量化管线 + 修掉基准差偏斜</td><td>平均朝向误差 &lt; 15°</td>
+      <td><span class="tag ok">已完成</span>9.7°</td></tr>
+  <tr><td>A2</td><td>压低腿部残留误差（排查三点链弯曲平面退化 / 大腿小腿 twist 传递）</td>
+      <td><b>全部关节平均 &lt; 8°，最大 &lt; 30°</b></td><td><span class="tag warn">进行中</span></td></tr>
+  <tr><td>A3</td><td>足部锁地（Blender 内 IK 烘焙）</td><td>支撑相脚掌世界坐标漂移 &lt; 2cm</td><td>待办</td></tr>
+  <tr><td>A4</td><td>根运动归一</td><td>每循环位移写入 Root Motion</td><td>待办</td></tr>
+</table>
+
+<h3>阶段 B：UE 侧落地（资产定稿后才做）</h3>
+<ul>
+  <li><b>B1</b> 用 <code>anim_12_import_snap.py</code> 批量导入（30fps 帧边界对齐是硬要求）</li>
+  <li><b>B2</b> 创建 <code>BS_Darius_Locomotion</code> BlendSpace（Speed 0~600 / Direction ±180）</li>
+  <li><b>B3</b> 创建 <code>ABP_Darius</code>：Idle ↔ Walk ↔ Run 状态机 + Foot IK 层
+    <br><span class="tag info">已探明的可行路径</span>
+    <code>duplicate_asset(ABP_Unarmed)</code> → 改 <code>target_skeleton</code> →
+    <code>AnimationLibrary.get_nodes_of_class</code> 枚举节点改写 <code>sequence</code> → 编译。
+    <br>⚠️ Python <b>无法新增</b> AnimGraph 节点（<code>EdGraph</code> 无 <code>add_node</code>），只能改写已有节点。
+  </li>
+  <li><b>B4</b> 指定 <code>BP_DariusCharacter</code> 的 <code>anim_class</code></li>
+</ul>
+
+<h3>阶段 C：战斗与技能（原路线图顺延）</h3>
+<ul>
+  <li>攻击连招与打击判定（战斧 3 Socket Box/Sphere Trace + Ribbon Trail）</li>
+  <li>GAS 技能全复刻（被动流血 / Q / W / E / R）</li>
+</ul>
+
+<h2>七、沉淀的工具与规范</h2>
+
+<div class="panel">
+  <h3>已写入 AGENTS.md 第 0 节「美术资产处理铁律」</h3>
+  <ul>
+    <li><b>相信数据，禁止主观臆断</b>：任何美术资产改动前必须先建客观指标 → 测基线 → 提假设 → 用数据检验 → 改动 → 复测</li>
+    <li><b>用现成工具和轮子</b>：KDTree / bmesh / mathutils / ffmpeg / UE Python，不自己造</li>
+    <li><b>验证器必须与先验假设无关</b>：用关节坐标，不用骨骼朝向矩阵</li>
+    <li><b>假设被否立刻换方向</b>，不许硬撑（附本次两个被否假设的完整记录）</li>
+  </ul>
+  <h3>新增可复用验证器</h3>
+  <table>
+    <tr><th>脚本</th><th>用途</th></tr>
+    <tr><td><code>blender_41_axis_audit.py</code></td><td>骨骼朝向自检（matrix_local Y 轴 vs 几何方向）</td></tr>
+    <tr><td><code>blender_42_fidelity.py</code></td><td>Swing 保真度（与静止姿态无关）</td></tr>
+    <tr><td><code>blender_70_joint_audit.py</code></td><td>逐关节弯曲角逐帧对比表</td></tr>
+    <tr><td><b><code>blender_80_orient_verify.py</code></b></td><td><b>★ 绝对朝向误差（最终判据）</b></td></tr>
+    <tr><td><code>blender_51_retarget_v4.py</code></td><td>带 K 基准补偿的重定向正式版</td></tr>
+  </table>
+</div>
+
+<h2>八、需要你拍板的点</h2>
+<div class="panel">
+  <ol>
+    <li><b>腿部残留误差（17°~22°）的容忍度</b>：是继续压到 &lt;8°，还是先接受当前精度推进足部锁地？</li>
+    <li><b>是否清空 UE 里那 8 支偏斜动画</b>（<code>/Game/Character/Darius/Anims/</code>）重导？</li>
+    <li><b>阶段 A 与阶段 B 的顺序</b>：我建议严格 A 全部达标后再进 B，避免又在 UE 里返工。</li>
+    <li><b>是否需要中间可视化</b>：棒图 A/B 对比渲染脚本目前有 bug（球体尺寸算错），
+        是否值得修（数值验证器已经足够客观）？</li>
+  </ol>
+</div>
+
+</div>
+</body>
+</html>

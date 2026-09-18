@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>德莱厄斯（神王）音频触发逻辑探明报告</title>
+<style>
+  :root {
+    --bg:#f7f8fa; --card:#fff; --ink:#1a1d24; --sub:#5b6472; --line:#e3e7ee;
+    --accent:#b4532a; --accent2:#2a6bb4; --code:#f0f2f6;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:1240px; margin:0 auto; padding:40px 28px 80px; }
+  h1 { font-size:28px; margin:0 0 6px; letter-spacing:-.3px; }
+  .lead { color:var(--sub); margin:0 0 28px; }
+  h2 { font-size:20px; margin:44px 0 14px; padding-bottom:8px;
+    border-bottom:2px solid var(--line); }
+  h3 { font-size:16px; margin:26px 0 10px; color:var(--accent); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:20px 22px; margin:16px 0; }
+  .kpis { display:flex; gap:14px; flex-wrap:wrap; margin:22px 0 6px; }
+  .kpi { flex:1 1 150px; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; padding:14px 16px; }
+  .kpi b { display:block; font-size:24px; color:var(--accent2); line-height:1.3; }
+  .kpi span { color:var(--sub); font-size:12.5px; }
+  table { width:100%; border-collapse:collapse; background:var(--card);
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    font-size:13.5px; margin:12px 0; }
+  th { background:#eef1f6; text-align:left; padding:10px 12px; font-weight:600;
+    font-size:12.5px; color:var(--sub); border-bottom:1px solid var(--line);
+    position:sticky; top:0; }
+  td { padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  tr.grp td { background:#f2f5f9; font-weight:600; color:var(--accent);
+    font-size:13px; }
+  .cnt { color:var(--sub); font-weight:400; }
+  .ev { font-family:ui-monospace,Consolas,monospace; font-size:12.5px;
+    word-break:break-all; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; color:var(--sub); }
+  .fl code, .tr code { background:var(--code); padding:1px 5px; border-radius:4px;
+    font-size:11.5px; display:inline-block; margin:1px 0; }
+  .none { color:#b8c0cc; }
+  .more { color:var(--sub); font-size:11.5px; }
+  .flow { background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:18px 20px; overflow-x:auto; }
+  .flow code { font-size:12.5px; }
+  .note { border-left:3px solid var(--accent2); background:#f2f6fc;
+    padding:12px 16px; border-radius:0 8px 8px 0; margin:14px 0; font-size:13.5px; }
+  .warn { border-left-color:var(--accent); background:#fdf4f0; }
+  .search { width:100%; padding:10px 14px; font-size:14px; border:1px solid var(--line);
+    border-radius:8px; margin:14px 0 6px; background:var(--card); }
+  ul { padding-left:20px; } li { margin:5px 0; }
+  .tag { display:inline-block; background:var(--code); border-radius:5px;
+    padding:1px 7px; font-size:12px; font-family:ui-monospace,Consolas,monospace; }
+  .hide { display:none !important; }
+  footer { margin-top:56px; color:var(--sub); font-size:12.5px;
+    border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>德莱厄斯（神王）音频触发逻辑探明报告</h1>
+<p class="lead">从《英雄联盟》客户端原始资产中逆向出「音效 / 语音何时播报、播的是哪个文件」的完整链路。
+数据全部来自本机 WAD 解包，可复现、可验证。</p>
+
+<div class="kpis">
+  <div class="kpi"><b>145</b><span>音频事件条目</span></div>
+  <div class="kpi"><b>518</b><span>随机变体音频数</span></div>
+  <div class="kpi"><b>858</b><span>已定位 wav 文件</span></div>
+  <div class="kpi"><b>17</b><span>动画驱动的音效点</span></div>
+  <div class="kpi"><b>19</b><span>动画驱动的粒子点</span></div>
+</div>
+
+<h2>一、核心结论：LOL 的音效到底怎么触发的</h2>
+
+<div class="note warn">
+<b>反直觉的发现：</b>技能音效<b>不在</b> <code>darius.bin</code> 的技能定义里。
+通读 <code>data/characters/darius/darius.bin</code>（24 KB，含 Q/W/E/R/平A 全部数值）后确认，
+里面只有冷却、射程、伤害、系数等纯数值字段，<b>唯一的音频相关字段是 <code>mApplyMaterialOnHitSound</code></b>。
+音效事件是<b>按动画帧挂载</b>的。
+</div>
+
+<div class="card">
+<b>完整触发链路（已逐环节验证）</b>
+<div class="flow">
+<pre>
+① 动画配置 bin
+   data/characters/darius/animations/skin15.bin
+      mClipDataMap["Attack1"].mEventDataMap["&lt;事件标记&gt;"]
+         ├ __type = SoundEventData     -> mSoundName = "Play_sfx_DariusSkin15_DariusBasicAttack_foley"
+         ├ __type = ParticleEventData  -> mEffectKey = "Darius_BA_Swipe_01"
+         ├ __type = SubmeshVisibilityEventData / JointSnapEventData
+         └ mStartFrame / mEndFrame      -> 触发帧区间
+                    │
+                    │  Wwise 哈希：FNV-1 32 位，输入小写
+                    ▼
+② 事件表 bank（被剥离了名字表 STID，只剩哈希 ID）
+   assets/sounds/.../skin15/darius_skin15_sfx_events.bnk
+      Event(id=4103663980) -> EventAction -> Sound/Container -> wem short id
+                    ▼
+③ 音频数据 bank / 包
+   darius_skin15_sfx_audio.bnk  (DIDX+DATA 内嵌 wem)
+   darius_skin15_vo_audio.wpk   (r3d2 包，文件名为 wem id)
+                    ▼
+④ 本地 wav（vgmstream 转码）
+</pre>
+</div>
+</div>
+
+<h3>哈希算法的实测验证</h3>
+<p>用 <code>Play_sfx_DariusSkin15_DariusBasicAttack_foley</code> 做 FNV-1（<b>先乘后异或</b>，输入转小写）得到
+<code>4103663980</code>，在 bank 的 Event 集合中<b>命中</b>。这一步是整个逆向的钥匙 ——
+它把 bin 里的明文名字与 bank 里的匿名哈希 ID 缝合起来。</p>
+
+<div class="note">
+<b>两个不同的哈希，别搞混：</b>
+<ul>
+<li><b>Wwise 音频事件</b>（音效/语音事件名）→ <span class="tag">FNV-1</span> 先乘后异或，输入小写</li>
+<li><b>LOL bin 字段/条目</b>（如 <code>AFKDetection2 → e4460934</code>）→ <span class="tag">FNV-1a</span> 先异或后乘，输入小写</li>
+</ul>
+</div>
+
+<h3>命名规范</h3>
+<div class="card">
+<pre><code>Play_sfx_&lt;英雄&gt;&lt;皮肤&gt;_&lt;技能&gt;_&lt;阶段&gt;      音效
+Play_vo_&lt;英雄&gt;&lt;皮肤&gt;_&lt;触发场景&gt;&lt;2D|3D&gt;&lt;变体&gt;   语音</code></pre>
+<ul>
+<li><b>阶段</b>：<code>OnCast</code> 起手 / <code>OnHit</code> 命中 / <code>hit_inner</code>·<code>hit_outter</code> 内圈外圈 /
+<code>hit_kill</code> 击杀 / <code>swing</code> 挥砍 / <code>foley</code> 衣物摩擦 /
+<code>buffactivate</code> buff 激活 / <code>loop</code> 循环 / <code>leadin</code>·<code>leadout</code> 前奏尾奏 / <code>oba</code> 一次性变体</li>
+<li><b>2D / 3D</b>：<code>2D</code> = 非定位音（UI 播报类，不随位置衰减）；
+<code>3D</code> = 定位音（从角色位置发出，随距离衰减）</li>
+<li><b>变体后缀</b>：<code>General</code> 通用 / <code>First</code> 首次 / <code>Penta</code> 五杀 /
+<code>GarenSkin13</code> 等为特定对手/装备专用</li>
+</ul>
+</div>
+
+<h2>二、平A 与 QWER 音效清单</h2>
+<p>以下是神王皮肤（skin15）与基础皮肤（base）的完整技能音效事件。<b>变体数</b>表示该事件背后有多个随机音频，
+每次触发随机播一个（Wwise RandomSequenceContainer）。</p>
+
+<input class="search" id="s1" placeholder="搜索事件名 / 分类…（例如 Cleave、OnHit）">
+<table id="t1">
+<thead><tr><th style="width:36%">事件名（mSoundName）</th><th style="width:7%">变体</th>
+<th style="width:7%">文件</th><th style="width:34%">对应 wav 文件</th><th style="width:16%">动画触发</th></tr></thead>
+<tbody>
+<tr class="grp"><td colspan="5">平A 起手 / BasicAttack Cast <span class="cnt">4</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack2_OnCast</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_SFX\sfx_22_416206401.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_22_416206401.wav</code><br><code>Audio_SFX\sfx_08_118095133.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_08_118095133.wav</code><br><code>Audio_SFX\sfx_37_638562403.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_37_638562403.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_OnCast</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_SFX\sfx_22_416206401.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_22_416206401.wav</code><br><code>Audio_SFX\sfx_08_118095133.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_08_118095133.wav</code><br><code>Audio_SFX\sfx_37_638562403.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_37_638562403.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusBasicAttack2_OnCast</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_06_32439799.wav</code><br><code>Audio_SFX_Base\sfxbase_32_300119636.wav</code><br><code>Audio_SFX_Base\sfxbase_03_18723205.wav</code><br><code>Audio_SFX_Base\sfxbase_14_118543656.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusBasicAttack_OnCast</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_06_32439799.wav</code><br><code>Audio_SFX_Base\sfxbase_32_300119636.wav</code><br><code>Audio_SFX_Base\sfxbase_03_18723205.wav</code><br><code>Audio_SFX_Base\sfxbase_14_118543656.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">平A 命中 / BasicAttack Hit <span class="cnt">4</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack2_OnHit</td><td class="num">12</td><td class="num">24</td><td class="fl"><code>Audio_SFX\sfx_05_64359468.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_05_64359468.wav</code><br><code>Audio_SFX\sfx_07_116596741.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_07_116596741.wav</code><br><code>Audio_SFX\sfx_17_275411544.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_17_275411544.wav</code><br><code>Audio_SFX\sfx_14_228035728.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_14_228035728.wav</code><br><span class="more">… 共 24 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_OnHit</td><td class="num">12</td><td class="num">24</td><td class="fl"><code>Audio_SFX\sfx_05_64359468.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_05_64359468.wav</code><br><code>Audio_SFX\sfx_07_116596741.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_07_116596741.wav</code><br><code>Audio_SFX\sfx_17_275411544.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_17_275411544.wav</code><br><code>Audio_SFX\sfx_14_228035728.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_14_228035728.wav</code><br><span class="more">… 共 24 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusBasicAttack2_OnHit</td><td class="num">16</td><td class="num">16</td><td class="fl"><code>Audio_SFX_Base\sfxbase_16_141715137.wav</code><br><code>Audio_SFX_Base\sfxbase_08_71196676.wav</code><br><code>Audio_SFX_Base\sfxbase_10_89654828.wav</code><br><code>Audio_SFX_Base\sfxbase_17_157022166.wav</code><br><code>Audio_SFX_Base\sfxbase_33_311785540.wav</code><br><code>Audio_SFX_Base\sfxbase_34_329557927.wav</code><br><code>Audio_SFX_Base\sfxbase_11_90169099.wav</code><br><code>Audio_SFX_Base\sfxbase_09_86370382.wav</code><br><span class="more">… 共 16 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusBasicAttack_OnHit</td><td class="num">16</td><td class="num">16</td><td class="fl"><code>Audio_SFX_Base\sfxbase_16_141715137.wav</code><br><code>Audio_SFX_Base\sfxbase_08_71196676.wav</code><br><code>Audio_SFX_Base\sfxbase_10_89654828.wav</code><br><code>Audio_SFX_Base\sfxbase_17_157022166.wav</code><br><code>Audio_SFX_Base\sfxbase_33_311785540.wav</code><br><code>Audio_SFX_Base\sfxbase_34_329557927.wav</code><br><code>Audio_SFX_Base\sfxbase_11_90169099.wav</code><br><code>Audio_SFX_Base\sfxbase_09_86370382.wav</code><br><span class="more">… 共 16 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">平A 打击感 / Foley <span class="cnt">1</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_foley</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_SFX\sfx_10_153082921.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_10_153082921.wav</code><br><code>Audio_SFX\sfx_02_15646436.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_02_15646436.wav</code><br><code>Audio_SFX\sfx_47_990346633.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_47_990346633.wav</code><br><code>Audio_SFX\sfx_49_1003072977.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_49_1003072977.wav</code></td><td class="tr"><code>Crit@None~None</code><br><code>Attack1@None~None</code><br><code>Attack2@None~None</code></td></tr>
+<tr class="grp"><td colspan="5">暴击 / Crit <span class="cnt">4</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusCritAttack_OnCast</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_SFX\sfx_22_416206401.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_22_416206401.wav</code><br><code>Audio_SFX\sfx_08_118095133.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_08_118095133.wav</code><br><code>Audio_SFX\sfx_37_638562403.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_37_638562403.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusCritAttack_OnHit</td><td class="num">12</td><td class="num">24</td><td class="fl"><code>Audio_SFX\sfx_17_275411544.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_17_275411544.wav</code><br><code>Audio_SFX\sfx_05_64359468.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_05_64359468.wav</code><br><code>Audio_SFX\sfx_07_116596741.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_07_116596741.wav</code><br><code>Audio_SFX\sfx_42_885067677.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_42_885067677.wav</code><br><span class="more">… 共 24 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusCritAttack_OnCast</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_32_300119636.wav</code><br><code>Audio_SFX_Base\sfxbase_06_32439799.wav</code><br><code>Audio_SFX_Base\sfxbase_03_18723205.wav</code><br><code>Audio_SFX_Base\sfxbase_14_118543656.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusCritAttack_OnHit</td><td class="num">16</td><td class="num">16</td><td class="fl"><code>Audio_SFX_Base\sfxbase_27_256973450.wav</code><br><code>Audio_SFX_Base\sfxbase_04_30627994.wav</code><br><code>Audio_SFX_Base\sfxbase_07_64013170.wav</code><br><code>Audio_SFX_Base\sfxbase_12_98679036.wav</code><br><code>Audio_SFX_Base\sfxbase_34_329557927.wav</code><br><code>Audio_SFX_Base\sfxbase_33_311785540.wav</code><br><code>Audio_SFX_Base\sfxbase_11_90169099.wav</code><br><code>Audio_SFX_Base\sfxbase_09_86370382.wav</code><br><span class="more">… 共 16 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">Q 大杀四方 / Cleave <span class="cnt">6</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusCleave_OnCast</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_SFX\sfx_24_433690810.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_24_433690810.wav</code><br><code>Audio_SFX\sfx_18_311482642.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_18_311482642.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusCleave_hit_inner</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_19_368630590.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_19_368630590.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusCleave_hit_outter</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_SFX\sfx_38_705099632.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_38_705099632.wav</code><br><code>Audio_SFX\sfx_52_1012433612.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_52_1012433612.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusCleave_OnCast</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_SFX_Base\sfxbase_65_997531811.wav</code><br><code>Audio_SFX_Base\sfxbase_15_124118252.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusCleave_hit_inner</td><td class="num">3</td><td class="num">3</td><td class="fl"><code>Audio_SFX_Base\sfxbase_71_1041461749.wav</code><br><code>Audio_SFX_Base\sfxbase_44_569505691.wav</code><br><code>Audio_SFX_Base\sfxbase_23_210703391.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusCleave_hit_outter</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_37_386105878.wav</code><br><code>Audio_SFX_Base\sfxbase_28_263263092.wav</code><br><code>Audio_SFX_Base\sfxbase_29_269810161.wav</code><br><code>Audio_SFX_Base\sfxbase_59_879253519.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">W 致残打击 / NoxianTactics <span class="cnt">3</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffActivate</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_11_155871985.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_11_155871985.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusNoxianTacticsONHAttack_OnHit</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_05_30889466.wav</code><br><code>Audio_SFX_Base\sfxbase_62_958963043.wav</code><br><code>Audio_SFX_Base\sfxbase_35_364336933.wav</code><br><code>Audio_SFX_Base\sfxbase_53_783560361.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusNoxianTacticsONH_OnBuffDeactivate</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_25_228328609.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">E 无情铁手 / AxeGrabCone <span class="cnt">4</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusAxeGrabConeBump_buffactivate</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_23_422037407.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_23_422037407.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusAxeGrabCone_OnCast</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_30_557430967.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_30_557430967.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusAxeGrabConeBump_buffactivate</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_46_653757986.wav</code><br><code>Audio_SFX_Base\sfxbase_30_271001715.wav</code><br><code>Audio_SFX_Base\sfxbase_63_978673885.wav</code><br><code>Audio_SFX_Base\sfxbase_72_1056557875.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusAxeGrabCone_OnCast</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_66_998086056.wav</code><br><code>Audio_SFX_Base\sfxbase_49_712070769.wav</code><br><code>Audio_SFX_Base\sfxbase_22_209340780.wav</code><br><code>Audio_SFX_Base\sfxbase_54_785276538.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">R 断头台 / Execute <span class="cnt">7</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusExecute_OnCast</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_SFX\sfx_43_905314766.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_43_905314766.wav</code><br><code>Audio_SFX\sfx_41_805720248.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_41_805720248.wav</code><br><code>Audio_SFX\sfx_03_31089407.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_03_31089407.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusExecute_OnHit</td><td class="num">6</td><td class="num">12</td><td class="fl"><code>Audio_SFX\sfx_34_586302477.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_34_586302477.wav</code><br><code>Audio_SFX\sfx_33_577420082.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_33_577420082.wav</code><br><code>Audio_SFX\sfx_03_31089407.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_03_31089407.wav</code><br><code>Audio_SFX\sfx_21_403961969.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_21_403961969.wav</code><br><span class="more">… 共 12 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusExecute_hit_kill</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_SFX\sfx_13_216864344.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_13_216864344.wav</code><br><code>Audio_SFX\sfx_45_918641828.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_45_918641828.wav</code><br><code>Audio_SFX\sfx_50_1005889691.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_50_1005889691.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusExecute_swing</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_SFX\sfx_21_403961969.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_21_403961969.wav</code><br><code>Audio_SFX\sfx_39_720487663.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_39_720487663.wav</code><br><code>Audio_SFX\sfx_12_181734504.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_12_181734504.wav</code><br><code>Audio_SFX\sfx_08_118095133.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_08_118095133.wav</code></td><td class="tr"><code>{23bc3a50}@9.0~None</code><br><code>{421a8ec5}@9.0~None</code></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusExecute_OnCast</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_48_667872367.wav</code><br><code>Audio_SFX_Base\sfxbase_26_235418659.wav</code><br><code>Audio_SFX_Base\sfxbase_68_1010060182.wav</code><br><code>Audio_SFX_Base\sfxbase_36_379884182.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusExecute_OnHit</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_61_943343047.wav</code><br><code>Audio_SFX_Base\sfxbase_67_1008461292.wav</code><br><code>Audio_SFX_Base\sfxbase_43_559748741.wav</code><br><code>Audio_SFX_Base\sfxbase_40_464271686.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusExecute_hit_kill</td><td class="num">3</td><td class="num">3</td><td class="fl"><code>Audio_SFX_Base\sfxbase_20_180022127.wav</code><br><code>Audio_SFX_Base\sfxbase_00_4330184.wav</code><br><code>Audio_SFX_Base\sfxbase_38_439591571.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">被动流血 / Hemo <span class="cnt">2</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusHemoMax_OnBuffActivate</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_50_1005889691.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_50_1005889691.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusHemoMax_loop</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_55_845746812.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">死亡 / Death <span class="cnt">1</span></td></tr>
+<tr><td class="ev">Play_sfx_Darius_Death3D_cast</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_60_890351513.wav</code></td><td class="tr"><code>Death@None~None</code></td></tr>
+<tr class="grp"><td colspan="5">舞蹈 / Dance <span class="cnt">3</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_dance_intro</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_55_1053415821.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_55_1053415821.wav</code></td><td class="tr"><code>Dance_In@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_dance_loop</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_00_5971422.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_00_5971422.wav</code></td><td class="tr"><code>Dance@1.0~None</code></td></tr>
+<tr><td class="ev">Play_sfx_Darius_Dance3D_buffactivate</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_31_276130758.wav</code></td><td class="tr"><code>Dance@None~None</code></td></tr>
+<tr class="grp"><td colspan="5">笑话 / Joke <span class="cnt">3</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_joke_intro</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_29_557065189.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_29_557065189.wav</code></td><td class="tr"><code>{e365408f}@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_joke_loop</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_01_10818490.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_01_10818490.wav</code></td><td class="tr"><code>Joke_Loop@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_Darius_Joke3D_buffactivate</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_45_588978278.wav</code></td><td class="tr"><code>Joke@46.0~None</code></td></tr>
+<tr class="grp"><td colspan="5">嘲讽 / Taunt <span class="cnt">2</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_taunt_oba</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_20_380061102.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_20_380061102.wav</code></td><td class="tr"><code>Taunt@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_Darius_Taunt3D_buffactivate</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_47_658896417.wav</code></td><td class="tr"><code>Taunt@None~None</code></td></tr>
+<tr class="grp"><td colspan="5">回城 / Recall <span class="cnt">2</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_recall_leadin</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_16_274665129.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_16_274665129.wav</code></td><td class="tr"><code>Recall@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_recall_leadout</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_28_537153261.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_28_537153261.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">复活 / Respawn <span class="cnt">1</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_respawn_oba</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_04_43449754.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_04_43449754.wav</code></td><td class="tr"><code>Respawn@None~None</code></td></tr>
+<tr class="grp"><td colspan="5">其他 / Other <span class="cnt">29</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x12D67221&gt;</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_55_845746812.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x17DF2623&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_04_43449754.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_04_43449754.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x37D9FB05&gt;</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_56_847571742.wav</code><br><code>Audio_SFX_Base\sfxbase_64_995422204.wav</code><br><code>Audio_SFX_Base\sfxbase_69_1036474092.wav</code><br><code>Audio_SFX_Base\sfxbase_58_877098507.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x3B4E69E2&gt;</td><td class="num">0</td><td class="num">0</td><td class="fl"><span class="none">—</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x3F041713&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_11_155871985.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_11_155871985.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x4969666E&gt;</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_SFX_Base\sfxbase_41_489880903.wav</code><br><code>Audio_SFX_Base\sfxbase_21_182943585.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x4987CE18&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_44_908399603.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_44_908399603.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x5C8453A7&gt;</td><td class="num">3</td><td class="num">3</td><td class="fl"><code>Audio_SFX_Base\sfxbase_42_545883039.wav</code><br><code>Audio_SFX_Base\sfxbase_18_159254298.wav</code><br><code>Audio_SFX_Base\sfxbase_57_848584531.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x5F19CB22&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_48_995503400.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_48_995503400.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x69D57BE0&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_32_570674251.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_32_570674251.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x6B2ED8D9&gt;</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_51_742668008.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x771674E0&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_51_1011132596.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_51_1011132596.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x8B317077&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_16_274665129.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_16_274665129.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x8ED87D0A&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_28_537153261.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_28_537153261.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x92E63056&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_40_757021898.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_40_757021898.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x93BBFB69&gt;</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_SFX\sfx_24_433690810.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_24_433690810.wav</code><br><code>Audio_SFX\sfx_18_311482642.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_18_311482642.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x97210618&gt;</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_50_728543462.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x9B59B297&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_20_380061102.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_20_380061102.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xA0DB5A80&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_00_5971422.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_00_5971422.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xB49F58A8&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_01_10818490.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_01_10818490.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xB6F35DC6&gt;</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_50_728543462.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xD023AAD1&gt;</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_46_653757986.wav</code><br><code>Audio_SFX_Base\sfxbase_30_271001715.wav</code><br><code>Audio_SFX_Base\sfxbase_63_978673885.wav</code><br><code>Audio_SFX_Base\sfxbase_72_1056557875.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xD08D08F8&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_40_757021898.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_40_757021898.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xD5F91428&gt;</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_SFX\sfx_36_637349338.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_36_637349338.wav</code><br><code>Audio_SFX\sfx_48_995503400.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_48_995503400.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xDB409AA7&gt;</td><td class="num">1</td><td class="num">1</td><td class="fl"><code>Audio_SFX_Base\sfxbase_25_228328609.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xEE65C992&gt;</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_SFX\sfx_53_1034896787.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_53_1034896787.wav</code><br><code>Audio_SFX\sfx_25_436870362.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_25_436870362.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_DariusQCast_OnBuffDeactivate</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_09_125032709.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_09_125032709.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_sfx_DariusSkin15_death_oba</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_SFX\sfx_54_1051466623.wav</code><br><code>Audio_SFX_Skin15\sfxskin15_54_1051466623.wav</code></td><td class="tr"><code>Death@None~None</code></td></tr>
+<tr><td class="ev">Play_sfx_Darius_DariusQCast_OnBuffDeactivate</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_SFX_Base\sfxbase_39_450092659.wav</code><br><code>Audio_SFX_Base\sfxbase_19_170018532.wav</code><br><code>Audio_SFX_Base\sfxbase_70_1040193103.wav</code><br><code>Audio_SFX_Base\sfxbase_52_748710184.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+</tbody>
+</table>
+
+<h2>三、语音（VO）播报时机全表</h2>
+<p>事件名本身就编码了触发场景。共 <b>69</b> 条。</p>
+
+<div class="note">
+<b>怎么读这张表：</b>例如 <code>Play_vo_DariusSkin15_Kill3DGeneral</code> 表示
+「击杀敌方英雄时，从角色位置（3D）播放通用击杀台词」，背后有 27 个变体随机抽取。
+<code>Play_vo_DariusSkin15_FirstEncounter3DAatrox</code> 表示「首次遇到亚托克斯时专属台词」。
+</div>
+
+<input class="search" id="s2" placeholder="搜索触发场景 / 英雄名…（例如 Kill、FirstEncounter、Aatrox）">
+<table id="t2">
+<thead><tr><th style="width:36%">事件名（mSoundName）</th><th style="width:7%">变体</th>
+<th style="width:7%">文件</th><th style="width:50%">对应 wav 文件</th></tr></thead>
+<tbody>
+<tr class="grp"><td colspan="5">移动 / Move <span class="cnt">8</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DFirst</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_167_1572997046.wav</code><br><code>Audio_VO_zh_CN\vo_zh_167_1572997046.wav</code><br><code>Audio_VO_zh_CN\vozh_096_928120661.wav</code><br><code>Audio_VO_zh_CN\vo_zh_096_928120661.wav</code><br><code>Audio_VO_zh_CN\vozh_122_1122994814.wav</code><br><code>Audio_VO_zh_CN\vo_zh_122_1122994814.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DFirstAllyAspect</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_089_860390800.wav</code><br><code>Audio_VO_zh_CN\vo_zh_089_860390800.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DFirstAllyDemon</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_021_265550560.wav</code><br><code>Audio_VO_zh_CN\vo_zh_021_265550560.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DFirstAllyDraven</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_204_1895527861.wav</code><br><code>Audio_VO_zh_CN\vo_zh_204_1895527861.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DFirstEnemyGarenSkin13</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_138_1325399469.wav</code><br><code>Audio_VO_zh_CN\vo_zh_138_1325399469.wav</code><br><code>Audio_VO_zh_CN\vozh_186_1753204910.wav</code><br><code>Audio_VO_zh_CN\vo_zh_186_1753204910.wav</code><br><code>Audio_VO_zh_CN\vozh_036_394661267.wav</code><br><code>Audio_VO_zh_CN\vo_zh_036_394661267.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DLong</td><td class="num">12</td><td class="num">24</td><td class="fl"><code>Audio_VO_zh_CN\vozh_217_2026698582.wav</code><br><code>Audio_VO_zh_CN\vo_zh_217_2026698582.wav</code><br><code>Audio_VO_zh_CN\vozh_056_546921563.wav</code><br><code>Audio_VO_zh_CN\vo_zh_056_546921563.wav</code><br><code>Audio_VO_zh_CN\vozh_201_1868370587.wav</code><br><code>Audio_VO_zh_CN\vo_zh_201_1868370587.wav</code><br><code>Audio_VO_zh_CN\vozh_003_34462286.wav</code><br><code>Audio_VO_zh_CN\vo_zh_003_34462286.wav</code><br><span class="more">… 共 24 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Move2DStandard</td><td class="num">30</td><td class="num">60</td><td class="fl"><code>Audio_VO_zh_CN\vozh_224_2122799177.wav</code><br><code>Audio_VO_zh_CN\vo_zh_224_2122799177.wav</code><br><code>Audio_VO_zh_CN\vozh_061_617977021.wav</code><br><code>Audio_VO_zh_CN\vo_zh_061_617977021.wav</code><br><code>Audio_VO_zh_CN\vozh_180_1694375497.wav</code><br><code>Audio_VO_zh_CN\vo_zh_180_1694375497.wav</code><br><code>Audio_VO_zh_CN\vozh_137_1284711669.wav</code><br><code>Audio_VO_zh_CN\vo_zh_137_1284711669.wav</code><br><span class="more">… 共 60 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Move2DStandard</td><td class="num">10</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_018_721079636.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_013_442972030.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_023_895566884.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_003_75808362.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_016_605139493.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_021_828220806.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_017_619752849.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_015_591787374.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">攻击 / Attack <span class="cnt">13</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Attack2DGarenSkin13</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_212_1984930409.wav</code><br><code>Audio_VO_zh_CN\vo_zh_212_1984930409.wav</code><br><code>Audio_VO_zh_CN\vozh_128_1172556683.wav</code><br><code>Audio_VO_zh_CN\vo_zh_128_1172556683.wav</code><br><code>Audio_VO_zh_CN\vozh_078_810731625.wav</code><br><code>Audio_VO_zh_CN\vo_zh_078_810731625.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Attack2DGeneral</td><td class="num">24</td><td class="num">48</td><td class="fl"><code>Audio_VO_zh_CN\vozh_152_1418681775.wav</code><br><code>Audio_VO_zh_CN\vo_zh_152_1418681775.wav</code><br><code>Audio_VO_zh_CN\vozh_222_2116940928.wav</code><br><code>Audio_VO_zh_CN\vo_zh_222_2116940928.wav</code><br><code>Audio_VO_zh_CN\vozh_093_915158370.wav</code><br><code>Audio_VO_zh_CN\vo_zh_093_915158370.wav</code><br><code>Audio_VO_zh_CN\vozh_111_1019680483.wav</code><br><code>Audio_VO_zh_CN\vo_zh_111_1019680483.wav</code><br><span class="more">… 共 48 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Attack2DRivenSkin16</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_127_1146537880.wav</code><br><code>Audio_VO_zh_CN\vo_zh_127_1146537880.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Attack2DYasuoSkin09</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_012_143740233.wav</code><br><code>Audio_VO_zh_CN\vo_zh_012_143740233.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusBasicAttack2_cast3D</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vo_zh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vozh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vo_zh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vozh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vo_zh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vozh_191_1778511647.wav</code><br><code>Audio_VO_zh_CN\vo_zh_191_1778511647.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusBasicAttack_cast3D</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vo_zh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vozh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vo_zh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vozh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vo_zh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vozh_191_1778511647.wav</code><br><code>Audio_VO_zh_CN\vo_zh_191_1778511647.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusCritAttack_cast3D</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vo_zh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vozh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vo_zh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vozh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vo_zh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vozh_191_1778511647.wav</code><br><code>Audio_VO_zh_CN\vo_zh_191_1778511647.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusNoxianTacticsONHAttack_cast3D</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vo_zh_091_881659756.wav</code><br><code>Audio_VO_zh_CN\vozh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vo_zh_118_1081543587.wav</code><br><code>Audio_VO_zh_CN\vozh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vo_zh_059_576823283.wav</code><br><code>Audio_VO_zh_CN\vozh_191_1778511647.wav</code><br><code>Audio_VO_zh_CN\vo_zh_191_1778511647.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Attack2DGeneral</td><td class="num">5</td><td class="num">5</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_033_1586054625.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_036_1836268440.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_024_960729356.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_041_2079570073.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_010_316157923.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusBasicAttack2_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_039_1988058024.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_032_1290492208.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_025_1034181395.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_011_339160176.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusBasicAttack_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_039_1988058024.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_032_1290492208.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_025_1034181395.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_011_339160176.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusCritAttack_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_039_1988058024.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_032_1290492208.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_025_1034181395.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_011_339160176.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusNoxianTacticsONHAttack_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_039_1988058024.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_032_1290492208.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_025_1034181395.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_011_339160176.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">技能施放 / Cast <span class="cnt">6</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusAxeGrabCone_cast3D</td><td class="num">8</td><td class="num">16</td><td class="fl"><code>Audio_VO_zh_CN\vozh_119_1093985216.wav</code><br><code>Audio_VO_zh_CN\vo_zh_119_1093985216.wav</code><br><code>Audio_VO_zh_CN\vozh_088_856881058.wav</code><br><code>Audio_VO_zh_CN\vo_zh_088_856881058.wav</code><br><code>Audio_VO_zh_CN\vozh_075_777119475.wav</code><br><code>Audio_VO_zh_CN\vo_zh_075_777119475.wav</code><br><code>Audio_VO_zh_CN\vozh_141_1333850865.wav</code><br><code>Audio_VO_zh_CN\vo_zh_141_1333850865.wav</code><br><span class="more">… 共 16 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_DariusCleave_cast3D</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_037_420487803.wav</code><br><code>Audio_VO_zh_CN\vo_zh_037_420487803.wav</code><br><code>Audio_VO_zh_CN\vozh_063_640387376.wav</code><br><code>Audio_VO_zh_CN\vo_zh_063_640387376.wav</code><br><code>Audio_VO_zh_CN\vozh_002_27284280.wav</code><br><code>Audio_VO_zh_CN\vo_zh_002_27284280.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Spell3DPMax</td><td class="num">5</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN\vozh_042_452445340.wav</code><br><code>Audio_VO_zh_CN\vo_zh_042_452445340.wav</code><br><code>Audio_VO_zh_CN\vozh_033_376399031.wav</code><br><code>Audio_VO_zh_CN\vo_zh_033_376399031.wav</code><br><code>Audio_VO_zh_CN\vozh_161_1533487200.wav</code><br><code>Audio_VO_zh_CN\vo_zh_161_1533487200.wav</code><br><code>Audio_VO_zh_CN\vozh_055_535483550.wav</code><br><code>Audio_VO_zh_CN\vo_zh_055_535483550.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusCleave_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_014_541387022.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_007_227092683.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_001_3622186.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_006_222017226.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_DariusExecute_cast3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_040_2024449683.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_038_1966192228.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_026_1136790169.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_008_233097523.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Spell3DPMax</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_034_1660800068.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_004_128340887.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">击杀 / Kill <span class="cnt">5</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Kill3DFirst</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_007_79584263.wav</code><br><code>Audio_VO_zh_CN\vo_zh_007_79584263.wav</code><br><code>Audio_VO_zh_CN\vozh_073_750539812.wav</code><br><code>Audio_VO_zh_CN\vo_zh_073_750539812.wav</code><br><code>Audio_VO_zh_CN\vozh_190_1778441698.wav</code><br><code>Audio_VO_zh_CN\vo_zh_190_1778441698.wav</code><br><code>Audio_VO_zh_CN\vozh_142_1351882523.wav</code><br><code>Audio_VO_zh_CN\vo_zh_142_1351882523.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Kill3DGarenSkin13</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_150_1412549698.wav</code><br><code>Audio_VO_zh_CN\vo_zh_150_1412549698.wav</code><br><code>Audio_VO_zh_CN\vozh_081_825842647.wav</code><br><code>Audio_VO_zh_CN\vo_zh_081_825842647.wav</code><br><code>Audio_VO_zh_CN\vozh_098_953015864.wav</code><br><code>Audio_VO_zh_CN\vo_zh_098_953015864.wav</code><br><code>Audio_VO_zh_CN\vozh_198_1834210173.wav</code><br><code>Audio_VO_zh_CN\vo_zh_198_1834210173.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Kill3DGeneral</td><td class="num">27</td><td class="num">54</td><td class="fl"><code>Audio_VO_zh_CN\vozh_009_104704914.wav</code><br><code>Audio_VO_zh_CN\vo_zh_009_104704914.wav</code><br><code>Audio_VO_zh_CN\vozh_200_1866473848.wav</code><br><code>Audio_VO_zh_CN\vo_zh_200_1866473848.wav</code><br><code>Audio_VO_zh_CN\vozh_074_762713522.wav</code><br><code>Audio_VO_zh_CN\vo_zh_074_762713522.wav</code><br><code>Audio_VO_zh_CN\vozh_022_281132446.wav</code><br><code>Audio_VO_zh_CN\vo_zh_022_281132446.wav</code><br><span class="more">… 共 54 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Kill3DPenta</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN\vozh_026_345484191.wav</code><br><code>Audio_VO_zh_CN\vo_zh_026_345484191.wav</code><br><code>Audio_VO_zh_CN\vozh_082_830037441.wav</code><br><code>Audio_VO_zh_CN\vo_zh_082_830037441.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Kill3DTurret</td><td class="num">5</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN\vozh_051_514100803.wav</code><br><code>Audio_VO_zh_CN\vo_zh_051_514100803.wav</code><br><code>Audio_VO_zh_CN\vozh_058_572775530.wav</code><br><code>Audio_VO_zh_CN\vo_zh_058_572775530.wav</code><br><code>Audio_VO_zh_CN\vozh_044_466218566.wav</code><br><code>Audio_VO_zh_CN\vo_zh_044_466218566.wav</code><br><code>Audio_VO_zh_CN\vozh_079_820630232.wav</code><br><code>Audio_VO_zh_CN\vo_zh_079_820630232.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">死亡 / Death <span class="cnt">2</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Death3D</td><td class="num">6</td><td class="num">12</td><td class="fl"><code>Audio_VO_zh_CN\vozh_057_558997290.wav</code><br><code>Audio_VO_zh_CN\vo_zh_057_558997290.wav</code><br><code>Audio_VO_zh_CN\vozh_106_992297797.wav</code><br><code>Audio_VO_zh_CN\vo_zh_106_992297797.wav</code><br><code>Audio_VO_zh_CN\vozh_099_964258675.wav</code><br><code>Audio_VO_zh_CN\vo_zh_099_964258675.wav</code><br><code>Audio_VO_zh_CN\vozh_133_1219971802.wav</code><br><code>Audio_VO_zh_CN\vo_zh_133_1219971802.wav</code><br><span class="more">… 共 12 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Death3D</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_042_2085925522.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_022_833746608.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_012_397563770.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_043_2128752955.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">复活 / Respawn <span class="cnt">1</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Respawn2DGeneral</td><td class="num">8</td><td class="num">16</td><td class="fl"><code>Audio_VO_zh_CN\vozh_113_1034326209.wav</code><br><code>Audio_VO_zh_CN\vo_zh_113_1034326209.wav</code><br><code>Audio_VO_zh_CN\vozh_104_978801678.wav</code><br><code>Audio_VO_zh_CN\vo_zh_104_978801678.wav</code><br><code>Audio_VO_zh_CN\vozh_163_1557755486.wav</code><br><code>Audio_VO_zh_CN\vo_zh_163_1557755486.wav</code><br><code>Audio_VO_zh_CN\vozh_039_430622347.wav</code><br><code>Audio_VO_zh_CN\vo_zh_039_430622347.wav</code><br><span class="more">… 共 16 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">回城 / Recall <span class="cnt">1</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Recall3DGeneral</td><td class="num">5</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN\vozh_013_189451157.wav</code><br><code>Audio_VO_zh_CN\vo_zh_013_189451157.wav</code><br><code>Audio_VO_zh_CN\vozh_149_1411723544.wav</code><br><code>Audio_VO_zh_CN\vo_zh_149_1411723544.wav</code><br><code>Audio_VO_zh_CN\vozh_067_677455961.wav</code><br><code>Audio_VO_zh_CN\vo_zh_067_677455961.wav</code><br><code>Audio_VO_zh_CN\vozh_218_2062275606.wav</code><br><code>Audio_VO_zh_CN\vo_zh_218_2062275606.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">嘲讽互动 / Emote <span class="cnt">8</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Joke3DGeneral</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_206_1902592730.wav</code><br><code>Audio_VO_zh_CN\vo_zh_206_1902592730.wav</code><br><code>Audio_VO_zh_CN\vozh_087_844175818.wav</code><br><code>Audio_VO_zh_CN\vo_zh_087_844175818.wav</code><br><code>Audio_VO_zh_CN\vozh_032_373027860.wav</code><br><code>Audio_VO_zh_CN\vo_zh_032_373027860.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_JokeResponse3DGeneral</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_192_1779475730.wav</code><br><code>Audio_VO_zh_CN\vo_zh_192_1779475730.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Laugh3DGeneral</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_001_23318179.wav</code><br><code>Audio_VO_zh_CN\vo_zh_001_23318179.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_Taunt3DGeneral</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_005_60632231.wav</code><br><code>Audio_VO_zh_CN\vo_zh_005_60632231.wav</code><br><code>Audio_VO_zh_CN\vozh_117_1078310044.wav</code><br><code>Audio_VO_zh_CN\vo_zh_117_1078310044.wav</code><br><code>Audio_VO_zh_CN\vozh_083_830355460.wav</code><br><code>Audio_VO_zh_CN\vo_zh_083_830355460.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_TauntResponse3DGarenSkin13</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_092_910994816.wav</code><br><code>Audio_VO_zh_CN\vo_zh_092_910994816.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Joke3DGeneral</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_020_790611467.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_031_1255323910.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Joke3DGeneralEnd</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_020_790611467.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_031_1255323910.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_Darius_Laugh3DGeneral</td><td class="num">3</td><td class="num">3</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_030_1237338886.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_037_1852271069.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_027_1148180706.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">首次遭遇 / FirstEncounter <span class="cnt">13</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DAatrox</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_124_1135393800.wav</code><br><code>Audio_VO_zh_CN\vo_zh_124_1135393800.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DAspect</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_214_2004341450.wav</code><br><code>Audio_VO_zh_CN\vo_zh_214_2004341450.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DChoGath</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_171_1597953215.wav</code><br><code>Audio_VO_zh_CN\vo_zh_171_1597953215.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DDemon</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_187_1760132297.wav</code><br><code>Audio_VO_zh_CN\vo_zh_187_1760132297.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DDraven</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_213_1997670515.wav</code><br><code>Audio_VO_zh_CN\vo_zh_213_1997670515.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DGalio</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_177_1682049069.wav</code><br><code>Audio_VO_zh_CN\vo_zh_177_1682049069.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DGarenSkin13</td><td class="num">3</td><td class="num">6</td><td class="fl"><code>Audio_VO_zh_CN\vozh_045_467535075.wav</code><br><code>Audio_VO_zh_CN\vo_zh_045_467535075.wav</code><br><code>Audio_VO_zh_CN\vozh_116_1067247246.wav</code><br><code>Audio_VO_zh_CN\vo_zh_116_1067247246.wav</code><br><code>Audio_VO_zh_CN\vozh_132_1215292247.wav</code><br><code>Audio_VO_zh_CN\vo_zh_132_1215292247.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DKayle</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_084_831998235.wav</code><br><code>Audio_VO_zh_CN\vo_zh_084_831998235.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DLissandra</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_004_45642545.wav</code><br><code>Audio_VO_zh_CN\vo_zh_004_45642545.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DMorgana</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_020_263846748.wav</code><br><code>Audio_VO_zh_CN\vo_zh_020_263846748.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DQuinn</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_077_808402806.wav</code><br><code>Audio_VO_zh_CN\vo_zh_077_808402806.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DSwain</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_115_1061721224.wav</code><br><code>Audio_VO_zh_CN\vo_zh_115_1061721224.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_FirstEncounter3DYorick</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_065_661379248.wav</code><br><code>Audio_VO_zh_CN\vo_zh_065_661379248.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">队友集结 / RallyTeam <span class="cnt">3</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_RallyTeam3DAhead</td><td class="num">5</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN\vozh_193_1781940984.wav</code><br><code>Audio_VO_zh_CN\vo_zh_193_1781940984.wav</code><br><code>Audio_VO_zh_CN\vozh_041_449233776.wav</code><br><code>Audio_VO_zh_CN\vo_zh_041_449233776.wav</code><br><code>Audio_VO_zh_CN\vozh_197_1822243005.wav</code><br><code>Audio_VO_zh_CN\vo_zh_197_1822243005.wav</code><br><code>Audio_VO_zh_CN\vozh_038_428282944.wav</code><br><code>Audio_VO_zh_CN\vo_zh_038_428282944.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_RallyTeam3DBehind</td><td class="num">5</td><td class="num">10</td><td class="fl"><code>Audio_VO_zh_CN\vozh_114_1059999715.wav</code><br><code>Audio_VO_zh_CN\vo_zh_114_1059999715.wav</code><br><code>Audio_VO_zh_CN\vozh_086_837978659.wav</code><br><code>Audio_VO_zh_CN\vo_zh_086_837978659.wav</code><br><code>Audio_VO_zh_CN\vozh_188_1776079016.wav</code><br><code>Audio_VO_zh_CN\vo_zh_188_1776079016.wav</code><br><code>Audio_VO_zh_CN\vozh_053_529873705.wav</code><br><code>Audio_VO_zh_CN\vo_zh_053_529873705.wav</code><br><span class="more">… 共 10 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_RallyTeam3DEven</td><td class="num">4</td><td class="num">8</td><td class="fl"><code>Audio_VO_zh_CN\vozh_175_1611787288.wav</code><br><code>Audio_VO_zh_CN\vo_zh_175_1611787288.wav</code><br><code>Audio_VO_zh_CN\vozh_110_1017114616.wav</code><br><code>Audio_VO_zh_CN\vo_zh_110_1017114616.wav</code><br><code>Audio_VO_zh_CN\vozh_006_62767581.wav</code><br><code>Audio_VO_zh_CN\vo_zh_006_62767581.wav</code><br><code>Audio_VO_zh_CN\vozh_148_1409084357.wav</code><br><code>Audio_VO_zh_CN\vo_zh_148_1409084357.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">购买装备 / BuyItem <span class="cnt">2</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_BuyItem2DBlackCleaver</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_011_131312562.wav</code><br><code>Audio_VO_zh_CN\vo_zh_011_131312562.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">Play_vo_DariusSkin15_BuyItem2DTitanicHydra</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_140_1329728376.wav</code><br><code>Audio_VO_zh_CN\vo_zh_140_1329728376.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr class="grp"><td colspan="5">其他 / Other <span class="cnt">7</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x753C4A82&gt;</td><td class="num">7</td><td class="num">14</td><td class="fl"><code>Audio_VO_zh_CN\vozh_034_381237635.wav</code><br><code>Audio_VO_zh_CN\vo_zh_034_381237635.wav</code><br><code>Audio_VO_zh_CN\vozh_107_996480017.wav</code><br><code>Audio_VO_zh_CN\vo_zh_107_996480017.wav</code><br><code>Audio_VO_zh_CN\vozh_008_94818465.wav</code><br><code>Audio_VO_zh_CN\vo_zh_008_94818465.wav</code><br><code>Audio_VO_zh_CN\vozh_023_281238345.wav</code><br><code>Audio_VO_zh_CN\vo_zh_023_281238345.wav</code><br><span class="more">… 共 14 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0x93BAE652&gt;</td><td class="num">13</td><td class="num">26</td><td class="fl"><code>Audio_VO_zh_CN\vozh_016_215972618.wav</code><br><code>Audio_VO_zh_CN\vo_zh_016_215972618.wav</code><br><code>Audio_VO_zh_CN\vozh_210_1942911685.wav</code><br><code>Audio_VO_zh_CN\vo_zh_210_1942911685.wav</code><br><code>Audio_VO_zh_CN\vozh_169_1580201326.wav</code><br><code>Audio_VO_zh_CN\vo_zh_169_1580201326.wav</code><br><code>Audio_VO_zh_CN\vozh_146_1386704520.wav</code><br><code>Audio_VO_zh_CN\vo_zh_146_1386704520.wav</code><br><span class="more">… 共 26 个文件</span></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xA861E734&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_203_1890911304.wav</code><br><code>Audio_VO_zh_CN\vo_zh_203_1890911304.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xAF3CDB45&gt;</td><td class="num">2</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN\vozh_208_1921965939.wav</code><br><code>Audio_VO_zh_CN\vo_zh_208_1921965939.wav</code><br><code>Audio_VO_zh_CN\vozh_136_1244481629.wav</code><br><code>Audio_VO_zh_CN\vo_zh_136_1244481629.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xDF14B427&gt;</td><td class="num">1</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN\vozh_151_1417843040.wav</code><br><code>Audio_VO_zh_CN\vo_zh_151_1417843040.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xF1EAD944&gt;</td><td class="num">2</td><td class="num">2</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_000_2577951.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_035_1731843834.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+<tr><td class="ev">&lt;未命名 Event 0xF6CA6BA3&gt;</td><td class="num">4</td><td class="num">4</td><td class="fl"><code>Audio_VO_zh_CN_Base\vozhbase_028_1157202123.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_019_779115582.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_029_1180705684.wav</code><br><code>Audio_VO_zh_CN_Base\vozhbase_009_305301373.wav</code></td><td class="tr"><span class="none">—</span></td></tr>
+</tbody>
+</table>
+
+<h2>四、动画事件表（音效 / 粒子 / 骨骼 / 子网格）</h2>
+<p>这些是挂在动画帧上的事件点。<b>帧号是「何时播报」的直接答案</b>。</p>
+
+<h3>音效事件</h3>
+<table>
+<thead><tr><th>皮肤</th><th>动画 Clip</th><th>事件类型</th><th>帧区间</th>
+<th>音效名</th><th>挂点骨骼</th></tr></thead>
+<tbody>
+<tr><td>skin0(base)</td><td class="ev">Dance</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_Darius_Dance3D_buffactivate</td><td>—</td></tr>
+<tr><td>skin0(base)</td><td class="ev">Death</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_Darius_Death3D_cast</td><td>—</td></tr>
+<tr><td>skin0(base)</td><td class="ev">Joke</td><td>SoundEventData</td><td class="num">46.0 ~ ∞</td><td class="ev">Play_sfx_Darius_Joke3D_buffactivate</td><td>—</td></tr>
+<tr><td>skin0(base)</td><td class="ev">Taunt</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_Darius_Taunt3D_buffactivate</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Attack1</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_foley</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Attack2</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_foley</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Crit</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_DariusBasicAttack_foley</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Dance</td><td>SoundEventData</td><td class="num">1.0 ~ ∞</td><td class="ev">Play_sfx_DariusSkin15_dance_loop</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Dance_In</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_dance_intro</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Death</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_death_oba</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Joke_Loop</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_joke_loop</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_recall_leadin</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Respawn</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_respawn_oba</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Taunt</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_taunt_oba</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{23bc3a50}</td><td>SoundEventData</td><td class="num">9.0 ~ ∞</td><td class="ev">Play_sfx_DariusSkin15_DariusExecute_swing</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{421a8ec5}</td><td>SoundEventData</td><td class="num">9.0 ~ ∞</td><td class="ev">Play_sfx_DariusSkin15_DariusExecute_swing</td><td>—</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{e365408f}</td><td>SoundEventData</td><td class="num">—</td><td class="ev">Play_sfx_DariusSkin15_joke_intro</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h3>粒子 / 特效事件</h3>
+<table>
+<thead><tr><th>皮肤</th><th>动画 Clip</th><th>事件类型</th><th>帧区间</th>
+<th>特效名</th><th>挂点骨骼</th></tr></thead>
+<tbody>
+<tr><td>skin15(神王)</td><td class="ev">Attack1</td><td>ParticleEventData</td><td class="num">0 ~ 30.0</td><td class="ev">Darius_BA_Swipe_01</td><td>C_Buffbone_GLB_Layout_Loc</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Attack2</td><td>ParticleEventData</td><td class="num">0 ~ 30.0</td><td class="ev">Darius_BA_Swipe_02</td><td>C_Buffbone_GLB_Layout_Loc</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Death</td><td>ParticleEventData</td><td class="num">63.0 ~ ∞</td><td class="ev">Darius_Z_Death</td><td>Root</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_Z_Recall_Ground</td><td>BUFFBONE_GLB_GROUND_LOC</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>ParticleEventData</td><td class="num">70.0 ~ 155.0</td><td class="ev">Darius_Z_Recall_Gem</td><td>Gem</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>ParticleEventData</td><td class="num">148.0 ~ 165.0</td><td class="ev">Darius_Z_Throne_Burst</td><td>Gem</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>ParticleEventData</td><td class="num">143.0 ~ 155.0</td><td class="ev">Darius_Z_Recall_Impact</td><td>BUFFBONE_GLB_GROUND_LOC</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Recall</td><td>ParticleEventData</td><td class="num">195.0 ~ 221.0</td><td class="ev">Darius_Z_Wolf_Trail</td><td>R_Lion_Hand|L_Lion_Hand</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Respawn</td><td>ParticleEventData</td><td class="num">36.0 ~ 60.0</td><td class="ev">Darius_Z_SpawnIn</td><td>C_Buffbone_GLB_Layout_Loc</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Run_Homeguard_RunIn</td><td>ParticleEventData</td><td class="num">0 ~ 200.0</td><td class="ev">Darius_Z_Wolf_Trail</td><td>R_Lion_Hand|L_Lion_Hand</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Spell2</td><td>ParticleEventData</td><td class="num">0 ~ 40.0</td><td class="ev">Darius_W_Cast</td><td>Root</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Spell3</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_E_Cast</td><td>Axe_Head</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Spell3</td><td>ParticleEventData</td><td class="num">8.0 ~ ∞</td><td class="ev">Darius_E_ClawMarks</td><td>C_Buffbone_GLB_Layout_Loc</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Taunt</td><td>ParticleEventData</td><td class="num">0 ~ 0.0</td><td class="ev">Darius_Z_Wolf_Trail</td><td>R_Lion_Hand|L_Lion_Hand</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">Taunt</td><td>ParticleEventData</td><td class="num">41.0 ~ 95.0</td><td class="ev">Darius_Z_Wolf_Trail</td><td>R_Lion_Hand|L_Lion_Hand</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{23bc3a50}</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_R_Cast_Wolf</td><td>Root</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{23bc3a50}</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_R_Trail</td><td>Lion_Root</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{421a8ec5}</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_R_Cast_Wolf</td><td>Root</td></tr>
+<tr><td>skin15(神王)</td><td class="ev">{421a8ec5}</td><td>ParticleEventData</td><td class="num">—</td><td class="ev">Darius_R_Trail</td><td>Lion_Root</td></tr>
+</tbody>
+</table>
+
+<h2>五、已知边界与待办</h2>
+<div class="card">
+<ul>
+<li><b>代码驱动事件 vs 动画驱动事件。</b>
+<code>OnCast</code> / <code>OnHit</code> 这类事件由游戏逻辑在技能结算时触发，<b>不挂在动画帧上</b>，
+所以它们在动画事件表里查不到 —— 这是正常的，不代表数据缺失。</li>
+<li><b>未命名 Event。</b>bank 里还有少量 Event 的哈希未能反查到名字
+（base 9 个、skin15 约 17 个、vo 5 个）。原因：CDragon 公开哈希表只收录 Riot 注册过的字段名，
+美术自定义的动画标记名（如 <code>{bf57e8fe}</code>）不在表内，且实测<b>不是</b> FNV-1a 名字哈希，
+疑似编辑器分配的随机 ID。它们不影响已命名的技能/语音链路。</li>
+<li><b>VO 精确时序。</b>数据给出的是「触发场景 + 音频池」。
+具体冷却间隔、优先级抢占、同队同时触发时的去重，属于客户端运行时逻辑，不在资产内。</li>
+<li><b>base 皮肤的音效事件远少于 skin15。</b>base 只有 4 条动画驱动音效
+（Death / Joke / Taunt / Dance），神王皮肤有 13 条 —— 传说皮肤额外录制了
+舞蹈、笑话、回城、复活等一整套专属音频。</li>
+<li><b>base 与 skin15 的 bank 是「叠加」关系，不是替换。</b>
+神王皮肤只覆盖它自己录过的部分事件，其余回落到 base。
+最典型的例子是 <b>W 致残打击</b>：skin15 的 bank 里只有
+<code>DariusNoxianTacticsONH_OnBuffActivate</code>（buff 激活），
+而它的命中音效 <code>DariusNoxianTacticsONHAttack_OnHit</code> 只在 <b>base</b> bank 里。
+若后续只导 skin15 的 bank 而丢掉 base，W 的命中就会没声音。</li>
+</ul>
+</div>
+
+<h2>六、复现脚本</h2>
+<table>
+<thead><tr><th style="width:34%">脚本</th><th>作用</th></tr></thead>
+<tbody>
+<tr><td class="ev">Scripts/audio_01_scan_wad.py</td><td>扫描 WAD，列出全部 .bin / .bnk / .wpk</td></tr>
+<tr><td class="ev">Scripts/audio_02_extract_logic.py</td><td>提取 darius.bin、动画 bin、事件表 bank、语音包</td></tr>
+<tr><td class="ev">Scripts/audio_03_scan_event_names.py</td><td>从全部 bin 中抽出明文音频事件名（634 个）</td></tr>
+<tr><td class="ev">Scripts/audio_04_extract_wavs.py</td><td>bank / wpk 解出 wav（vgmstream 转码，623 个）</td></tr>
+<tr><td class="ev">Scripts/audio_10_bnk_parse.py</td><td>Wwise bank chunk 与 HIRC 对象解析</td></tr>
+<tr><td class="ev">Scripts/audio_11_bin_dump.py</td><td>LOL bin（PROP）转 JSON 并关键词检索</td></tr>
+<tr><td class="ev">Scripts/audio_20_hirc_graph.py</td><td>★ 建 Event→Action→Sound→wem 链路，并用 FNV-1 反查事件名</td></tr>
+<tr><td class="ev">Scripts/audio_21_anim_events.py</td><td>★ 提取动画事件（音效/粒子/骨骼/子网格 + 帧号）</td></tr>
+<tr><td class="ev">Scripts/audio_22_hash_lookup.py</td><td>用 CDragon 哈希表反查 bin 字段名</td></tr>
+<tr><td class="ev">Scripts/audio_23_bruteforce.py</td><td>字典暴力破解未识别的动画标记哈希</td></tr>
+<tr><td class="ev">Scripts/audio_30_summary.py</td><td>汇总主表（CSV / JSON）</td></tr>
+</tbody>
+</table>
+
+<h3>运行环境</h3>
+<div class="card">
+<pre><code>uv venv E:/uv_env --python 3.12
+uv pip install --python E:/uv_env/Scripts/python.exe --link-mode=copy cdtb
+E:/uv_env/Scripts/python.exe -m cdtb fetch-hashes   # 下载 CDragon 哈希表（必须）</code></pre>
+</div>
+
+<h3>全流程重跑</h3>
+<div class="card">
+<pre><code># 1) 扫 WAD + 提原始文件（输出到 E:\UE\Assets\Darius_GodKing_LOL_Original\Audio_Logic）
+E:/uv_env/Scripts/python.exe Scripts/audio_01_scan_wad.py
+E:/uv_env/Scripts/python.exe Scripts/audio_02_extract_logic.py
+E:/uv_env/Scripts/python.exe Scripts/audio_03_scan_event_names.py
+E:/uv_env/Scripts/python.exe Scripts/audio_04_extract_wavs.py
+
+# 2) 建链路 + 提动画事件（输出到 Docs/Audio）
+E:/uv_env/Scripts/python.exe Scripts/audio_20_hirc_graph.py
+E:/uv_env/Scripts/python.exe Scripts/audio_21_anim_events.py
+E:/uv_env/Scripts/python.exe Scripts/audio_22_hash_lookup.py
+E:/uv_env/Scripts/python.exe Scripts/audio_23_bruteforce.py
+E:/uv_env/Scripts/python.exe Scripts/audio_30_summary.py
+E:/uv_env/Scripts/python.exe Scripts/audio_40_report.py</code></pre>
+</div>
+
+<h2>七、产出文件清单</h2>
+<div class="note">
+所有交付物放在 <code>E:\UE\Fight\Docs\Audio\</code>，<b>会进 git</b>。
+（此前曾误放在 <code>Saved\</code>，但 <code>.gitignore</code> 里有 <code>Saved/*</code>，
+团队和 CI 都看不到，已迁出。）
+</div>
+<div class="card">
+<pre><code>E:\UE\Fight\Docs\Audio\
+├─ 德莱厄斯_音频触发逻辑探明报告.html   ← 本报告
+├─ audio_master.csv / .json             ← 主数据表（145 行）
+├─ anim_events.csv / .json              ← 动画事件表（含帧号）
+└─ _intermediate\                       ← 中间产物（可删，可重生成）
+   ├─ audio_event_graph.json            bank 侧事件→wem 链路
+   ├─ anim_events_named.json            哈希反查结果
+   ├─ anim_events_resolved.json         字典暴破结果
+   ├─ darius_bin.json / skin15_bin.json / anim_skin15.json
+   └─ *_out.txt / dump_*.txt            各步骤控制台日志</code></pre>
+</div>
+
+<h2>八、原始文件清单</h2>
+<div class="card">
+<pre><code>E:\UE\Assets\Darius_GodKing_LOL_Original\
+├─ Audio_Logic\main\darius.bin                     角色主定义（技能数值）
+├─ Audio_Logic\main\skin15.bin                     神王皮肤定义
+├─ Audio_Logic\main\anim__skin0.bin                基础皮肤动画事件
+├─ Audio_Logic\main\anim__skin15.bin               神王皮肤动画事件 ★
+├─ Audio_Logic\main\base__*_sfx_events.bnk        基础音效事件表
+├─ Audio_Logic\main\skin15__*_sfx_events.bnk      神王音效事件表 ★
+├─ Audio_Logic\zh_CN\*_vo_events.bnk               语音事件表 ★
+├─ Audio_Logic\zh_CN\skin15__*_vo_audio.wpk        语音音频包（中文）
+├─ Audio_SFX_Base\          73 个 wav（基础音效）
+├─ Audio_SFX_Skin15\        56 个 wav（神王音效）
+├─ Audio_VO_zh_CN\         225 个 wav（神王中文语音）
+├─ Audio_VO_zh_CN_Base\     44 个 wav（基础中文语音）
+├─ Audio_VO_en_US\         225 个 wav（神王英文语音）
+└─ Audio_Logic\all_event_names.txt                634 个事件名清单</code></pre>
+</div>
+
+<footer>
+数据来源：本机《英雄联盟》客户端 <code>Darius.wad.client</code> / <code>Darius.zh_CN.wad.client</code> / <code>Darius.en_US.wad.client</code>。<br>
+解析工具：cdtb 1.3.0（WAD / BIN）、vgmstream-cli（wem→wav）、自研 Wwise bank 解析器。<br>
+所有结论均经数值验证，未使用主观判断。
+</footer>
+
+</div>
+<script>
+function bind(inputId, tableId) {
+  const inp = document.getElementById(inputId);
+  const rows = document.getElementById(tableId).querySelectorAll('tbody tr');
+  inp.addEventListener('input', () => {
+    const q = inp.value.trim().toLowerCase();
+    let grpPending = false, grpRow = null, grpVisible = false;
+    rows.forEach(r => {
+      if (r.classList.contains('grp')) {
+        if (grpRow) grpRow.classList.toggle('hide', !grpVisible);
+        grpRow = r; grpVisible = false;
+        return;
+      }
+      const hit = !q || r.textContent.toLowerCase().includes(q);
+      r.classList.toggle('hide', !hit);
+      if (hit) grpVisible = true;
+    });
+    if (grpRow) grpRow.classList.toggle('hide', !grpVisible);
+  });
+}
+bind('s1','t1'); bind('s2','t2');
+</script>
+</body>
+</html>

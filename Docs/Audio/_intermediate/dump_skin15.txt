@@ -1,0 +1,944 @@
+已导出 JSON: Docs\Audio\_intermediate\skin15_bin.json  (1,317,993 bytes)
+
+====================================================================================================
+顶层条目
+====================================================================================================
+   Characters/Darius/Skins/Skin15           dict   20
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04Minion dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02Minion dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Death dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_ClawMarks dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_Cast dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_02_Norse_King dict   4
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_BA dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Glow_L_Shoulder dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar_unit_trail dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar_02 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Impact dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_smoke dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Gem dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Glow_R_Shoulder dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_r_refresh_01 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_Ring_Windup dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_Ring dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03Minion dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_tar_inner dict   7
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05Minion dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_tar dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_handle dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_SpawnIn dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only2 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_BA_Crit dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Cast_Wolf dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_R dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_02 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Darius_Base_BA2 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_03 dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_04 dict   4
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_Heal dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_tar dict   7
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_L dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_frost_mist dict   4
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Pool_Smoke dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_Activate dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01Minion dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_blood_spatter_self dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_Enraged dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Glow dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Wolf_Trail dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_BA_Swipe_01 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_04 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_BA_Swipe_02 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_cast_axe dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_02 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_03 dict   5
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Axegrab_Collision dict   6
+   Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01 dict   5
+   Characters/Darius/Skins/Skin15/Materials/MaskedBlend_inst dict   9
+   Characters/Darius/Skins/Skin15/Materials/Wolf_inst dict   9
+   Characters/Darius/Skins/Skin15/Materials/MaskedBlend_Shoulder dict   9
+   Characters/Darius/Skins/Skin15/Resources dict   2
+   __linked: ['DATA/Characters/Darius/Darius.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin1_Skins_Skin14_Skins_Skin15_Skins_Skin3_Skins_Skin5_Skins_Skin6_Skins_Skin7_Skins_Skin8.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin1_Skins_Skin10_Skins_Skin11_Skins_Skin12_Skins_Skin13_Skins_Skin14_Skins_Skin15_Skins_Skin16_Skins_Skin17_Skins_Skin18_Skins_Skin19_Skins_Skin2_Skins_Skin20_Skins_Skin21_Skins_Skin22_Skins_Skin23_Skins_Skin3_Skins_Skin4_Skins_Skin5_Skins_Skin53_Skins_Skin6_Skins_Skin7_Skins_Skin8_Skins_Skin9.bin', 'DATA/Characters/Darius/Animations/Skin15.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin1_Skins_Skin14_Skins_Skin15_Skins_Skin16_Skins_Skin17_Skins_Skin18_Skins_Skin19_Skins_Skin20_Skins_Skin21_Skins_Skin22_Skins_Skin23_Skins_Skin3_Skins_Skin5_Skins_Skin6_Skins_Skin7_Skins_Skin8.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin1_Skins_Skin10_Skins_Skin11_Skins_Skin12_Skins_Skin13_Skins_Skin14_Skins_Skin15_Skins_Skin16_Skins_Skin17_Skins_Skin18_Skins_Skin19_Skins_Skin2_Skins_Skin20_Skins_Skin21_Skins_Skin22_Skins_Skin23_Skins_Skin3_Skins_Skin33_Skins_Skin34_Skins_Skin35_Skins_Skin36_Skins_Skin37_Skins_Skin38_Skins_Skin39_Skins_Skin4_Skins_Skin40_Skins_Skin41_Skins_Skin42_Skins_Skin5_Skins_Skin53_Skins_Skin6_Skins_Skin7_Skins_Skin8_Skins_Skin9.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin1_Skins_Skin10_Skins_Skin11_Skins_Skin12_Skins_Skin13_Skins_Skin14_Skins_Skin15_Skins_Skin2_Skins_Skin3_Skins_Skin4_Skins_Skin5_Skins_Skin53_Skins_Skin6_Skins_Skin7_Skins_Skin8_Skins_Skin9.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin0_Skins_Skin15_Skins_Skin5_Skins_Skin6_Skins_Skin7_Skins_Skin8.bin', 'DATA/Characters/Darius/Darius_Multi_Skins_Skin15_Skins_Skin64.bin']
+
+====================================================================================================
+含关键词的字段路径（去重后）
+====================================================================================================
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.__type   x1
+        'SkinAudioProperties'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[0].__type   x1
+        'BankUnit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[0].bankPath[0]   x1
+        'ASSETS/Sounds/Wwise2016/SFX/Characters/Darius/Skins/Base/Darius_Base_SFX_audio.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[0].bankPath[1]   x1
+        'ASSETS/Sounds/Wwise2016/SFX/Characters/Darius/Skins/Base/Darius_Base_SFX_events.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[0].name   x1
+        'Darius_Base_SFX'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].__type   x1
+        'BankUnit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].bankPath[0]   x1
+        'ASSETS/Sounds/Wwise2016/SFX/Characters/Darius/Skins/Skin15/Darius_Skin15_SFX_audio.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].bankPath[1]   x1
+        'ASSETS/Sounds/Wwise2016/SFX/Characters/Darius/Skins/Skin15/Darius_Skin15_SFX_events.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[0]   x1
+        'Play_sfx_DariusSkin15_dance_intro'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[10]   x1
+        'Play_sfx_DariusSkin15_DariusCleave_hit_inner'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[11]   x1
+        'Play_sfx_DariusSkin15_DariusCleave_hit_outter'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[12]   x1
+        'Play_sfx_DariusSkin15_DariusCleave_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[13]   x1
+        'Play_sfx_DariusSkin15_DariusCritAttack_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[14]   x1
+        'Play_sfx_DariusSkin15_DariusCritAttack_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[15]   x1
+        'Play_sfx_DariusSkin15_DariusExecute_hit_kill'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[16]   x1
+        'Play_sfx_DariusSkin15_DariusExecute_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[17]   x1
+        'Play_sfx_DariusSkin15_DariusExecute_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[18]   x1
+        'Play_sfx_DariusSkin15_DariusExecute_swing'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[19]   x1
+        'Play_sfx_DariusSkin15_DariusHemoMax_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[1]   x1
+        'Play_sfx_DariusSkin15_dance_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[20]   x1
+        'Play_sfx_DariusSkin15_DariusHemoMax_OnBuffActivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[21]   x1
+        'Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffActivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[22]   x1
+        'Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffDeactivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[23]   x1
+        'Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[24]   x1
+        'Play_sfx_DariusSkin15_DariusNoxianTacticsONHAttack_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[25]   x1
+        'Play_sfx_DariusSkin15_DariusNoxianTacticsONHAttack_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[26]   x1
+        'Play_sfx_DariusSkin15_DariusQCast_OnBuffDeactivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[27]   x1
+        'Play_sfx_DariusSkin15_death_oba'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[28]   x1
+        'Play_sfx_DariusSkin15_joke_intro'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[29]   x1
+        'Play_sfx_DariusSkin15_joke_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[2]   x1
+        'Play_sfx_DariusSkin15_DariusAxeGrabCone_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[30]   x1
+        'Play_sfx_DariusSkin15_recall_leadin'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[31]   x1
+        'Play_sfx_DariusSkin15_recall_leadout'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[32]   x1
+        'Play_sfx_DariusSkin15_respawn_oba'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[33]   x1
+        'Play_sfx_DariusSkin15_taunt_oba'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[34]   x1
+        'Stop_sfx_DariusSkin15_dance_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[35]   x1
+        'Stop_sfx_DariusSkin15_DariusAxeGrabConeBump_buffactivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[36]   x1
+        'Stop_sfx_DariusSkin15_DariusCleave_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[37]   x1
+        'Stop_sfx_DariusSkin15_DariusHemoMax_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[38]   x1
+        'Stop_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffActivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[39]   x1
+        'Stop_sfx_DariusSkin15_DariusNoxianTacticsONHAttack_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[3]   x1
+        'Play_sfx_DariusSkin15_DariusAxeGrabCone_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[40]   x1
+        'Stop_sfx_DariusSkin15_joke_loop'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[41]   x1
+        'Stop_sfx_DariusSkin15_recall_leadin'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[42]   x1
+        'Stop_sfx_DariusSkin15_recall_leadout'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[43]   x1
+        'Stop_sfx_DariusSkin15_respawn_oba'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[44]   x1
+        'Stop_sfx_DariusSkin15_taunt_oba'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[4]   x1
+        'Play_sfx_DariusSkin15_DariusAxeGrabConeBump_buffactivate'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[5]   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack2_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[6]   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack2_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[7]   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_foley'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[8]   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_OnCast'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].events[9]   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_OnHit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[1].name   x1
+        'Darius_Skin15_SFX'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].__type   x1
+        'BankUnit'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].bankPath[0]   x1
+        'ASSETS/Sounds/Wwise2016/VO/en_US/Characters/Darius/Skins/Skin15/Darius_Skin15_VO_audio.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].bankPath[1]   x1
+        'ASSETS/Sounds/Wwise2016/VO/en_US/Characters/Darius/Skins/Skin15/Darius_Skin15_VO_events.bnk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].bankPath[2]   x1
+        'ASSETS/Sounds/Wwise2016/VO/en_US/Characters/Darius/Skins/Skin15/Darius_Skin15_VO_audio.wpk'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[0]   x1
+        'Play_vo_DariusSkin15_Attack2DGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[10]   x1
+        'Play_vo_DariusSkin15_DariusCritAttack_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[11]   x1
+        'Play_vo_DariusSkin15_DariusExecute_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[12]   x1
+        'Play_vo_DariusSkin15_DariusNoxianTacticsONH_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[13]   x1
+        'Play_vo_DariusSkin15_DariusNoxianTacticsONHAttack_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[14]   x1
+        'Play_vo_DariusSkin15_Death3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[15]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DAatrox'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[16]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DAspect'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[17]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DChoGath'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[18]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DDemon'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[19]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DDraven'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[1]   x1
+        'Play_vo_DariusSkin15_Attack2DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[20]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DGalio'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[21]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DGaren'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[22]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[23]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DKayle'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[24]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DLissandra'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[25]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DMorgana'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[26]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DQuinn'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[27]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DSwain'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[28]   x1
+        'Play_vo_DariusSkin15_FirstEncounter3DYorick'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[29]   x1
+        'Play_vo_DariusSkin15_Joke3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[2]   x1
+        'Play_vo_DariusSkin15_Attack2DRivenSkin16'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[30]   x1
+        'Play_vo_DariusSkin15_JokeResponse3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[31]   x1
+        'Play_vo_DariusSkin15_Kill3DFirst'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[32]   x1
+        'Play_vo_DariusSkin15_Kill3DGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[33]   x1
+        'Play_vo_DariusSkin15_Kill3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[34]   x1
+        'Play_vo_DariusSkin15_Kill3DPenta'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[35]   x1
+        'Play_vo_DariusSkin15_Kill3DTurret'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[36]   x1
+        'Play_vo_DariusSkin15_Laugh3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[37]   x1
+        'Play_vo_DariusSkin15_Move2DFirst'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[38]   x1
+        'Play_vo_DariusSkin15_Move2DFirstAllyAspect'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[39]   x1
+        'Play_vo_DariusSkin15_Move2DFirstAllyDemon'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[3]   x1
+        'Play_vo_DariusSkin15_Attack2DYasuoSkin09'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[40]   x1
+        'Play_vo_DariusSkin15_Move2DFirstAllyDraven'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[41]   x1
+        'Play_vo_DariusSkin15_Move2DFirstAllyGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[42]   x1
+        'Play_vo_DariusSkin15_Move2DFirstEnemyGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[43]   x1
+        'Play_vo_DariusSkin15_Move2DLong'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[44]   x1
+        'Play_vo_DariusSkin15_Move2DStandard'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[45]   x1
+        'Play_vo_DariusSkin15_RallyTeam3DAhead'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[46]   x1
+        'Play_vo_DariusSkin15_RallyTeam3DBehind'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[47]   x1
+        'Play_vo_DariusSkin15_RallyTeam3DEven'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[48]   x1
+        'Play_vo_DariusSkin15_Recall3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[49]   x1
+        'Play_vo_DariusSkin15_Respawn2DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[4]   x1
+        'Play_vo_DariusSkin15_BuyItem2DBlackCleaver'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[50]   x1
+        'Play_vo_DariusSkin15_Spell3DPMax'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[51]   x1
+        'Play_vo_DariusSkin15_Taunt3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[52]   x1
+        'Play_vo_DariusSkin15_TauntResponse3DGarenSkin13'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[53]   x1
+        'Play_vo_DariusSkin15_TauntResponse3DGeneral'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[5]   x1
+        'Play_vo_DariusSkin15_BuyItem2DTitanicHydra'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[6]   x1
+        'Play_vo_DariusSkin15_DariusAxeGrabCone_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[7]   x1
+        'Play_vo_DariusSkin15_DariusBasicAttack2_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[8]   x1
+        'Play_vo_DariusSkin15_DariusBasicAttack_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].events[9]   x1
+        'Play_vo_DariusSkin15_DariusCleave_cast3D'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].name   x1
+        'Darius_Skin15_VO'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.bankUnits[2].voiceOver   x1
+        True
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.tagEventList[0]   x1
+        'Darius'
+   .Characters/Darius/Skins/Skin15.skinAudioProperties.tagEventList[1]   x1
+        'DariusSkin15'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Axegrab_Collision.soundOnCreateDefault   x1
+        'Play_sfx_Darius_DariusAxeGrabConeBump_buffactivate'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[3].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[3].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[3].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[4].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[4].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[4].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.constantValue[0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.constantValue[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyValues[0]   x1
+        -1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyValues[0]   x1
+        -1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.values[0][0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_Cast.complexEmitterDefinitionData[5].textureMult.birthUVOffsetMult.dynamics.values[0][1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar_unit_trail.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar_unit_trail.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_E_tar_unit_trail.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.constantValue[0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.constantValue[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyValues[0]   x1
+        -1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyValues[0]   x1
+        -1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.probabilityTables[1].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.values[0][0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[0].textureMult.birthUVOffsetMult.dynamics.values[0][1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[10].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[10].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[10].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[13].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[13].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[13].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.values[0][0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[2].birthUVOffset.dynamics.values[0][1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.constantValue[1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.values[0][0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Child_OrbFlame.complexEmitterDefinitionData[7].birthUVOffset.dynamics.values[0][1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Pool_Smoke.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Pool_Smoke.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_Pool_Smoke.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[10].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[10].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[10].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[11].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[11].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[11].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[12].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[12].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[12].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[13].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[13].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[13].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[6].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[6].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[6].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[7].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[7].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[7].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[9].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[9].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_axe_tip.complexEmitterDefinitionData[9].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged.soundPersistentDefault   x1
+        'Play_sfx_Darius_DariusHemoMax_loop'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_L.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_L.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_L.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_R.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_R.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_enraged_shoulder_R.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        -0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.values[0][0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[1].birthUVOffset.dynamics.values[0][1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        -0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.constantValue[0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.constantValue[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.values[0][0]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_P_nova.complexEmitterDefinitionData[6].birthUVOffset.dynamics.values[0][1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_tar.soundOnCreateDefault   x1
+        'Play_sfx_Darius_DariusCleave_hit_outter'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Q_tar_inner.soundOnCreateDefault   x1
+        'Play_sfx_Darius_DariusCleave_hit_inner'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_Trail.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar.complexEmitterDefinitionData[4].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar.complexEmitterDefinitionData[4].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar.complexEmitterDefinitionData[4].birthUVOffset.constantValue[1]   x1
+        -0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_02.complexEmitterDefinitionData[10].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_02.complexEmitterDefinitionData[10].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_R_tar_02.complexEmitterDefinitionData[10].birthUVOffset.constantValue[1]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_tar.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_tar.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_tar.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        -0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.values[0][0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[0].birthUVOffset.dynamics.values[0][1]   x1
+        0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_W_weapon_01.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_L.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[3].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[3].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[3].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[6].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[6].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[6].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[7].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[7].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Idle_Shoulder_R.complexEmitterDefinitionData[7].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.probabilityTables[1].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.values[0][0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Ground.complexEmitterDefinitionData[1].birthUVOffset.dynamics.values[0][1]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Impact.complexEmitterDefinitionData[7].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Impact.complexEmitterDefinitionData[7].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Recall_Impact.complexEmitterDefinitionData[7].birthUVOffset.constantValue[1]   x1
+        -0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        -0.10000000149011612
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.__type   x1
+        'VfxAnimatedVector2fVariableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[0].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].__type   x1
+        'VfxProbabilityTableData'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].keyTimes[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].keyTimes[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].keyValues[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.probabilityTables[1].keyValues[1]   x1
+        1.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.times[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.values[0][0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Throne_Burst.complexEmitterDefinitionData[2].birthUVOffset.dynamics.values[0][1]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Wolf_Trail.complexEmitterDefinitionData[0].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Wolf_Trail.complexEmitterDefinitionData[0].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_Z_Wolf_Trail.complexEmitterDefinitionData[0].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only2.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only2.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only2.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only3.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only4.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[3].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[3].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_bleed_trail_only6.complexEmitterDefinitionData[3].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01Minion.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01Minion.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_01Minion.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02.complexEmitterDefinitionData[6].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02.complexEmitterDefinitionData[6].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02.complexEmitterDefinitionData[6].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02Minion.complexEmitterDefinitionData[5].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02Minion.complexEmitterDefinitionData[5].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_02Minion.complexEmitterDefinitionData[5].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03.complexEmitterDefinitionData[7].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03.complexEmitterDefinitionData[7].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03.complexEmitterDefinitionData[7].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03Minion.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03Minion.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_03Minion.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04.complexEmitterDefinitionData[2].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04.complexEmitterDefinitionData[2].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04.complexEmitterDefinitionData[2].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04Minion.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04Minion.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_04Minion.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05Minion.complexEmitterDefinitionData[1].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05Minion.complexEmitterDefinitionData[1].birthUVOffset.constantValue[0]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_hemo_counter_05Minion.complexEmitterDefinitionData[1].birthUVOffset.constantValue[1]   x1
+        -0.20000000298023224
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[11].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[11].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[11].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[13].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[13].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[13].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[6].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[6].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[6].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[8].birthUVOffset.__type   x1
+        'ValueVector2'
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[8].birthUVOffset.constantValue[0]   x1
+        0.5
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_passive_overhead_max_stack.complexEmitterDefinitionData[8].birthUVOffset.constantValue[1]   x1
+        0.0
+   .Characters/Darius/Skins/Skin15/Particles/Darius_Skin15_darius_Base_r_refresh_01.soundOnCreateDefault   x1
+        'Play_sfx_Darius_DariusExecute_hit_kill'
+   .Characters/Darius/Skins/Skin15/Resources.resourceMap.darius_emote_dance_sound_BV2   x1
+        'Characters/Darius/Skins/Skin0/Particles/darius_emote_dance_sound'
+   .Characters/Darius/Skins/Skin15/Resources.resourceMap.darius_emote_death_sound_BV2   x1
+        'Characters/Darius/Skins/Skin0/Particles/darius_emote_death_sound'
+   .Characters/Darius/Skins/Skin15/Resources.resourceMap.darius_emote_joke_sound_BV2   x1
+        'Characters/Darius/Skins/Skin0/Particles/darius_emote_joke_sound'
+   .Characters/Darius/Skins/Skin15/Resources.resourceMap.darius_emote_taunt_sound_BV2   x1
+        'Characters/Darius/Skins/Skin0/Particles/darius_emote_taunt_sound'

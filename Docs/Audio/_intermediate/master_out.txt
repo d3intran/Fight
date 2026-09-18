@@ -1,0 +1,245 @@
+主表 145 行
+
+
+### sfx/base / E 无情铁手 / AxeGrabCone  (2 条)
+   Play_sfx_Darius_DariusAxeGrabConeBump_buffactivate             变体 x4   文件 x4
+   Play_sfx_Darius_DariusAxeGrabCone_OnCast                       变体 x4   文件 x4
+
+### sfx/base / Q 大杀四方 / Cleave  (3 条)
+   Play_sfx_Darius_DariusCleave_OnCast                            变体 x2   文件 x2
+   Play_sfx_Darius_DariusCleave_hit_inner                         变体 x3   文件 x3
+   Play_sfx_Darius_DariusCleave_hit_outter                        变体 x4   文件 x4
+
+### sfx/base / R 断头台 / Execute  (3 条)
+   Play_sfx_Darius_DariusExecute_OnCast                           变体 x4   文件 x4
+   Play_sfx_Darius_DariusExecute_OnHit                            变体 x4   文件 x4
+   Play_sfx_Darius_DariusExecute_hit_kill                         变体 x3   文件 x3
+
+### sfx/base / W 致残打击 / NoxianTactics  (2 条)
+   Play_sfx_Darius_DariusNoxianTacticsONHAttack_OnHit             变体 x4   文件 x4
+   Play_sfx_Darius_DariusNoxianTacticsONH_OnBuffDeactivate        变体 x1   文件 x1
+
+### sfx/base / 其他 / Other  (10 条)
+   <未命名 Event 0x12D67221>                                         变体 x1   文件 x1
+   <未命名 Event 0x37D9FB05>                                         变体 x4   文件 x4
+   <未命名 Event 0x4969666E>                                         变体 x2   文件 x2
+   <未命名 Event 0x5C8453A7>                                         变体 x3   文件 x3
+   <未命名 Event 0x6B2ED8D9>                                         变体 x1   文件 x1
+   <未命名 Event 0x97210618>                                         变体 x1   文件 x1
+   <未命名 Event 0xB6F35DC6>                                         变体 x1   文件 x1
+   <未命名 Event 0xD023AAD1>                                         变体 x4   文件 x4
+   <未命名 Event 0xDB409AA7>                                         变体 x1   文件 x1
+   Play_sfx_Darius_DariusQCast_OnBuffDeactivate                   变体 x4   文件 x4
+
+### sfx/base / 嘲讽 / Taunt  (1 条)
+   Play_sfx_Darius_Taunt3D_buffactivate                           变体 x1   文件 x1  动画触发: Taunt@None~None
+
+### sfx/base / 平A 命中 / BasicAttack Hit  (2 条)
+   Play_sfx_Darius_DariusBasicAttack2_OnHit                       变体 x16  文件 x16
+   Play_sfx_Darius_DariusBasicAttack_OnHit                        变体 x16  文件 x16
+
+### sfx/base / 平A 起手 / BasicAttack Cast  (2 条)
+   Play_sfx_Darius_DariusBasicAttack2_OnCast                      变体 x4   文件 x4
+   Play_sfx_Darius_DariusBasicAttack_OnCast                       变体 x4   文件 x4
+
+### sfx/base / 暴击 / Crit  (2 条)
+   Play_sfx_Darius_DariusCritAttack_OnCast                        变体 x4   文件 x4
+   Play_sfx_Darius_DariusCritAttack_OnHit                         变体 x16  文件 x16
+
+### sfx/base / 死亡 / Death  (1 条)
+   Play_sfx_Darius_Death3D_cast                                   变体 x1   文件 x1  动画触发: Death@None~None
+
+### sfx/base / 笑话 / Joke  (1 条)
+   Play_sfx_Darius_Joke3D_buffactivate                            变体 x1   文件 x1  动画触发: Joke@46.0~None
+
+### sfx/base / 舞蹈 / Dance  (1 条)
+   Play_sfx_Darius_Dance3D_buffactivate                           变体 x1   文件 x1  动画触发: Dance@None~None
+
+### sfx/base / 被动流血 / Hemo  (1 条)
+   Play_sfx_Darius_DariusHemoMax_loop                             变体 x1   文件 x1
+
+### sfx/skin15 / E 无情铁手 / AxeGrabCone  (2 条)
+   Play_sfx_DariusSkin15_DariusAxeGrabConeBump_buffactivate       变体 x1   文件 x2
+   Play_sfx_DariusSkin15_DariusAxeGrabCone_OnCast                 变体 x1   文件 x2
+
+### sfx/skin15 / Q 大杀四方 / Cleave  (3 条)
+   Play_sfx_DariusSkin15_DariusCleave_OnCast                      变体 x2   文件 x4
+   Play_sfx_DariusSkin15_DariusCleave_hit_inner                   变体 x1   文件 x2
+   Play_sfx_DariusSkin15_DariusCleave_hit_outter                  变体 x2   文件 x4
+
+### sfx/skin15 / R 断头台 / Execute  (4 条)
+   Play_sfx_DariusSkin15_DariusExecute_OnCast                     变体 x3   文件 x6
+   Play_sfx_DariusSkin15_DariusExecute_OnHit                      变体 x6   文件 x12
+   Play_sfx_DariusSkin15_DariusExecute_hit_kill                   变体 x3   文件 x6
+   Play_sfx_DariusSkin15_DariusExecute_swing                      变体 x4   文件 x8  动画触发: {23bc3a50}@9.0~None|{421a8ec5}@9.0~None
+
+### sfx/skin15 / W 致残打击 / NoxianTactics  (1 条)
+   Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffActivate    变体 x1   文件 x2
+
+### sfx/skin15 / 其他 / Other  (19 条)
+   <未命名 Event 0x17DF2623>                                         变体 x1   文件 x2
+   <未命名 Event 0x3B4E69E2>                                         变体 x0   文件 x0
+   <未命名 Event 0x3F041713>                                         变体 x1   文件 x2
+   <未命名 Event 0x4987CE18>                                         变体 x1   文件 x2
+   <未命名 Event 0x5F19CB22>                                         变体 x1   文件 x2
+   <未命名 Event 0x69D57BE0>                                         变体 x1   文件 x2
+   <未命名 Event 0x771674E0>                                         变体 x1   文件 x2
+   <未命名 Event 0x8B317077>                                         变体 x1   文件 x2
+   <未命名 Event 0x8ED87D0A>                                         变体 x1   文件 x2
+   <未命名 Event 0x92E63056>                                         变体 x1   文件 x2
+   <未命名 Event 0x93BBFB69>                                         变体 x2   文件 x4
+   <未命名 Event 0x9B59B297>                                         变体 x1   文件 x2
+   <未命名 Event 0xA0DB5A80>                                         变体 x1   文件 x2
+   <未命名 Event 0xB49F58A8>                                         变体 x1   文件 x2
+   <未命名 Event 0xD08D08F8>                                         变体 x1   文件 x2
+   <未命名 Event 0xD5F91428>                                         变体 x2   文件 x4
+   <未命名 Event 0xEE65C992>                                         变体 x2   文件 x4
+   Play_sfx_DariusSkin15_DariusQCast_OnBuffDeactivate             变体 x1   文件 x2
+   Play_sfx_DariusSkin15_death_oba                                变体 x1   文件 x2  动画触发: Death@None~None
+
+### sfx/skin15 / 嘲讽 / Taunt  (1 条)
+   Play_sfx_DariusSkin15_taunt_oba                                变体 x1   文件 x2  动画触发: Taunt@None~None
+
+### sfx/skin15 / 回城 / Recall  (2 条)
+   Play_sfx_DariusSkin15_recall_leadin                            变体 x1   文件 x2  动画触发: Recall@None~None
+   Play_sfx_DariusSkin15_recall_leadout                           变体 x1   文件 x2
+
+### sfx/skin15 / 复活 / Respawn  (1 条)
+   Play_sfx_DariusSkin15_respawn_oba                              变体 x1   文件 x2  动画触发: Respawn@None~None
+
+### sfx/skin15 / 平A 命中 / BasicAttack Hit  (2 条)
+   Play_sfx_DariusSkin15_DariusBasicAttack2_OnHit                 变体 x12  文件 x24
+   Play_sfx_DariusSkin15_DariusBasicAttack_OnHit                  变体 x12  文件 x24
+
+### sfx/skin15 / 平A 打击感 / Foley  (1 条)
+   Play_sfx_DariusSkin15_DariusBasicAttack_foley                  变体 x4   文件 x8  动画触发: Crit@None~None|Attack1@None~None|Attack2@None~None
+
+### sfx/skin15 / 平A 起手 / BasicAttack Cast  (2 条)
+   Play_sfx_DariusSkin15_DariusBasicAttack2_OnCast                变体 x3   文件 x6
+   Play_sfx_DariusSkin15_DariusBasicAttack_OnCast                 变体 x3   文件 x6
+
+### sfx/skin15 / 暴击 / Crit  (2 条)
+   Play_sfx_DariusSkin15_DariusCritAttack_OnCast                  变体 x3   文件 x6
+   Play_sfx_DariusSkin15_DariusCritAttack_OnHit                   变体 x12  文件 x24
+
+### sfx/skin15 / 笑话 / Joke  (2 条)
+   Play_sfx_DariusSkin15_joke_intro                               变体 x1   文件 x2  动画触发: {e365408f}@None~None
+   Play_sfx_DariusSkin15_joke_loop                                变体 x1   文件 x2  动画触发: Joke_Loop@None~None
+
+### sfx/skin15 / 舞蹈 / Dance  (2 条)
+   Play_sfx_DariusSkin15_dance_intro                              变体 x1   文件 x2  动画触发: Dance_In@None~None
+   Play_sfx_DariusSkin15_dance_loop                               变体 x1   文件 x2  动画触发: Dance@1.0~None
+
+### sfx/skin15 / 被动流血 / Hemo  (1 条)
+   Play_sfx_DariusSkin15_DariusHemoMax_OnBuffActivate             变体 x1   文件 x2
+
+### vo/base / 其他 / Other  (2 条)
+   <未命名 Event 0xF1EAD944>                                         变体 x2   文件 x2
+   <未命名 Event 0xF6CA6BA3>                                         变体 x4   文件 x4
+
+### vo/base / 嘲讽互动 / Emote  (3 条)
+   Play_vo_Darius_Joke3DGeneral                                   变体 x2   文件 x2
+   Play_vo_Darius_Joke3DGeneralEnd                                变体 x2   文件 x2
+   Play_vo_Darius_Laugh3DGeneral                                  变体 x3   文件 x3
+
+### vo/base / 技能施放 / Cast  (3 条)
+   Play_vo_Darius_DariusCleave_cast3D                             变体 x4   文件 x4
+   Play_vo_Darius_DariusExecute_cast3D                            变体 x4   文件 x4
+   Play_vo_Darius_Spell3DPMax                                     变体 x2   文件 x2
+
+### vo/base / 攻击 / Attack  (5 条)
+   Play_vo_Darius_Attack2DGeneral                                 变体 x5   文件 x5
+   Play_vo_Darius_DariusBasicAttack2_cast3D                       变体 x4   文件 x4
+   Play_vo_Darius_DariusBasicAttack_cast3D                        变体 x4   文件 x4
+   Play_vo_Darius_DariusCritAttack_cast3D                         变体 x4   文件 x4
+   Play_vo_Darius_DariusNoxianTacticsONHAttack_cast3D             变体 x4   文件 x4
+
+### vo/base / 死亡 / Death  (1 条)
+   Play_vo_Darius_Death3D                                         变体 x4   文件 x4
+
+### vo/base / 移动 / Move  (1 条)
+   Play_vo_Darius_Move2DStandard                                  变体 x10  文件 x10
+
+### vo/skin15 / 其他 / Other  (5 条)
+   <未命名 Event 0x753C4A82>                                         变体 x7   文件 x14
+   <未命名 Event 0x93BAE652>                                         变体 x13  文件 x26
+   <未命名 Event 0xA861E734>                                         变体 x1   文件 x2
+   <未命名 Event 0xAF3CDB45>                                         变体 x2   文件 x4
+   <未命名 Event 0xDF14B427>                                         变体 x1   文件 x2
+
+### vo/skin15 / 击杀 / Kill  (5 条)
+   Play_vo_DariusSkin15_Kill3DFirst                               变体 x4   文件 x8
+   Play_vo_DariusSkin15_Kill3DGarenSkin13                         变体 x4   文件 x8
+   Play_vo_DariusSkin15_Kill3DGeneral                             变体 x27  文件 x54
+   Play_vo_DariusSkin15_Kill3DPenta                               变体 x2   文件 x4
+   Play_vo_DariusSkin15_Kill3DTurret                              变体 x5   文件 x10
+
+### vo/skin15 / 嘲讽互动 / Emote  (5 条)
+   Play_vo_DariusSkin15_Joke3DGeneral                             变体 x3   文件 x6
+   Play_vo_DariusSkin15_JokeResponse3DGeneral                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_Laugh3DGeneral                            变体 x1   文件 x2
+   Play_vo_DariusSkin15_Taunt3DGeneral                            变体 x3   文件 x6
+   Play_vo_DariusSkin15_TauntResponse3DGarenSkin13                变体 x1   文件 x2
+
+### vo/skin15 / 回城 / Recall  (1 条)
+   Play_vo_DariusSkin15_Recall3DGeneral                           变体 x5   文件 x10
+
+### vo/skin15 / 复活 / Respawn  (1 条)
+   Play_vo_DariusSkin15_Respawn2DGeneral                          变体 x8   文件 x16
+
+### vo/skin15 / 技能施放 / Cast  (3 条)
+   Play_vo_DariusSkin15_DariusAxeGrabCone_cast3D                  变体 x8   文件 x16
+   Play_vo_DariusSkin15_DariusCleave_cast3D                       变体 x3   文件 x6
+   Play_vo_DariusSkin15_Spell3DPMax                               变体 x5   文件 x10
+
+### vo/skin15 / 攻击 / Attack  (8 条)
+   Play_vo_DariusSkin15_Attack2DGarenSkin13                       变体 x3   文件 x6
+   Play_vo_DariusSkin15_Attack2DGeneral                           变体 x24  文件 x48
+   Play_vo_DariusSkin15_Attack2DRivenSkin16                       变体 x1   文件 x2
+   Play_vo_DariusSkin15_Attack2DYasuoSkin09                       变体 x1   文件 x2
+   Play_vo_DariusSkin15_DariusBasicAttack2_cast3D                 变体 x4   文件 x8
+   Play_vo_DariusSkin15_DariusBasicAttack_cast3D                  变体 x4   文件 x8
+   Play_vo_DariusSkin15_DariusCritAttack_cast3D                   变体 x4   文件 x8
+   Play_vo_DariusSkin15_DariusNoxianTacticsONHAttack_cast3D       变体 x4   文件 x8
+
+### vo/skin15 / 死亡 / Death  (1 条)
+   Play_vo_DariusSkin15_Death3D                                   变体 x6   文件 x12
+
+### vo/skin15 / 移动 / Move  (7 条)
+   Play_vo_DariusSkin15_Move2DFirst                               变体 x3   文件 x6
+   Play_vo_DariusSkin15_Move2DFirstAllyAspect                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_Move2DFirstAllyDemon                      变体 x1   文件 x2
+   Play_vo_DariusSkin15_Move2DFirstAllyDraven                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_Move2DFirstEnemyGarenSkin13               变体 x3   文件 x6
+   Play_vo_DariusSkin15_Move2DLong                                变体 x12  文件 x24
+   Play_vo_DariusSkin15_Move2DStandard                            变体 x30  文件 x60
+
+### vo/skin15 / 购买装备 / BuyItem  (2 条)
+   Play_vo_DariusSkin15_BuyItem2DBlackCleaver                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_BuyItem2DTitanicHydra                     变体 x1   文件 x2
+
+### vo/skin15 / 队友集结 / RallyTeam  (3 条)
+   Play_vo_DariusSkin15_RallyTeam3DAhead                          变体 x5   文件 x10
+   Play_vo_DariusSkin15_RallyTeam3DBehind                         变体 x5   文件 x10
+   Play_vo_DariusSkin15_RallyTeam3DEven                           变体 x4   文件 x8
+
+### vo/skin15 / 首次遭遇 / FirstEncounter  (13 条)
+   Play_vo_DariusSkin15_FirstEncounter3DAatrox                    变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DAspect                    变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DChoGath                   变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DDemon                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DDraven                    变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DGalio                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DGarenSkin13               变体 x3   文件 x6
+   Play_vo_DariusSkin15_FirstEncounter3DKayle                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DLissandra                 变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DMorgana                   变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DQuinn                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DSwain                     变体 x1   文件 x2
+   Play_vo_DariusSkin15_FirstEncounter3DYorick                    变体 x1   文件 x2
+
+==========================================================================================
+事件名总数 112（含未命名占位 0 个）
+本地音频文件索引: 623 个 wem id
+动画驱动事件: 17 条
+输出: E:\UE\Fight\Docs\Audio\audio_master.csv

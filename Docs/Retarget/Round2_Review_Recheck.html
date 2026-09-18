@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>第二轮评审复核 · 对「精简实战版」方案的逐条校准</title>
+<style>
+  :root{--bg:#f5f6f8;--panel:#fff;--ink:#1b1f23;--ink2:#525a62;--line:#e1e5ea;
+        --red:#c0392b;--blue:#2b6ca3;--green:#1e8e5a;--amber:#b8860b;--purple:#6b4fa8;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.75;
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 26px 100px}
+  header{border-bottom:3px solid var(--purple);padding-bottom:14px}
+  h1{font-size:25px;margin:0 0 6px}
+  .sub{color:var(--ink2);font-size:13.5px}
+  h2{font-size:20px;margin:44px 0 12px;padding-left:12px;border-left:5px solid var(--blue)}
+  h3{font-size:16px;margin:24px 0 8px;color:var(--blue)}
+  p{margin:9px 0}
+  ul,ol{margin:9px 0 9px 2px;padding-left:22px}
+  li{margin:4px 0}
+  code{background:#eef1f4;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,monospace}
+  pre{background:#20262c;color:#dfe6ec;padding:13px 15px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.55}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:#eef1f4;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:20px;font-weight:600}
+  .tag.ok{background:#e2f5ea;color:var(--green)}
+  .tag.bad{background:#fdeaea;color:var(--red)}
+  .tag.warn{background:#fdf3dd;color:var(--amber)}
+  .tag.info{background:#e6f0f8;color:var(--blue)}
+  .callout{border-left:4px solid var(--blue);background:#eff5fa;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.red{border-color:var(--red);background:#fdf1ef}
+  .callout.green{border-color:var(--green);background:#eef8f2}
+  .callout.amber{border-color:var(--amber);background:#fdf8ec}
+  .mono{font-family:Consolas,monospace;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>第二轮评审复核 · 对「精简实战版」方案的逐条校准</h1>
+  <div class="sub">复核方式：本地磁盘实测 + 官方发布状态核实 + 前一轮已建立的资产实测数据｜2026-09-18</div>
+</header>
+
+<div class="callout green">
+<b>总评：这一轮的价值在于「真的去查了本地磁盘」——这是三份方案里第一个做实地核实的，值得肯定。它值得采纳的实质意见有三条（Stride Warping 优先、先做垂直切片、暂不引入 Cascadeur）。但它有三个继承性错误、一个方向性错误、一个退化（把我上一轮明确否掉的 <span class="mono">|Pitch| ≤ 5°</span> 又搬了回来），以及一个结构性问题：<b>把一个"无量化门禁 + 3 天交付"的计划当成了精简的优点，而这恰恰是上次 26.8° 翻车的模式。</b></div>
+</div>
+
+<h2>1. 它做对的事（实测复核后确认成立）</h2>
+
+<h3>1.1 本地确无 2XKO 资源 —— 它查对了</h3>
+<p>我独立复核了全盘：</p>
+<pre>全盘搜索 2XKO 目录       → 无
+全盘搜索 nav_std 文件     → 无（只命中 LOL 的 darius_base 音频/特效，不是 2XKO）
+E:\UE\Assets 下 2XKO 动画 → 无，只有 God King Darius 2XKO.fbx（单个网格体）</pre>
+<p><span class="tag ok">它是对的</span>本地确实没有 2XKO 客户端或解包动画库，我上一版把方案 C 列为"第一个半天去验证"，它提前把这一步做掉了，这是净收益。</p>
+
+<h3>1.2 但它的结论下得过重 —— 因为前提过时了</h3>
+<div class="callout amber">
+它写「2XKO 目前处于有限 Playtest 封测阶段，若无客户端资产，把方案 C 当作第一前提是空中楼阁」。<br>
+<b>实测（官方渠道，2026-09-18）：</b>
+<ul>
+<li>2XKO 已于 <b>2025-10-07 PC 抢先体验</b>，<b>2026-01-20 正式发售</b>（PC / PS5 / Xbox Series X|S），免费游戏；</li>
+<li><b>2026-08-20 Riot 公告：2026 年 12 月结束积极开发，转入维护模式</b>；最终内容更新在 10 月（Lux 已在 9/9 上线，Samira 10 月）；</li>
+<li><b>服务器继续在线，PC 仍可免费下载</b>；且为回馈玩家，<b>全部格斗家免费解锁</b>；</li>
+<li>国服另有「先锋测试服」（限号不删档，需到官网申请资格）。</li>
+</ul>
+<b>所以准确定性是：不是「封测不可得」，而是「需要一次几十 GB 的下载 + 一次解包」。</b>
+对照一个要投入 12+ 天的重定向工程，几小时的下载成本换「locomotion 零重定向误差」，性价比判断完全不同。
+</div>
+
+<h3>1.3 另外两条实质意见，我认同并采纳</h3>
+<table>
+<tr><th>它的意见</th><th>我上一版的处理</th><th>修正</th></tr>
+<tr><td><b>步幅用 Stride Warping，不要「改引擎速度迁就动画」</b></td>
+    <td>我建议「设 <span class="mono">MaxWalkSpeed = V_anim</span>」，把 Stride Warping 只放在风险 R4 的缓解措施里</td>
+    <td><span class="tag ok">接受</span>重手感优先是对的。修正为：<b>以目标移速（500~600）为锚 → 用 Stride Warping 自适应展开步幅</b>；仅当 Stride Warping 仍压不住（超出手感可接受范围）才回头调速度。<br><span class="tag warn">但它把「改速度」等同于「硬降到 350」是稻草人</span>——V_anim 从未被测过，降不降、降多少本来就该先测再定，而"测隐含速度"正是我计划里的阶段 0。</td></tr>
+<tr><td><b>先做垂直切片（走跑+普攻+技能姿态）再铺开</b></td>
+    <td>我给了 8 阶段 12.5 天的完整路线</td>
+    <td><span class="tag ok">部分接受</span>拆分里程碑是对的：<b>M1 垂直切片</b>（源净化 + IK Rig + 比例补偿 + 去倾斜 + 步幅闭环 + ABP，约 3.5 天）→ <b>M2</b> 风格改造/次级运动/twist 驱动/全量动作/回归。<br><span class="tag bad">但「2~3 天完成」不可信</span>：它砍掉的正是验证环节。参照本项目的实际历史——今天修一个"应该 5 分钟"的斧头显示问题，从定位到落盘花了近 3 小时；上次重定向因为跳过验证直接翻车成 26.8°。**3 天垂直切片可以接受，3 天交付整套行走跑跳打不行。**</td></tr>
+<tr><td><b>暂不引入 Cascadeur</b></td><td>我列为"阶段 4/5 手工超 2 天再考虑"</td><td><span class="tag ok">接受结论</span><br><span class="tag bad">但理由错了</span>：它说「309 骨远超免费额度」——Cascadeur 本来就只用于<b>白名单裁剪后的源骨架（~45 骨）</b>，远在 120 骨上限内。真正的拒绝理由应是"多一个跨软件环节的往返风险与时间成本不划算"。</td></tr>
+</table>
+
+<h2>2. 它继承 / 引入的错误</h2>
+
+<h3>2.1 仍然沿用「2.47 m」——而且这次用在了解算里</h3>
+<div class="callout red">
+它写「2XKO 是 <b>2.47m</b> 写实巨人」，并在阶段 3 写「以 <b>2.47m</b> 腿长自适应展开步幅」。<br>
+<b>实测：目标网格 z 上限 = 2.06 m</b>（UE SK bounds z = 3.8 ~ 206.2 cm；源 FBX 网格 z 0.04 ~ 2.06）。
+2.47 这个数字源自 <code>AGENTS.md</code> 里一句未核实的旧注，我上一轮已经把它连同 A3 的机理一起修正了。
+<br><b>影响：步幅/Stride Warping 的量级推算会偏 20%，去倾斜的肩高/腿长比例也会跟着错。</b>
+</div>
+
+<h3>2.2 髋宽偏差的物理解释反了（结论碰巧对，机理错）</h3>
+<p>它说：「LOL 德莱厄斯是 MOBA 倒三角身材、<b>髋极窄</b>；2XKO 是写实巨人、<b>骨盆宽大</b>」。</p>
+<table>
+<tr><th>度量</th><th>LOL 源</th><th>2XKO 目标</th><th>谁更宽</th></tr>
+<tr><td>左右髋间距 / 身高</td><td>26.55 / 187.21 = <b>0.1418</b></td><td>0.2048 / 1.8502 = <b>0.1107</b></td><td><b>LOL 相对宽 28%</b></td></tr>
+</table>
+<p><b>方向是反的。</b>后果：旋转复制后，目标膝盖间距会比源窄约 5.7 cm（髋间距差 × 缩放），出现"夹腿"。要恢复源的站姿，正确操作是把目标双腿<b>外展</b>——它给的处方（外展偏移）方向对，但因为它相信"目标是宽骨盆"，幅度会算反（会往"收"的方向越调越糟）。<b>这类"结论对、机理反"的错误最危险，因为它会在调参阶段把人带偏。</b></p>
+
+<h3>2.3 把我上一轮明确否掉的 <span class="mono">|Pitch| ≤ 5°</span> 又搬了回来</h3>
+<div class="callout red">
+它阶段 3 写：「将待机/跑动视线<b>强制</b>拉回地平线水平面（<span class="mono">|Pitch| ≤ 5°</span>）」——这与我在上一轮批评 Gemini 的 G2 是<b>同一条</b>：<br>
+逐帧强制头部绝对水平会剥夺自然点头（跑步时头本来就该随躯干有 3°~8° 周期性起伏），在 attack/spell 的发力帧（实测颈段最大 +69°）会产生明显"头部卡住"感。<br>
+<b>正确做法（我上一轮已给出）：</b>① 低通滤波估出"俯视补偿基线"，<b>只减去基线</b>；② 关键帧约束（站立帧 |pitch| ≤ 6°，发力帧放宽 ≤ 25°）；③ 指标改为「<b>头部相对躯干的偏置标准差 &lt; 4°</b>」。
+</div>
+
+<h3>2.4 仍然没有校验去倾斜的数据前提，而且作用对象搞错了</h3>
+<p>它说「躯干彻底抹除 56° 俯视造成的'仰面望天'」。但实测（相对 bind pose）：</p>
+<table>
+<tr><th>动作</th><th>躯干轴</th><th>颈段</th><th>头骨轴</th></tr>
+<tr><td>idle1</td><td><b>+0.4°（不动）</b></td><td><b>−32.1°</b></td><td><b>−12.1°</b></td></tr>
+<tr><td>run</td><td><b>+34.3°</b></td><td>+52.3°</td><td>+10.8°</td></tr>
+<tr><td>run_fast</td><td><b>+61.9°</b></td><td>+63.8°</td><td>+22.4°</td></tr>
+</table>
+<ul>
+<li>「仰面望天」<b>不在躯干</b>，在 <span class="mono">Neck</span>(−32°) + <span class="mono">Head</span>(−12°)。对躯干做「去倾斜 100%」在 idle 上<b>等于什么都没做</b>，而如果按"反向补偿"施加，反而会把 idle 的躯干推成前倾。</li>
+<li>真正该被"去"的是 <b>run 家族 34°~62° 的前倾</b>——而它写成「待机/跑动视线」，把 idle 和 run 当成同一个问题处理，两者需要的补偿方向和工作部位都不一样。</li>
+</ul>
+
+<h2>3. 结构性缺口：它把一个"没有量化验收"的计划当成了优点</h2>
+<div class="callout red">
+它的 4 阶段计划里，<b>唯一的量化指标是 <span class="mono">|Pitch| ≤ 5°</span></b>（而且这条本身是错的）。<br>
+没有：关节位置误差门禁、足部漂移门禁、<b>隐含速度 vs 速度门禁</b>、生理限位、穿模检查、A/B 渲染对比。<br>
+而它同时把周期压到 2~3 天。<br><br>
+<b>「压缩周期 + 取消量化验收」这个组合，与本项目 2026-09-18 那次 26.8° 翻车的成因完全同构</b>——当时也是"只验了能导入就交付"。它批评我的计划过度工程化，但它砍掉的不是工具链（Control Rig 补偿、Stride Warping、Speed Planting、双手 IK 它都留着），<b>砍掉的是验证环节</b>。
+</div>
+<p>另外几处遗漏（与我上一轮列的一致，它没补）：<b>24 根 twist 骨的驱动策略</b>（源侧无对应）、<b>披风/次级运动</b>（阶段 4 完全没提，连它自己认可的 Gemini 披风分离方案也没写进去）、<b>attack/spell 的姿态改造</b>（阶段 1~3 只覆盖 walk/run）、<b>309 骨里大批无源骨的处置</b>。</p>
+
+<h2>4. 合并后的决策（6 个拍板点，附实测依据）</h2>
+<table>
+<tr><th>#</th><th>它的决策</th><th>我的最终建议</th><th>实测依据</th></tr>
+<tr><td>1</td><td>UE IK Retargeter + DCC 预处理为主线</td><td><b>一致</b>，但把 2XKO 官方动画从"第一前提"降为<b>可选的、需先下载验证的增强项</b>（不是"空中楼阁"，也不是"必须先做"）</td><td>本地实测无 2XKO 资源；但 2XKO 已公开发售、PC 免费下载、全角色免费</td></tr>
+<tr><td>2</td><td>躯干去倾斜 100%，手臂幅度保留 85~90%</td><td><b>拆开处理</b>：idle 只动 neck(−32°)/head(−12°)，spine=0；run 动 spine(−15~−25°)+neck(−25~−40°)；run_fast spine(−35~−45°)+neck(−40~−55°)；attack/spell <b>不去倾斜</b>，只做限位软压缩，幅度保留 ≥85%（它这条比我原来的 75% 更合理，采纳）</td><td>plan_05 逐动作实测表</td></tr>
+<tr><td>3</td><td>Stride Warping 适配步幅</td><td><b>采纳</b>。先测动画隐含速度做基线，再以目标移速为锚用 Stride Warping</td><td>腿长/身高差仅 4.4%（不是它以为的"短腿对长腿"）</td></tr>
+<tr><td>4</td><td>先用 Run 贯通，或降速重采样出 Jog</td><td><b>采纳</b>。补一条：Walk 缺失必须写进计划显式项，别让 BlendSpace 假设它存在</td><td>实测 46 个动作里无 walk</td></tr>
+<tr><td>5</td><td>髋/颈补偿写在 Control Rig 运行时层</td><td><b>一致</b>。但幅度必须<b>反解</b>而不是手调：以"两膝间距 / 身高"和"头顶高度 / 身高"与源一致为方程求解</td><td>髋宽 −22%（目标更窄）、颈长 +84%（目标更长）</td></tr>
+<tr><td>6</td><td>暂不买 Cascadeur</td><td><b>同意结论，修正理由</b>：源骨架裁剪后仅 ~45 骨，不超免费额度；拒绝的真实理由是"多一个跨软件环节不划算"</td><td>Cascadeur 免费档限 120 关节</td></tr>
+</table>
+
+<h2>5. 分项评分</h2>
+<table>
+<tr><th>维度</th><th>评分</th><th>说明</th></tr>
+<tr><td>实地核实意识</td><td><b>A−</b></td><td>三份方案里唯一真去查本地磁盘的，这一步价值最高</td></tr>
+<tr><td>对手感/设计层的判断</td><td><b>A−</b></td><td>Stride Warping 优于改速度、不为迁就动画牺牲移速 —— 判断专业</td></tr>
+<tr><td>事实准确度</td><td><b>D+</b></td><td>沿用 2.47m；髋宽方向反；2XKO 状态过时；Cascadeur 拒绝理由错</td></tr>
+<tr><td>方案设计</td><td><b>C+</b></td><td>继承了我上一轮明确否掉的 |Pitch|≤5°；去倾斜作用对象搞错</td></tr>
+<tr><td>验证严谨度</td><td><b>D</b></td><td>唯一量化指标本身是错的；无任何门禁；与项目铁律冲突</td></tr>
+<tr><td>周期估算</td><td><b>D</b></td><td>2~3 天不可信；但它"先做垂直切片"的思路应采纳</td></tr>
+<tr><td colspan="2"><b>综合</b></td><td><b>它的"敏捷收敛"直觉对，执行细节不可采信。</b>正确做法：采纳它的三条实质意见（Stride Warping / 垂直切片 / 不引入 Cascadeur）+ 补齐量化门禁 + 用 plan_05 的实测表替换它的去倾斜章节。</td></tr>
+</table>
+
+<h2>附录 · 本轮新增的核实动作</h2>
+<table>
+<tr><th>动作</th><th>结果</th></tr>
+<tr><td>全盘搜索 2XKO / Riot / nav_std</td><td>无 2XKO 资源；但有 Riot Client 基础设施（<span class="mono">E:\WeGameApps\英雄联盟\Riot Client</span>，腾讯 WeGame 版 LOL）</td></tr>
+<tr><td><span class="mono">C:\ProgramData\Riot Games\RiotClientInstalls.json</span></td><td>仅绑定 <span class="mono">KeystoneFoundationTencentLeagueLivePublicWin</span>，无 2XKO patchline</td></tr>
+<tr><td>官方发布状态核实</td><td>2XKO 2025-10-07 PC 抢先体验 / 2026-01-20 正式发售 / 2026-08-20 宣布 12 月转维护模式、服务器保持在线、PC 免费下载、全角色免费解锁</td></tr>
+</table>
+
+</div>
+</body>
+</html>

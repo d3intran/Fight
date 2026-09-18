@@ -1,0 +1,603 @@
+已导出 JSON: Docs\Audio\_intermediate\anim_skin15.json  (68,895 bytes)
+
+====================================================================================================
+顶层条目
+====================================================================================================
+   Characters/Darius/Animations/Skin15      dict   7
+   __linked: []
+
+====================================================================================================
+含关键词的字段路径（去重后）
+====================================================================================================
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{a951ed9a}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{a951ed9a}.mEffectKey   x1
+        'Darius_BA_Swipe_01'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{a951ed9a}.mEndFrame   x1
+        30.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{a951ed9a}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{a951ed9a}.mParticleEventDataPairList[0].mBoneName   x1
+        'C_Buffbone_GLB_Layout_Loc'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{bf57e8fe}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack1.mEventDataMap.{bf57e8fe}.mSoundName   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_foley'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{a951ed9a}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{a951ed9a}.mEffectKey   x1
+        'Darius_BA_Swipe_02'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{a951ed9a}.mEndFrame   x1
+        30.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{a951ed9a}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{a951ed9a}.mParticleEventDataPairList[0].mBoneName   x1
+        'C_Buffbone_GLB_Layout_Loc'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{bf57e8fe}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Attack2.mEventDataMap.{bf57e8fe}.mSoundName   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_foley'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Crit.mEventDataMap.{bf57e8fe}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Crit.mEventDataMap.{bf57e8fe}.mSoundName   x1
+        'Play_sfx_DariusSkin15_DariusBasicAttack_foley'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{0a0999ed}.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{0a0999ed}.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{66f806eb}.__type   x1
+        'JointSnapEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{66f806eb}.mJointNameToOverride   x1
+        'weapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{66f806eb}.mJointNameToSnapTo   x1
+        'SnapWeapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{6771a682}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{6771a682}.mSoundName   x1
+        'Play_sfx_DariusSkin15_dance_loop'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance.mEventDataMap.{6771a682}.mStartFrame   x1
+        1.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.Face_Camera.__type   x1
+        'FaceTargetEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{0a0999ed}.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{0a0999ed}.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{0a0999ed}.mStartFrame   x1
+        20.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{66f806eb}.__type   x1
+        'JointSnapEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{66f806eb}.mJointNameToOverride   x1
+        'weapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{66f806eb}.mJointNameToSnapTo   x1
+        'SnapWeapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{66f806eb}.mStartFrame   x1
+        20.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{69ac328e}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{69ac328e}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Dance_In.mEventDataMap.{69ac328e}.mSoundName   x1
+        'Play_sfx_DariusSkin15_dance_intro'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.mEffectKey   x1
+        'Darius_Z_Death'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.mParticleEventDataPairList[0].mBoneName   x1
+        'Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{5e062102}.mStartFrame   x1
+        63.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{dbaf4421}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{dbaf4421}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{dbaf4421}.mSoundName   x1
+        'Play_sfx_DariusSkin15_death_oba'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{ef4701b1}.__type   x1
+        'JointSnapEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{ef4701b1}.mJointNameToOverride   x1
+        'weapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Death.mEventDataMap.{ef4701b1}.mJointNameToSnapTo   x1
+        'SnapWeapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Joke_Loop.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Joke_Loop.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Joke_Loop.mEventDataMap.{567d4bb2}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Joke_Loop.mEventDataMap.{567d4bb2}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Joke_Loop.mEventDataMap.{567d4bb2}.mSoundName   x1
+        'Play_sfx_DariusSkin15_joke_loop'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.FaceCamera.__type   x1
+        'FaceTargetEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.Throne.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.Throne.mEndFrame   x1
+        260.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.Throne.mShowSubmeshList[0]   x1
+        'Throne_mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.Throne.mStartFrame   x1
+        17.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.wolf.mEndFrame   x1
+        260.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.wolf.mStartFrame   x1
+        178.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.mEffectKey   x1
+        'Darius_Z_Throne_Burst'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.mEndFrame   x1
+        165.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.mParticleEventDataPairList[0].mBoneName   x1
+        'Gem'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ecd1953}.mStartFrame   x1
+        148.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mEffectKey   x1
+        'Darius_Z_Wolf_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mEndFrame   x1
+        221.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[0].mBoneName   x1
+        'R_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[1].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[1].mBoneName   x1
+        'L_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{2ffe02c4}.mStartFrame   x1
+        195.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mEffectKey   x1
+        'Darius_Z_Recall_Impact'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mEndFrame   x1
+        155.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mParticleEventDataPairList[0].mBoneName   x1
+        'BUFFBONE_GLB_GROUND_LOC'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5aa1c18a}.mStartFrame   x1
+        143.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5d61554a}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5d61554a}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{5d61554a}.mSoundName   x1
+        'Play_sfx_DariusSkin15_recall_leadin'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.mEffectKey   x1
+        'Darius_Z_Recall_Gem'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.mEndFrame   x1
+        155.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.mParticleEventDataPairList[0].mBoneName   x1
+        'Gem'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{d33f1522}.mStartFrame   x1
+        70.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{df529004}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{df529004}.mEffectKey   x1
+        'Darius_Z_Recall_Ground'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{df529004}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Recall.mEventDataMap.{df529004}.mParticleEventDataPairList[0].mBoneName   x1
+        'BUFFBONE_GLB_GROUND_LOC'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.Face_Camera.YRotationDegrees   x1
+        -82.5
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.Face_Camera.__type   x1
+        'FaceTargetEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.mEndFrame   x1
+        38.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.mHideSubmeshList[0]   x1
+        'Darius_Skin15_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.mHideSubmeshList[1]   x1
+        'Darius_Axe_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.mHideSubmeshList[2]   x1
+        'Darius_Cape_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{0a0999ed}.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.mEffectKey   x1
+        'Darius_Z_SpawnIn'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.mEndFrame   x1
+        60.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.mParticleEventDataPairList[0].mBoneName   x1
+        'C_Buffbone_GLB_Layout_Loc'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{2a436910}.mStartFrame   x1
+        36.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{787ddf8f}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{787ddf8f}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Respawn.mEventDataMap.{787ddf8f}.mSoundName   x1
+        'Play_sfx_DariusSkin15_respawn_oba'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.wolf.mEndFrame   x1
+        67.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.wolf.mStartFrame   x1
+        8.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mEffectKey   x1
+        'Darius_Z_Wolf_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mEndFrame   x1
+        200.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mParticleEventDataPairList[0].mBoneName   x1
+        'R_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mParticleEventDataPairList[1].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Run_Homeguard_RunIn.mEventDataMap.{d6394b54}.mParticleEventDataPairList[1].mBoneName   x1
+        'L_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell1.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1_ToIdle.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1_ToIdle.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1_ToIdle.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_spell1_toidle.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell1_ToIdle.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.mEffectKey   x1
+        'Darius_W_Cast'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.mEndFrame   x1
+        40.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mEventDataMap.{767dd48f}.mParticleEventDataPairList[0].mBoneName   x1
+        'Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Activate.Updater.__type   x1
+        'IsMovingParametricUpdater'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Activate.__type   x1
+        'ConditionBoolClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Activate.mChangeAnimationMidPlay   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Activate.mFalseConditionClipName   x1
+        'Spell2_ActivateIdle'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Activate.mTrueConditionClipName   x1
+        'Spell2_ActivateRun'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateIdle.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateIdle.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateIdle.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_activateidle.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateIdle.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateRun.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateRun.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateRun.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_activaterun.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_ActivateRun.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Deactivate.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Deactivate.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Deactivate.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_deactivate.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Deactivate.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Idle.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Idle.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Idle.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_idle.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Idle.mFlags   x1
+        2
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Idle.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_idlein.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn2.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn2.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn2.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_idlein2.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_IdleIn2.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell2_run.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.mFlags   x1
+        2
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.mTickDuration   x1
+        0.03333333879709244
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell2_Run.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell3.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.mEffectKey   x1
+        'Darius_E_ClawMarks'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.mParticleEventDataPairList[0].mBoneName   x1
+        'C_Buffbone_GLB_Layout_Loc'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{0745a793}.mStartFrame   x1
+        8.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{767dd48f}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{767dd48f}.mEffectKey   x1
+        'Darius_E_Cast'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{767dd48f}.mIsKillEvent   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{767dd48f}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mEventDataMap.{767dd48f}.mParticleEventDataPairList[0].mBoneName   x1
+        'Axe_Head'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToIdle.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToIdle.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToIdle.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell3_toidle.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToIdle.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToRun.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToRun.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToRun.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell3_torun.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell3_ToRun.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.SyncFrameOnChangeAnim   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.__type   x1
+        'LogicDriverBoolParametricUpdater'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.__type   x1
+        'DelayedBoolMaterialDriver'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.mBoolDriver.__type   x1
+        'OneTrueMaterialDriver'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.mBoolDriver.mDrivers[0].__type   x1
+        'IsAnimationPlayingDynamicMaterialBoolDriver'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.mBoolDriver.mDrivers[0].mAnimationNames[0]   x1
+        '{23bc3a50}'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.mBoolDriver.mDrivers[0].mAnimationNames[1]   x1
+        '{421a8ec5}'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.Updater.driver.mDelayOn   x1
+        0.009999999776482582
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.__type   x1
+        'ConditionBoolClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.mChangeAnimationMidPlay   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.mFalseConditionClipName   x1
+        '{23bc3a50}'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4.mTrueConditionClipName   x1
+        '{421a8ec5}'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4_ToRun.__type   x1
+        'AtomicClipData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4_ToRun.mAnimationResourceData.__type   x1
+        'AnimationResourceData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4_ToRun.mAnimationResourceData.mAnimationFilePath   x1
+        'assets/characters/darius/skins/skin15/animations/darius_skin15_spell4_trans.anm'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Spell4_ToRun.mTrackDataName   x1
+        'Default'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.wolf.mEndFrame   x1
+        205.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.wolf.mStartFrame   x1
+        33.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mEffectKey   x1
+        'Darius_Z_Wolf_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mEndFrame   x1
+        95.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[0].mBoneName   x1
+        'R_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[1].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mParticleEventDataPairList[1].mBoneName   x1
+        'L_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{2ffe02c4}.mStartFrame   x1
+        41.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mEffectKey   x1
+        'Darius_Z_Wolf_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mEndFrame   x1
+        0.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mParticleEventDataPairList[0].mBoneName   x1
+        'R_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mParticleEventDataPairList[1].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{d6394b54}.mParticleEventDataPairList[1].mBoneName   x1
+        'L_Lion_Hand'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{f44131a7}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{f44131a7}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.Taunt.mEventDataMap.{f44131a7}.mSoundName   x1
+        'Play_sfx_DariusSkin15_taunt_oba'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.mEndFrame   x1
+        18.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.mHideSubmeshList[0]   x1
+        'Darius_Axe_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.mHideSubmeshList[1]   x1
+        'Darius_Cape_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.mHideSubmeshList[2]   x1
+        'Darius_Skin15_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.BODY.mStartFrame   x1
+        3.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.weapon.__type   x1
+        'JointSnapEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.weapon.mJointNameToOverride   x1
+        'weapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.weapon.mJointNameToSnapTo   x1
+        'SnapWeapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{5be819d6}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{5be819d6}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{5be819d6}.mSoundName   x1
+        'Play_sfx_DariusSkin15_DariusExecute_swing'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{5be819d6}.mStartFrame   x1
+        9.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{cef6a86c}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{cef6a86c}.mEffectKey   x1
+        'Darius_R_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{cef6a86c}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{cef6a86c}.mParticleEventDataPairList[0].mBoneName   x1
+        'Lion_Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.mEffectKey   x1
+        'Darius_R_Cast_Wolf'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.mIsKillEvent   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{23bc3a50}.mEventDataMap.{e3a4c5e3}.mParticleEventDataPairList[0].mBoneName   x1
+        'Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.mEndFrame   x1
+        18.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.mHideSubmeshList[0]   x1
+        'Darius_Axe_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.mHideSubmeshList[1]   x1
+        'Darius_Cape_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.mHideSubmeshList[2]   x1
+        'Darius_Skin15_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.BODY.mStartFrame   x1
+        3.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.weapon.__type   x1
+        'JointSnapEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.weapon.mJointNameToOverride   x1
+        'weapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.weapon.mJointNameToSnapTo   x1
+        'SnapWeapon'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{5be819d6}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{5be819d6}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{5be819d6}.mSoundName   x1
+        'Play_sfx_DariusSkin15_DariusExecute_swing'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{5be819d6}.mStartFrame   x1
+        9.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{cef6a86c}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{cef6a86c}.mEffectKey   x1
+        'Darius_R_Trail'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{cef6a86c}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{cef6a86c}.mParticleEventDataPairList[0].mBoneName   x1
+        'Lion_Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.__type   x1
+        'ParticleEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.mEffectKey   x1
+        'Darius_R_Cast_Wolf'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.mIsDetachable   x1
+        True
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.mIsKillEvent   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.mParticleEventDataPairList[0].__type   x1
+        'ParticleEventDataPair'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{421a8ec5}.mEventDataMap.{e3a4c5e3}.mParticleEventDataPairList[0].mBoneName   x1
+        'Root'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.wolf.__type   x1
+        'SubmeshVisibilityEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.wolf.mShowSubmeshList[0]   x1
+        'Wolf_Mat'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.wolf.mStartFrame   x1
+        27.0
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.{9ef361fe}.__type   x1
+        'SoundEventData'
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.{9ef361fe}.mIsLoop   x1
+        False
+   .Characters/Darius/Animations/Skin15.mClipDataMap.{e365408f}.mEventDataMap.{9ef361fe}.mSoundName   x1
+        'Play_sfx_DariusSkin15_joke_intro'

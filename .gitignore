@@ -40,3 +40,11 @@ Scripts/darius_extracted/
 Scripts/tools/
 *.exe
 *.zip
+
+# Agent 目录：.workbuddy/ 是当前工作区记忆（进 git）；.workbuddy-ai/ 是旧家目录遗留副本，不进
+.workbuddy-ai/
+
+# 诊断期临时 UE 资产（渲染目标、探针蓝图等），随时可重建
+Content/Temp/
+Content/Character/Darius/Blueprints/ABP_NodeTest.uasset
+Content/Character/Darius/Blueprints/ABP_Darius_Test.uasset

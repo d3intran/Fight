@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>神王战斧手持显示缺失 —— 根因定位与修复报告</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#1c2024; --muted:#5b6672; --line:#e3e7ec; --soft:#f6f8fa;
+    --accent:#1f6feb; --ok:#0f7b3f; --bad:#c0392b; --warn:#9a6700; --code:#f2f4f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:15px/1.72 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;}
+  .wrap{max-width:1000px;margin:0 auto;padding:48px 32px 96px}
+  h1{font-size:27px;line-height:1.35;margin:0 0 6px;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:34px}
+  h2{font-size:20px;margin:46px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:16px;margin:26px 0 10px;color:#111}
+  h4{font-size:14px;margin:18px 0 8px;color:var(--muted)}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0 10px 4px;padding-left:22px}
+  li{margin:5px 0}
+  code{background:var(--code);padding:1.5px 5px;border-radius:4px;font-size:12.5px;
+       font-family:ui-monospace,"SF Mono",Consolas,monospace}
+  pre{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px 16px;
+      overflow:auto;font-size:12.5px;line-height:1.65;font-family:ui-monospace,"SF Mono",Consolas,monospace}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--soft);font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .card{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0}
+  .tl{border-left:3px solid var(--accent);background:#f3f8ff;padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0}
+  .warnbox{border-left:3px solid var(--warn);background:#fffaf0;padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0}
+  .good{border-left:3px solid var(--ok);background:#f2fbf5;padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0}
+  .bad{border-left:3px solid var(--bad);background:#fdf3f2;padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0}
+  img{max-width:100%;border:1px solid var(--line);border-radius:8px;display:block;margin:10px 0}
+  .cap{color:var(--muted);font-size:12.5px;margin:-2px 0 20px}
+  .pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600}
+  .pill.ok{background:#e6f6ec;color:var(--ok)}
+  .pill.bad{background:#fdecea;color:var(--bad)}
+  .pill.warn{background:#fff5db;color:var(--warn)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+  .kpi div{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .kpi b{display:block;font-size:19px;line-height:1.3}
+  .kpi span{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>神王战斧手持显示缺失 —— 根因定位与修复报告</h1>
+<div class="sub">项目 Fight（UE 5.8）｜2026-09-18｜对象：<code>BP_DariusCharacter</code> / <code>SK_Darius_GodKing</code> / <code>SM_Darius_GodKing_Axe</code></div>
+
+<div class="tl">
+<b>一句话结论：武器几何从未被删。真因是「斧头 pivot 不在握持点」叠加「socket 朝向靠试」，导致整块 77cm 大斧刃插进角色胸腔内部被身体遮挡——外部只能看到握柄和尾钩。修复只动了 <code>hand_rSocket</code> 的 6 个数字，几何 / 材质 / 材质槽一律未改。</b>
+</div>
+
+<div class="kpi">
+  <div><b>5668</b><span>UE 网格顶点数（源 FBX 5661，差值为 UV/法线拆分）</span></div>
+  <div><b>1.3e-07</b><span>姿态求解残差（标定后）</span></div>
+  <div><b>15.0°</b><span>斧头长轴与世界上向夹角</span></div>
+  <div><b>+43.1 cm</b><span>斧头最低点高度（修复前插在体内/地面附近）</span></div>
+</div>
+
+<h2>1. 最初的假设是错的</h2>
+<p>现场判断是「之前修角色身下斧头投影黑影时，误把手上斧头的斧头主体一起隐藏或删除了」。这个假设<b>被数据直接否掉</b>——武器几何从头到尾一次都没被动过。</p>
+
+<h3>1.1 几何完整性（硬指标）</h3>
+<table>
+<tr><th>对象</th><th>顶点</th><th>面</th><th>局部包围盒（m）</th></tr>
+<tr><td>2XKO 源 FBX <code>darius_godking_mesh_LOD0.007</code></td><td>5661</td><td>4698</td><td>0.210 × 1.718 × 0.770</td></tr>
+<tr><td><code>Saved/Exported_Weapons/SM_Darius_GodKing_Axe.fbx</code></td><td>5661</td><td>4698</td><td>0.210 × 1.718 × 0.770</td></tr>
+<tr><td>UE 资产 <code>SM_Darius_GodKing_Axe</code>（LOD0）</td><td>5668</td><td>—</td><td>0.210 × 1.718 × 0.770</td></tr>
+</table>
+<p>沿长轴（Y）的顶点分布直方图 <b>逐 bin 完全一致</b>；UE 侧多出 7 个顶点是 UV/法线接缝拆分所致。三者的包围盒一字不差——<b>大刃（占 Z 全高 77cm 的那部分几何）始终在资产里</b>。</p>
+
+<h3>1.2 材质不会「选择性隐藏斧刃」</h3>
+<table>
+<tr><th>资产</th><th>混合模式</th><th>双面</th><th>不透明遮罩</th></tr>
+<tr><td><code>M_Darius_Master</code>（所有 MI 的父材质）</td><td>BLEND_OPAQUE</td><td>False</td><td>无</td></tr>
+<tr><td><code>MI_Darius_Axe</code></td><td>继承 OPAQUE</td><td>继承</td><td>无 overrides</td></tr>
+</table>
+<p>把同一把 SM 单独摆进关卡渲染 → <b>完整斧头</b>（大双刃 + 黑握柄 + 尾钩 + 粉色发光），见下图左半。</p>
+
+<h3>1.3 变换对照实验（决定性）</h3>
+<p>把同一 SM 用<b>手部的世界变换</b>摆到场上、且场里没有任何角色遮挡：</p>
+<img src="assets_axe/XYZ_hand_only.png" alt="hand transform axe only">
+<div class="cap">同 SM + 手部世界变换（loc 7.55,-70.91,118.29 / rot 6.67,165.06,-137.52），无遮挡——斧头完整。</div>
+<div class="good"><b>资产正常、材质正常、变换正常 ⇒ 剩下的唯一变量就是「身体遮挡」。</b></div>
+
+<h3>1.4 A/B 隐藏实验</h3>
+<table>
+<tr><th>实验</th><th>画面变化</th><th>推论</th></tr>
+<tr><td>隐藏 <code>WeaponAxe</code> 组件（角色 BP 内）</td><td>手中「杆 + 小钩」<b>依旧存在</b></td><td>该组件当前贡献的可见像素为 0（被身体吃掉）</td></tr>
+<tr><td>隐藏就地摆放的同 SM clone</td><td>手中「杆 + 小钩」<b>消失</b></td><td>可见部分用的正是同一资产、同一变换</td></tr>
+</table>
+<p>两者使用<b>同一把 SM、同一个世界变换</b>，只是一个在角色体内、一个在体表——从而把「几何缺失」彻底排除，锁定为「位置错误 + 被遮挡」。</p>
+
+<h3>1.5 世界坐标核算（数字闭环）</h3>
+<p>用 UE 自身的 <code>Transform.transform_location()</code> 把斧头局部关键点投到世界（角色面朝 −Y，右手在 Y≈−71）：</p>
+<table>
+<tr><th>斧头局部点</th><th>世界坐标</th><th>位置判读</th></tr>
+<tr><td>局部 Y = +86（大刃端）</td><td>(31.4, −3.7, <b>167.5</b>)</td><td class="bad">X=31 / Y=−3.7 / Z=167.5 → <b>落在躯干内部</b>（躯干 Z 117~201，Y ±31）</td></tr>
+<tr><td>局部 Y = −86（尾钩端）</td><td>(−14.2, −122.6, 52.2)</td><td>体前 1.2m、膝下——就是截图里露出来的那截「月牙」</td></tr>
+<tr><td>骨骼 <code>head</code></td><td>(5.5, 0.0, 188.6)</td><td>—</td></tr>
+<tr><td>骨骼 <code>hand_r</code></td><td>(7.5, −70.9, 118.3)</td><td>与 weapon 组件原点重合</td></tr>
+</table>
+
+<h2>2. 真因</h2>
+
+<h3>2.1 pivot 根本不在握持点上（<code>blender_split_weapon.py</code> 用错轴）</h3>
+<pre>grip_z = min_v.z + size_v.z * 0.35     # ← 用了 Z 轴</pre>
+<p>这把斧头的<b>长轴是 Y（172 cm）</b>，Z 方向只有 77 cm（刃高）。所谓「全长 35% 处」算出来的是一个毫无几何意义的包围盒中部点。实际后果：</p>
+<ul>
+  <li>pivot 落在了<b>刃根</b>上（UE 局部 <code>Y = 0</code>）。</li>
+  <li>握柄（细段）在 UE 局部 <code>Y ∈ [−43, 0]</code>，尾钩在 <code>Y ∈ [−86, −43]</code>，大刃在 <code>Y ∈ [0, +86]</code>。</li>
+  <li>手正握在 <b>刃根</b>上 ⇒ 86 cm 长的大刃整根向外伸出。</li>
+</ul>
+
+<h3>2.2 挂载朝向是试出来的</h3>
+<p><code>hand_rSocket.relative_rotation</code> 被设为 <code>(pitch 90, yaw 0, roll 0)</code>，实测世界旋转为 <code>(6.67, 165.06, −137.52)</code>——完全由手骨自身朝向决定，从未按「刃朝上、刃面朝侧」设计。这个方向刚好把大刃送进躯干。</p>
+
+<div class="bad"><b>两个缺陷叠加的净效果：</b>一根 86 cm 的刃 100% 埋在胸腔里，外部只剩 86 cm 的握柄 + 尾钩。视觉上与「斧刃被删掉」完全等价——所以第一眼判断会跑偏。</div>
+
+<h2>3. 修复</h2>
+
+<h3>3.1 改动内容（只有 6 个数字）</h3>
+<table>
+<tr><th>属性</th><th>修复前</th><th>修复后</th></tr>
+<tr><td><code>hand_rSocket.relative_rotation</code></td><td>(90, 0, 0)</td><td><b>(−106.334, −70.982, 9.342)</b></td></tr>
+<tr><td><code>hand_rSocket.relative_location</code></td><td>(0, 0, 0)</td><td><b>(0.18965, 0.10080, 0.00982)</b>（bone 空间，≈21.5 cm 世界）</td></tr>
+<tr><td><code>hand_rSocket.relative_scale</code></td><td>(0.01, 0.01, 0.01)</td><td>不变（抵消根骨骼 100× 米→厘米换算）</td></tr>
+<tr><td><code>WeaponAxe</code> 组件相对变换</td><td>(0,0,0) / (0,0,0)</td><td>不变</td></tr>
+<tr><td>几何 / 材质 / 材质槽 / BP 结构</td><td>—</td><td><b>未改动</b></td></tr>
+</table>
+<p>改前已把 <code>SK_Darius_GodKing.uasset</code> / <code>BP_DariusCharacter.uasset</code> 备份到 <code>Saved/Backup_axe_fix/</code>。</p>
+
+<h3>3.2 求解方法（可复现，不靠手感）</h3>
+<ol>
+  <li><b>定目标姿态</b>：斧头局部 X 轴 → 世界 +X（刃面法线朝侧向）；局部 Y 轴 → (0, −0.259, 0.966)（刃朝上、前倾 15°）。用 <code>MathLibrary.make_rot_from_xy</code> 构造成目标世界朝向 <code>Wt</code>。</li>
+  <li><b>标定旋转组合顺序</b>（实测、非推断）：
+    <pre>relRot = (0,0,0)  → W = (47.0954, -97.7151, -80.1788)
+relRot = (0,90,0) → W = (42.1291,  68.9880,  80.9917)
+
+假设 World = Compose(Parent, Rel) : 残差 5.508537
+假设 World = Compose(Rel, Parent) : 残差 0.000000   ← 成立</pre>
+    <b>结论：socket 的相对旋转按 <code>World = Compose(Rel, Parent)</code> 组合</b>，与直觉相反。</li>
+  <li><b>坐标下降求解</b>（只用 <code>compose_rotators</code> + <code>get_forward/right/up_vector</code>，因为该版本的 <code>MathLibrary</code> 没有 <code>invert_rotator</code> / <code>rotate_vector</code> / <code>quat_from_rotator</code>），残差收敛到 <b>1.3e-07</b>，并由重新 spawn 实测复核（实测世界旋转 (−0.012, 0.0084, −105.0005) vs 目标 (0,0,−105)）。</li>
+  <li><b>沿斧头自身 +Y 平移 21.5 cm</b>：握柄覆盖局部 Y ∈ [−43, 0]，取中点 −21.5 作为握持点，正好落到手心。平移量以 <code>get_right_vector(Rs) × 0.215</code> 写入 socket 的 relative_location（bone 空间 1 单位 = 1 cm 世界 / 100）。</li>
+</ol>
+
+<h3>3.3 两个候选朝向的 A/B</h3>
+<div class="grid">
+  <div><img src="assets_axe/V_A_up_side.png" alt="variant A"><div class="cap">候选 A：局部 +Y 朝上 —— 完整斧头，大刃在上、尾钩在下。</div></div>
+  <div><img src="assets_axe/V_B_down_side.png" alt="variant B"><div class="cap">候选 B：局部 +Y 朝下 —— 刃朝下、姿态不自然，弃用。</div></div>
+</div>
+<p>由 A/B 结果反证：<b>UE 局部 +Y 端是大刃</b>（FBX 因一次轴转换语义翻转，直方图与 UE 局部轴正负号相反——这是本次最容易踩错的点）。</p>
+
+<h2>4. 修复前后</h2>
+<img src="assets_axe/AXE_before_after.png" alt="before after">
+<div class="cap">同一机位。左：修复前，手中只有握柄 + 尾钩。右：修复后，大双刃 / 握柄 / 尾钩齐全，握柄落在手心。</div>
+
+<div class="grid">
+  <div><img src="assets_axe/OK_q34.png" alt="after 3/4"><div class="cap">修复后 3/4 视角（编辑器 bind pose）。</div></div>
+  <div><img src="assets_axe/OK_simulate.png" alt="after simulate"><div class="cap">Simulate 模式下复核（<code>ABP_Unarmed</code> 驱动），大刃 / 握柄 / 尾钩完整。</div></div>
+</div>
+
+<h2>5. 验收指标</h2>
+<table>
+<tr><th>#</th><th>指标</th><th>期望</th><th>实测</th><th>判定</th></tr>
+<tr><td>1</td><td>几何完整性：UE LOD0 顶点数</td><td>≈5661（含 UV 拆分）</td><td>5668</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>2</td><td>斧头局部 +Y 与世界上向夹角</td><td>≈15°（刃朝上）</td><td>15.0°</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>3</td><td>斧头最低点世界 Z</td><td>≥ 0（不得插地）</td><td>+43.1 cm</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>4</td><td>斧头世界 AABB</td><td>完整包住刃 + 柄 + 钩</td><td>X −3~18 / Y −147~−28 / Z 43~229</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>5</td><td>世界缩放</td><td>1.0（21×172×77 cm）</td><td>1.0</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>6</td><td>材质槽</td><td><code>MI_Darius_Axe</code></td><td>一致</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>7</td><td>姿态求解残差</td><td>&lt; 1e-4</td><td>1.3e-07</td><td><span class="pill ok">PASS</span></td></tr>
+<tr><td>8</td><td>渲染硬证据：大刃可见</td><td>可见</td><td>见 §4 对比图</td><td><span class="pill ok">PASS</span></td></tr>
+</table>
+
+<div class="warnbox"><b>被弃用的伪指标：</b>我一度想用「斧头 AABB 与角色 AABB 的重叠体积」做遮挡率指标。对细长斜置物体这个指标无意义（修复后数值反而从 ~22% 涨到 49.8%），已弃用。本项目铁律要求「指标与先验假设无关」——这条正是反面教材。</div>
+
+<h2>6. UE5 中角色与武器资产的标准处理方式</h2>
+
+<h3>6.1 组件分离（Component Separation）</h3>
+<p>武器<b>不做</b>成角色骨骼网格的一部分，而是独立的 <code>StaticMesh</code> / <code>SkeletalMesh</code>，由角色蓝图里一个单独组件承载。</p>
+<table>
+<tr><th>角色骨架里放武器（不推荐）</th><th>独立组件 + socket（标准做法）</th></tr>
+<tr><td>换武器要重导整个角色网格</td><td>换武器只需换组件上的 Mesh 引用</td></tr>
+<tr><td>武器材质/碰撞/投影和身体绑死</td><td>武器可单独设材质、碰撞、阴影</td></tr>
+<tr><td>无法做掉落 / 拾取 / 换装</td><td>可 detach、丢到地上、被其他角色拾取</td></tr>
+<tr><td>描边/外发光等后处理壳会连带复制武器</td><td>不存在连带复制问题</td></tr>
+</table>
+<p>Darius 的武器天然满足这条（<code>SM_Darius_GodKing_Axe</code> 是独立 <code>StaticMesh</code>，挂在 <code>WeaponAxe</code> 组件上）。</p>
+
+<h3>6.2 骨骼插槽挂载（Socket Attachment）</h3>
+<ol>
+  <li>在 <b>骨架（Skeleton）</b> 资产上定义 socket，而不是在骨骼网格体上临时加——socket 存在骨架里才能被所有共用该骨架的网格/动画共享。</li>
+  <li>socket 的父骨骼选<b>武器专用骨</b>（本模型已有 <code>weapon_jnt_r</code>，且它正好落在手心：世界 (7.590, −70.610, 117.964) vs <code>hand_r</code> (7.549, −70.906, 118.293)）。用 <code>hand_r</code> 也可以，但武器骨通常带有动画师预设的持握偏移。</li>
+  <li><b>Pivot 契约</b>：武器网格的原点必须落在<b>握持点</b>，且长轴对齐 +X（forward）；
+      这样 socket 的 relative_rotation 就是一个简单、可读的常量（例如 <code>(0, 90, 0)</code>），而不是一串试出来的魔数。</li>
+  <li>组件 <code>relative_transform</code> 保持单位值，把「怎么握」全部收敛在 socket 里——一个地方管一件事。</li>
+  <li>需要骨骼缩放补偿时（本模型根骨骼 100× 米→厘米），put 在 socket 的 <code>relative_scale</code> 上（0.01），保持与其他 socket 一致。</li>
+</ol>
+
+<h3>6.3 碰撞（Collision）</h3>
+<ul>
+  <li>武器 <code>StaticMesh</code> 的碰撞<b>不要用复杂碰撞（per-poly）</b>：代价高、形状不可控。标准做法是给武器单独建一个 Simplicity Box/Capsule，或者干脆让武器 <code>Collision Enabled = No Collision</code>。</li>
+  <li>攻击判定<b>不要依赖武器网格的物理碰撞</b>，而是：<br>
+      (a) 在武器上埋 <code>Socket</code>（本资产已有 <code>Socket_Blade_Tip</code> / <code>Socket_Blade_Edge</code> / <code>Socket_Pommel</code>），运行时在这些 socket 之间做 <code>Sweep</code>/<code>Box Trace</code>；<br>
+      (b) 或用 Animation Notify + Capsule Overlap 近似。</li>
+  <li>角色胶囊体只负责移动碰撞；武器碰撞通道建议单独定义（如 <code>Weapon</code> trace channel），避免和移动碰撞互扰。</li>
+  <li>「武器不要挡路」——<code>Collision Enabled</code> 用 <code>No Collision</code> 或 <code>Query Only</code>，别用 <code>Physics Body</code>（除非要做物理武器）。</li>
+</ul>
+
+<h3>6.4 投影（Shadow）</h3>
+<ul>
+  <li><code>Cast Shadow</code> 保持 True（武器需要投影，否则失去立体感）。</li>
+  <li>要「实体存在但不投影」时，<b>不要</b>靠透明材质糊弄——用组件级开关：<code>Cast Shadow = False</code>、<code>Cast Dynamic Shadow as Masked</code>、或 <code>Hidden in Game + Visible in Scene Capture</code>。</li>
+  <li>本项目的坑：<code>BLEND_MASKED</code> 材质 OpacityMask=0 时自身不可见，<b>却仍按实体投出完整阴影</b>；必须显式开 <code>cast_dynamic_shadow_as_masked</code>（Python 属性名没有 <code>b_</code> 前缀）。</li>
+  <li>远距离/性能敏感场景用 <code>Set Cull Distance</code> 或 LOD 的 shadow flag，而不是整体关投影。</li>
+</ul>
+
+<h3>6.5 几何必须在 DCC 阶段处理</h3>
+<p>凡是要「永久消失」的几何，必须在 Blender/Maya 里删面，不能只靠材质隐藏——尤其是带描边/外发光壳（inverted hull）的模型，<b>外壳是整体复制品，材质隐藏挡不住它</b>。本项目 <code>blender_22_strip_all.py</code> 的做法（KDTree 找斧头顶点 → 删面 → 再删本体对象）是正确的，验收指标（全部网格 z &lt; −0.02 的顶点数为 0）也是正确的。</p>
+
+<h2>7. 当前项目与标准的差距</h2>
+<table>
+<tr><th>维度</th><th>标准做法</th><th>本项目现状</th><th>差距</th><th>改进方向</th></tr>
+<tr>
+  <td>武器 pivot</td><td>落在握持点，长轴对齐 +X</td>
+  <td><b>落在刃根</b>（<code>blender_split_weapon.py</code> 用 Z 轴算 35%）</td>
+  <td><span class="pill bad">严重</span></td>
+  <td>重导一次 <code>SM_Darius_GodKing_Axe</code>，pivot 移到握柄中点、长轴转到 +X。当前是用 socket 的 21.5cm 偏移<b>临时补偿</b>，属于 workaround</td>
+</tr>
+<tr>
+  <td>socket 父骨骼</td><td><code>weapon_jnt_r</code>（武器专用骨）</td>
+  <td><code>hand_rSocket</code> 挂在 <code>hand_r</code></td>
+  <td><span class="pill warn">中</span></td>
+  <td>改用 <code>weapon_jnt_r</code>；实物测两者距离仅 0.5 cm，切换成本低</td>
+</tr>
+<tr>
+  <td>socket 数值来源</td><td>常量、可读、可由 pivot 契约推出</td>
+  <td>试出来的魔数 <code>(−106.334, −70.982, 9.342)</code> + 21.5cm 偏移</td>
+  <td><span class="pill warn">中</span></td>
+  <td>修完 pivot 后重算，目标是 <code>(0, 90, 0)</code> 这类可读值</td>
+</tr>
+<tr>
+  <td>武器碰撞</td><td>No Collision / 简单碰撞 + socket 做 Trace</td>
+  <td>导入默认（<code>combine_meshes</code> 默认生成；未显式设置）</td>
+  <td><span class="pill warn">中</span></td>
+  <td>显式设 <code>Collision Enabled = No Collision</code>，攻击判定走 socket Sweep（<code>Socket_Blade_Tip/Edge/Pommel</code> 已埋好）</td>
+</tr>
+<tr>
+  <td>投影</td><td>组件级开关控制</td>
+  <td><code>cast_shadow=True</code>；曾用 <code>M_Invisible</code> 糊（已改为 DCC 删几何）</td>
+  <td><span class="pill ok">良好</span></td>
+  <td>保持；文档化「不要用透明材质代替删几何」</td>
+</tr>
+<tr>
+  <td>组件 vs 骨骼网格</td><td>武器独立组件</td>
+  <td>已独立（<code>WeaponAxe</code> StaticMeshComponent）</td>
+  <td><span class="pill ok">良好</span></td>
+  <td>—</td>
+</tr>
+<tr>
+  <td>socket 相对缩放</td><td>统一约定</td>
+  <td><code>(0.01,0.01,0.01)</code> 抵消根骨骼 100×</td>
+  <td><span class="pill warn">中</span></td>
+  <td>100× 缩放写在骨架里是隐患，建议在 DCC 导出时把单位统一成厘米，去掉这个补偿</td>
+</tr>
+<tr>
+  <td>验收方式</td><td>可复现的数值 + 渲染双证据</td>
+  <td>本次已建立（见 §5），但历史上靠「看起来差不多」交付过</td>
+  <td><span class="pill warn">中</span></td>
+  <td>把本次的数值验收脚本固化为 <code>Scripts/axe_verify.py</code>，纳入改动清单</td>
+</tr>
+<tr>
+  <td>动画蓝图</td><td>角色专用 ABP（目标骨架 = <code>SK_Darius_GodKing_Skeleton</code>）</td>
+  <td><code>CharacterMesh0.anim_class = ABP_Unarmed</code>（UE 假人通用 ABP，骨架不匹配）</td>
+  <td><span class="pill bad">严重</span></td>
+  <td>按 AGENTS.md §4-B3 建 <code>ABP_Darius</code>（duplicate <code>ABP_Unarmed</code> → 改 target_skeleton → 改写 sequence 引用），并在 <code>BP_DariusCharacter</code> 指定 <code>anim_class</code>。武器 socket 姿态届时需按持斧 Idle 微调</td>
+</tr>
+</table>
+
+<h2>8. 改进路线</h2>
+<h4>P0（立刻）</h4>
+<ul>
+  <li>用 <code>axe_verify.py</code>（本次 8 条指标）作为武器装配的回归验收；任何 socket / mesh 改动后必跑。</li>
+</ul>
+<h4>P1（短期）</h4>
+<ul>
+  <li>重导 <code>SM_Darius_GodKing_Axe</code>：pivot → 握柄中点，长轴 → +X，把 socket 魔数收敛成常量。</li>
+  <li>socket 父骨骼从 <code>hand_r</code> 换到 <code>weapon_jnt_r</code>。</li>
+  <li>显式设置武器碰撞为 <code>No Collision</code>，把攻击判定切到 socket Sweep。</li>
+</ul>
+<h4>P2（中期）</h4>
+<ul>
+  <li>在 DCC 导出阶段统一单位为厘米，去掉 <code>relative_scale = 0.01</code> 这一层补偿。</li>
+  <li>接入 <code>ABP_Darius</code> 后，按实际持斧 Idle 调整 socket（当前姿态是在 bind/A-pose 下定的；动画播放后手部朝变化，socket 需按动画微调）。</li>
+</ul>
+
+<h2>9. 复现命令</h2>
+<pre># 1) 资产审计（几何/材质/材质槽/组件装配）
+uv run --no-project python Scripts/ue_remote.py Scripts/axe_01_audit.py
+
+# 2) 几何硬验证：源 FBX vs 导出 FBX（直方图逐 bin 对比）
+"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P Scripts/axe_03_geom_audit.py \
+    -- "E:/UE/Assets/Darius_God_king/God King Darius 2XKO.fbx" "SOURCE"
+
+# 3) 标定 socket 旋转组合顺序（World = Compose(Rel, Parent)）
+uv run --no-project python Scripts/ue_remote.py Scripts/axe_19_calibrate.py
+
+# 4) 落盘修复 + 8 条指标验收 + 出终图
+uv run --no-project python Scripts/ue_remote.py Scripts/axe_21_apply_and_verify.py
+
+# 5) 清理临时 actor，恢复关卡基线（7 个 actor）
+uv run --no-project python Scripts/ue_remote.py Scripts/axe_22_cleanup.py</pre>
+
+<h2>附录 A：本次沉淀的环境 / API 坑</h2>
+<table>
+<tr><th>坑</th><th>表现</th><th>规避</th></tr>
+<tr>
+  <td><code>unreal.Rotator</code> 位置参数顺序</td>
+  <td>是 <b>(roll, pitch, yaw)</b>，不是 (pitch, yaw, roll)</td>
+  <td>一律用关键字：<code>unreal.Rotator(pitch=.., yaw=.., roll=..)</code>。这解释了历史上多张「拍歪」的截图</td>
+</tr>
+<tr>
+  <td>socket 相对旋转的组合顺序</td>
+  <td>实测是 <code>World = Compose(Rel, Parent)</code>，与直觉相反（残差 0.000000 vs 5.508537）</td>
+  <td>改 socket 前先做一次 (0,0,0) / (0,90,0) 两点标定</td>
+</tr>
+<tr>
+  <td><code>MathLibrary</code> 函数缺失</td>
+  <td>该版本没有 <code>invert_rotator</code> / <code>rotate_vector</code> / <code>quat_from_rotator</code> / <code>rotator_from_quat</code></td>
+  <td>改用「坐标下降 + <code>compose_rotators</code> + <code>get_forward/right/up_vector</code>」的纯数值求解，残差可做到 1e-7</td>
+</tr>
+<tr>
+  <td>编辑器 <code>HighResShot</code></td>
+  <td>会静默失败（无日志、无文件）；且<b>一次运行只认最后一条</b>；文件落地有 1~4 分钟延迟</td>
+  <td>改用 <code>SceneCapture2D</code> + <code>RenderingLibrary.export_render_target</code>（离屏、稳定、可一次拍多张）。输出是无扩展名的 HDR，需 ffmpeg 转 LDR：<br><code>ffmpeg -i CAP_side -vf "zscale=t=linear,tonemap=hable,zscale=t=bt709:m=bt709:r=tv,format=yuv420p" out.png</code></td>
+</tr>
+<tr>
+  <td>直接改组件的 <code>relative_location</code></td>
+  <td>会让组件脱离 socket 挂载，世界变换退化成单位矩阵</td>
+  <td>握持偏移写在 socket 上；组件相对变换保持单位值</td>
+</tr>
+<tr>
+  <td>FBX↔UE 的局部轴语义翻转</td>
+  <td>Blender 直方图显示大刃在 −Y，UE 里实际在 <b>+Y</b>（包围盒 Y 对称，数值上分辨不出）</td>
+  <td>用「无遮挡渲染 + 已知机位」反证，不要靠数值推断轴的正负</td>
+</tr>
+<tr>
+  <td><code>EditorAssetLibrary.unload_asset</code></td>
+  <td>该版本不存在</td>
+  <td>复核存盘值直接重新 <code>unreal.load_asset</code> 后读属性即可</td>
+</tr>
+</table>
+
+<div class="good" style="margin-top:34px">
+<b>一句话收尾：</b>「看起来被删了」和「被身体挡住了」在单张截图上无法区分。本次靠 ① 几何计数 ② 材质链路 ③ 同变换无遮挡对照 ④ 世界坐标核算 四步把空间收窄到唯一解，再改 6 个数字解决——而不是去重导资产、去补几何。
+</div>
+
+</div>
+</body>
+</html>

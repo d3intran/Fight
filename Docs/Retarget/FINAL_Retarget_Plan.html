@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>LOL → 2XKO 重定向 · 最终实施计划（定稿）</title>
+<style>
+  :root{--bg:#f5f6f8;--panel:#fff;--ink:#1b1f23;--ink2:#525a62;--line:#e1e5ea;
+        --red:#c0392b;--blue:#2b6ca3;--green:#1e8e5a;--amber:#b8860b;--purple:#6b4fa8;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.75;
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:36px 26px 110px}
+  header{border-bottom:3px solid var(--purple);padding-bottom:14px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:var(--ink2);font-size:13.5px}
+  h2{font-size:20px;margin:46px 0 12px;padding-left:12px;border-left:5px solid var(--blue)}
+  h3{font-size:16px;margin:26px 0 8px;color:var(--blue)}
+  h4{font-size:14px;margin:18px 0 6px;color:var(--purple)}
+  p{margin:9px 0}
+  ul,ol{margin:9px 0 9px 2px;padding-left:22px}
+  li{margin:4px 0}
+  code{background:#eef1f4;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,monospace}
+  pre{background:#20262c;color:#dfe6ec;padding:13px 15px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.6}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:#eef1f4;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:20px;font-weight:600}
+  .tag.ok{background:#e2f5ea;color:var(--green)}
+  .tag.bad{background:#fdeaea;color:var(--red)}
+  .tag.warn{background:#fdf3dd;color:var(--amber)}
+  .tag.info{background:#e6f0f8;color:var(--blue)}
+  .tag.p{background:#efe9fa;color:var(--purple)}
+  .callout{border-left:4px solid var(--blue);background:#eff5fa;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.red{border-color:var(--red);background:#fdf1ef}
+  .callout.green{border-color:var(--green);background:#eef8f2}
+  .callout.amber{border-color:var(--amber);background:#fdf8ec}
+  .mono{font-family:Consolas,monospace;font-size:12.5px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:820px){.grid3{grid-template-columns:1fr}}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:center}
+  .kpi b{display:block;font-size:21px;line-height:1.3}
+  .kpi span{color:var(--ink2);font-size:12px}
+  .step{border-left:3px solid var(--purple);padding:2px 0 2px 14px;margin:16px 0}
+  .step h4{margin:0 0 4px;font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>LOL 俯视角动画 → 2XKO 第三人称模型 · 最终实施计划（定稿）</h1>
+  <div class="sub">Fight 项目 · 2026-09-18 · 本版<b>取代</b>此前所有版本，所有参数均以已落地的实测数据为准，不再保留待选项</div>
+</header>
+
+<div class="callout green">
+<b>定稿要点：</b>管线 = <b>DCC 净化 → UE IK Retargeter → Control Rig 运行时层 → 门禁验收</b>。
+去倾斜不再是"一组全局比例"，而是<b>按速度连续的偏置曲线</b>——这是本轮最重要的架构修正（详见 §5），它同时解决了
+「idle 与 run 的补偿方向相反」和「切换时折颈暴冲 67°」两个问题。全部补偿量与门禁门槛已给出具体数值。
+</div>
+
+<h2>1. 决策锁定（不再保留待选项）</h2>
+<table>
+<tr><th>#</th><th>议题</th><th>定案</th><th>依据</th></tr>
+<tr><td>1</td><td>技术路线</td><td><b>UE5 IK Retargeter 为主</b> + DCC 净化前置 + 自研脚本作离线数值验证器。自研几何帧管线（v4）<b>降级为验证工具</b>，不再作为唯一交付路径</td><td>2XKO 主干为 UE Mannequin 命名；官方工具自带 Retarget Pose / Chain Scaling / Stride Warping / Speed Planting</td></tr>
+<tr><td>2</td><td>2XKO 官方动画</td><td><b>列为 M3 可选增强，不当前置</b>。本机实测无任何 2XKO 资源；但 2XKO 已公开发售、PC 免费下载、全角色免费解锁，属"一次几十 GB 下载 + 一次解包"的成本，不是不可得</td><td>全盘搜索 2XKO / <span class="mono">nav_std</span> 均为空；2XKO 状态：2025-10-07 抢先体验 → 2026-01-20 正式发售 → 2026-08-20 公告 12 月转维护模式、服务器保持在线</td></tr>
+<tr><td>3</td><td>去倾斜</td><td><b>按速度连续的偏置曲线</b>，实现在 Control Rig / ABP Post-Process 层。<b>不逐动作给离散常量，也不烘焙进 FBX</b></td><td>idle 与 run 的补偿方向相反（颈 +29.9° vs −37.5°）；偏置必须随运行时速度连续变化 ⇒ 离线烘焙做不到</td></tr>
+<tr><td>4</td><td>去倾斜深度</td><td>idle 只还原 <b>~70%</b> 的抬头量（保留部分上扬，维持神王的"睥睨"气质）；run 家族<b>压到人体冲刺合理区间</b></td><td>100% 抹除会丢失角色性格；幅度保留约束见门禁 G5</td></tr>
+<tr><td>5</td><td>步幅策略</td><td><b>以目标移速为锚（重装霸主 500~600 cm/s），用 Stride Warping 展开步幅</b>；不牺牲手感去迁就动画</td><td>腿长/身高仅差 4.4%，真正风险是动画隐含速度与胶囊速度脱节</td></tr>
+<tr><td>6</td><td>速度闭环</td><td><b>G3b 一票否决</b>：动画隐含接地速度 vs <span class="mono">MaxWalkSpeed</span> 误差 &lt; 5%</td><td>只测帧内脚滑会漏掉整条世界空间滑冰</td></tr>
+<tr><td>7</td><td>Walk 缺失</td><td>M1 用 Run 贯通状态机；<b>M2 从 <span class="mono">run</span> 降速重采样 + 曲线重新踩点生成 Walk</b>，不引入外部动画源</td><td>实测 46 个动作无 walk</td></tr>
+<tr><td>8</td><td>髋/颈补偿</td><td>写在 Control Rig 运行时层，<b>但幅度必须反解，不用魔数</b>。先行方案：在 Retarget Pose 里对齐站姿；仅当实测膝间距比偏差 &gt; 10% 才加外展偏移</td><td>髋宽/身高 LOL 0.1418 &gt; 目标 0.1107；我此前给的"6°~8° 外展"也是无出处魔数，本版作废</td></tr>
+<tr><td>9</td><td>双手持斧</td><td><b>采纳</b>：右手 Master 驱动 + 斧柄加 <span class="mono">Socket_LeftHand_Grip</span>，左手 Two-Bone IK 吸附，残差 ≤ 2.0 cm</td><td>2XKO 只有 <span class="mono">weapon_jnt_r</span> 一个武器骨；源侧左手无独立握持信息</td></tr>
+<tr><td>10</td><td>Cascadeur / Aventurine</td><td><b>均不引入</b>。Aventurine 保留为"M1 若卡在源数据保真度时的一次性验证项"</td><td>减少跨软件往返风险；源骨架裁剪后仅 ~45 骨，Cascadeur 无必要</td></tr>
+</table>
+
+<h2>2. 已锁定的实测真值（一切参数的基准）</h2>
+
+<h3>2.1 源/目标资产事实</h3>
+<table>
+<tr><th>项目</th><th>实测</th></tr>
+<tr><td>源 LOL skin15 骨架</td><td><b>179 骨</b>，真身体链仅 ~30；其余为 <span class="mono">Lion_*</span>（四足）、<span class="mono">Throne/L_Throne/R_Throne/Gem/Piece_1~3</span>（王座道具）、<span class="mono">*Buffbone*</span>（VFX 挂点）；纯 FK，无 twist/ik/ctrl</td></tr>
+<tr><td>源拓扑陷阱</td><td>膝/肘为等长 Upper/Lower 双骨（<span class="mono">L_Hip 48.84 → L_KneeUpper 48.84 → L_KneeLower 50.63</span>）→ 三点链共线退化；<span class="mono">L_Foot/L_Toe</span> 长度仅 <b>0.014</b>（微骨）</td></tr>
+<tr><td>目标 2XKO 骨架</td><td><b>309 骨</b>；主干为 UE Mannequin 命名；24 根 twist 骨；<span class="mono">cape_chain_*</span>；护具骨 <span class="mono">kneepad_jnt_* / ankle_front|back_jnt_* / shoulderpad_jnt_*</span></td></tr>
+<tr><td>目标真实身高</td><td><b>2.06 m</b>（网格 z 上限；UE SK bounds z = 3.8~206.2 cm）。<span class="tag bad">2.47 m 是错误旧注，已从 AGENTS.md 修正</span></td></tr>
+<tr><td>全局缩放</td><td>1.8502 / 187.2095 = <b>0.009883</b></td></tr>
+<tr><td>前后方向锚定</td><td><b>forward = −Y</b>（披风链在 +Y、斧刃在 −Y，双锚点互证）</td></tr>
+</table>
+
+<h3>2.2 比例偏差（相对全局缩放）</h3>
+<table>
+<tr><th>度量</th><th>比值</th><th>相对偏差</th><th>真实后果（修正后的表述）</th></tr>
+<tr><td>腿长/身高</td><td>0.0094</td><td>−4.4%</td><td><b>LOL 腿相对更长</b>；目标腿短 4.4% ⇒ 同周期步幅偏大</td></tr>
+<tr><td>上臂 / 前臂</td><td>0.0087 / 0.0114</td><td>−12% / +15%</td><td>肘点前后错位 ⇒ 手部定位漂移</td></tr>
+<tr><td>髋间距/身高</td><td>LOL 0.1418 vs 目标 0.1107</td><td>目标窄 22%</td><td>旋转照搬 ⇒ 目标膝间距比源窄约 5.7 cm ⇒ 观感"夹腿"</td></tr>
+<tr><td>颈骨长/身高</td><td>LOL 0.0370 vs 目标 0.0682</td><td>目标长 84%</td><td><span class="tag warn">修正</span> 不是"头会浮高"——旋转传递下头高由目标自身骨架决定。<b>真实后果：同样大小的颈部旋转，目标头部前后位移被放大 1.84 倍</b>。run 的颈段 59.5° 放到目标上会把头甩出去</td></tr>
+<tr><td>臂长/身高</td><td>0.0099</td><td>+0.1%</td><td>无需处理</td></tr>
+</table>
+
+<h3>2.3 姿态偏离实测（plan_05，相对 bind pose，正 = 前倾）</h3>
+<p>bind 基线：躯干 <b>−7.6°</b> · 颈段 <b>+7.2°</b> · 头骨轴 <b>0.0°</b></p>
+<table>
+<tr><th>动作</th><th>相对 bind：躯干 / 颈段 / 头</th><th>换算成<b>绝对角</b>：躯干 / 颈段</th></tr>
+<tr><td>idle1 / idle2</td><td>+0.4 / −32.1 / −12.1<br>−0.3 / −35.1 / −15.2</td><td><b>−7.2° / −24.9°</b><br>−7.9° / −27.9°</td></tr>
+<tr><td>run</td><td>+34.3 / +52.3 / +10.8</td><td><b>+26.7° / +59.5°</b></td></tr>
+<tr><td>run_fast</td><td>+61.9 / +63.8 / +22.4</td><td><b>+54.3° / +71.0°</b></td></tr>
+<tr><td>run_homeguard</td><td>+52.4 / +65.7 / +11.3</td><td>+44.8° / +72.9°</td></tr>
+<tr><td>attack1 / attack2</td><td>+16.8 / +34.4 / +0.2<br>+3.8 / +15.1 / −3.2</td><td>+9.2° / +41.6°<br>−3.8° / +22.3°</td></tr>
+<tr><td>spell1 / spell4_5</td><td>+23.8 / +2.9 / −8.1<br>+2.8 / +24.6 / +17.0</td><td>+16.2° / +10.1°<br>−4.8° / +31.8°</td></tr>
+<tr><td>dance / recall</td><td>+10.1 / +15.8 / −0.3<br>−3.5 / −23.1 / −11.4</td><td>+2.5° / +23.0°<br>−11.1° / −15.9°</td></tr>
+</table>
+
+<h2>3. 管线架构</h2>
+<pre>【源侧 · DCC (Blender)】
+  LOL skin15 GLB
+    └─ ① 白名单净化（剔 Lion_*/Throne/Gem/Piece_*/Buffbone）
+    └─ ② 关节真值表 joints_src.json（踝 = L_KneeLower.tail；膝 = L_KneeLower.head）
+    └─ ③ 导出干净源 FBX（~45 骨，30fps 帧边界对齐）
+                ↓
+【UE 5.8 · IK Retargeter】
+  IKR_LOL_Clean ──┐
+                  ├─ RTG_Darius（Chain Scaling / Globally Scaled / Retarget Pose 对齐）
+  IKR_Darius_2XKO ┘        │
+                           ├─ Speed Planting（源加 MotionExtractorModifier 生成脚速曲线）
+                           └─ Stride Warping
+                ↓
+【UE 5.8 · Control Rig / ABP Post-Process 运行时层】
+  ├─ 去倾斜偏置曲线 offset(speed)  ← 本版新增的核心架构
+  ├─ 髋间距 / 颈部放大 补偿（按实测反解）
+  ├─ 左手 Two-Bone IK 吸附 Socket_LeftHand_Grip
+  └─ 披风 AnimDynamics + 护具骨跟随
+                ↓
+【门禁验收 G1~G7】—— 不过不许进下一里程碑</pre>
+
+<h2>4. 里程碑与步骤</h2>
+
+<div class="step">
+<h4>M0 · 尺子先行（0.5 天）</h4>
+<ol>
+<li>把 <code>/Game/Character/Darius/Anims/</code> 现有 8 支 v2（26.8° 偏斜）动画移入 <code>_Deprecated/</code>，不删。</li>
+<li>补三个验证脚本（现有 <code>blender_80</code> 只验朝向，不够）：
+  <ul>
+    <li><code>blender_90_joint_pos_err.py</code> —— 缩放归一化后的逐关节世界位置误差（"像不像"的主判据）</li>
+    <li><code>blender_91_foot_contact.py</code> —— 支撑相判定 + 脚掌世界漂移</li>
+    <li><code>blender_92_stride_speed.py</code> —— <b>动画隐含接地速度</b>（G3b 的输入）</li>
+  </ul></li>
+<li>跑 M0 基线，写入 <code>Docs/Retarget/baseline.json</code>。</li>
+</ol>
+<b>验收</b>：三条基线数字出齐（含 idle/run/run_fast 的隐含速度 cm/s，这是 §5 速度曲线的自变量）。
+</div>
+
+<div class="step">
+<h4>M1 · 垂直切片：idle + run 走通全链路（3.5 天）</h4>
+<ol>
+<li><b>源侧净化</b>（<code>plan_10_src_clean.py</code>）：
+  <ul>
+    <li>白名单剔除道具子树 → 179 骨降到 ~45 骨</li>
+    <li>关节真值：踝 = <code>L_KneeLower.tail</code>（弃用 0.014 微骨 <code>L_Foot/L_Toe</code> 的 head）</li>
+    <li>膝用 <code>L_KneeLower.head</code>，<b>链里彻底不出现 <code>L_KneeUpper</code></b></li>
+  </ul></li>
+<li><b>UE IK Rig ×2 + Retargeter</b>：目标链 Spine/Head/Arm×2/Leg×2/Root；腿链 <b>只到踝、Chain Depth=2</b>；FK Translation Mode = <code>Globally Scaled</code>；Pelvis 的 Blend to Source Translation = 1.0 但 <b>Z 权重设 0</b>；进 Edit Retarget Pose 对齐两侧站姿。</li>
+<li><b>脚速曲线 + Speed Planting</b>：源动画加 <code>MotionExtractorModifier</code>（bone = 踝，Motion Type = 平移速度，Axis = XYZ）→ 腿上开 Speed Planting。</li>
+<li><b>Control Rig 运行时层</b>：接入 §5 的 <code>offset(speed)</code> 偏置曲线 + 左手 IK。</li>
+<li><b>ABP_Darius</b>：duplicate <code>ABP_Unarmed</code> → 改 <code>target_skeleton</code> → 改写 sequence 引用 → 编译；Idle↔Run 用 <b>Inertialization</b> 而非 Crossfade；<code>BP_DariusCharacter.anim_class</code> 指向它。</li>
+</ol>
+<b>验收</b>：G1/G2/G3a/G3b/G4/G6 全部通过（见表 §7）。这是"走通"里程碑，不要求风格完美。
+</div>
+
+<div class="step">
+<h4>M2 · 完整动作库与风格（4 天）</h4>
+<ol>
+<li>全量重定向：idle1/idle2/idlein/run/run_fast/run_homeguard/turn_l/turn_r/attack1/attack2/spell1/spell2*/spell3/spell4_5/recall/dance。</li>
+<li><b>Walk 生成</b>：从 <code>run</code> 降速重采样 + 关键帧重新踩点，产出 <code>A_Darius_Walk_TP</code>。</li>
+<li><b>风格处理</b>：
+  <ul>
+    <li>attack/spell <b>不做去倾斜</b>，只做生理限位<b>软压缩</b>（<code>θ' = θ_lim + (θ−θ_lim)·tanh(k(θ−θ_lim))/k</code>，保 C¹ 连续）；幅度保留 ≥ 85%</li>
+    <li>对"两姿态"段落做<b>时间重分布</b>（接触帧 ease-out 聚拢、过渡段拉开），注入 timing texture</li>
+  </ul></li>
+<li><b>次级运动</b>：披风把源 3 段 Cape 重定向到目标披风链前 3 节，其余节交给 <b>AnimDynamics</b>；肩甲狼头/斧头挂饰做一阶滞后（overlap）。</li>
+<li><b>twist 骨程序化驱动</b>：<code>lowerarm_twist_*</code> 由腕 roll 驱动、<code>thigh_twist_*</code> 由髋旋转按 30~50% 带动（Twist Corrective / Bone Driven Controller）。<b>不映射</b>（源侧无对应）。</li>
+<li><b>护具骨</b>：<code>kneepad_jnt_* / ankle_*_jnt_* / shoulderpad_jnt_*</code> 由父骨插值跟随，防止硬质件穿模。</li>
+<li>BS_Darius_Locomotion（Speed 0~600 / Direction ±180）。</li>
+</ol>
+<b>验收</b>：全部门禁 + 慢放 A/B 渲染无"抖/飘/僵/穿"。
+</div>
+
+<div class="step">
+<h4>M3 · 可选增强（视需要）</h4>
+<ul>
+<li><b>2XKO 官方动画替换 locomotion</b>：下载 2XKO → 解包 <code>Champions/Darius/Champ_Darius</code> → 取 <code>darius_base_nav_std_*</code>。同源骨架 ⇒ 零重定向误差，可整体替换 M1/M2 的 locomotion 部分。</li>
+<li><b>Aventurine 保真度验证</b>：仅当发现 glTF 路径的源数据保真度不足时才试装（注意其声明 Blender 4.0+，本机为 5.2，仓库最近提交为 2026-07，属在维护，但兼容性未验证）。</li>
+</ul>
+</div>
+
+<h2>5. 去倾斜：本版最关键的架构修正</h2>
+
+<h3>5.1 为什么不能逐动作给离散常量</h3>
+<p>按绝对角反解出的补偿量是<b>方向相反</b>的：</p>
+<table>
+<tr><th>动作</th><th>绝对角（躯干/颈段）</th><th>目标绝对角</th><th><b>补偿量（躯干/颈）</b></th></tr>
+<tr><td>idle1</td><td>−7.2° / −24.9°</td><td>−2° / +5°</td><td><b>+5.2° / +29.9°</b></td></tr>
+<tr><td>run</td><td>+26.7° / +59.5°</td><td>+18° / +22°</td><td><b>−8.7° / −37.5°</b></td></tr>
+<tr><td>run_fast</td><td>+54.3° / +71.0°</td><td>+22° / +25°</td><td><b>−32.3° / −46.0°</b></td></tr>
+<tr><td>run_homeguard</td><td>+44.8° / +72.9°</td><td>+22° / +25°</td><td>−22.8° / −47.9°</td></tr>
+</table>
+<div class="callout red">
+<b>颈部补偿在 idle 与 run 之间相差 67.4°</b>（+29.9° → −37.5°），idle→run_fast 相差 <b>75.9°</b>。<br>
+若按动作离散给常量，Idle↔Run 的 0.2s 状态淡化会让颈部在 0.2 秒内甩过 67° —— 肉眼可见的"触电式抽搐"。
+</div>
+
+<h3>5.2 正确的解法：把偏置定义成「速度」的连续函数</h3>
+<pre>躯干偏置  offsetTorso(v)：  v=0 → +5.2°      v=v_run → −8.7°      v=v_fast → −32.3°
+颈部偏置  offsetNeck(v) ：  v=0 → +29.9°     v=v_run → −37.5°     v=v_fast → −46.0°
+（v 为 M0 实测出的各动画隐含接地速度 cm/s；用 CurveFloat + MapRange 在 ABP 里驱动）</pre>
+<ul>
+<li><b>为什么这能根治</b>：速度是连续量，玩家从站立到全速会经过 0→600 的连续区间，<b>偏置随之连续变化</b>，不存在状态切换瞬间的角度阶跃。玩家读到的语义是"他随着加速逐渐压低身体"，而不是"脖子突然一甩"。</li>
+<li><b>为什么必须在运行时层</b>：偏置的自变量是<b>运行时速度</b>，离线烘焙进 FBX 就失去了这个自变量。这是"放 Control Rig 而非烘焙"的<b>真正理由</b>。</li>
+</ul>
+
+<div class="callout amber">
+<b>顺带纠正一个流传的论证：</b>"烘焙进 FBX 会在融合时抽搐、放运行时层就不会" —— 这个理由<b>不成立</b>。
+淡化（Crossfade）插值的是两段<b>姿态</b>，姿态差 67° 就是 67°，无论这 67° 是烘焙来的还是运行时叠加的，淡化期内的摆动完全一样。
+运行时层的价值不在于"避免抽搐"，而在于它<b>提供了施加阻尼的钩子</b>（Inertialization / Spring），以及<b>让偏置能随速度连续变化</b>。
+本版两者都用：<b>速度曲线消除阶跃（主），Inertialization 处理姿态本身的切换（辅）</b>。
+</div>
+
+<h3>5.3 去倾斜深度：保留角色性格</h3>
+<p>idle 的抬头（颈 −24.9° + 头 −12.1°，合计 ≈37°）100% 抹除会让神王看起来"垂头丧气"。定案：<b>只还原 ~70%</b>，即
+颈补偿从 +29.9° 降到 <b>+21°</b>，保留约 9° 的上扬（在第三人称里读作"睥睨"，符合角色）。</p>
+<p>run 家族<b>压到人体冲刺合理区间</b>（躯干 18°~22°），不保留过量。attack/spell/dance/recall <b>不做去倾斜</b>（小幅保留其设计幅度）。</p>
+
+<h2>6. 三处已知暗礁与对策</h2>
+<table>
+<tr><th>#</th><th>暗礁</th><th>机理</th><th>对策</th></tr>
+<tr><td>1</td><td><b>Idle→Run 折颈暴冲</b>（本轮新增，已量化确认）</td>
+    <td>颈部补偿方向相反、相差 67.4°；离散常量 + 0.2s 淡化 = 肉眼可见甩头</td>
+    <td>§5.2 的<b>速度连续偏置曲线</b>（主）+ Inertialization（辅）+ idle 只还原 70%（降幅）</td></tr>
+<tr><td>2</td><td><b>源骨架污染 IK Retargeter</b></td>
+    <td>179 骨里同名骨 <span class="mono">L_KneeUpper/L_KneeLower</span> 会让自动链映射猜错；道具子树让骨架可视化与选骨混乱</td>
+    <td>保留轻量 M1 步骤①（DCC 净化）：剔道具树 + 锚定踝点真值 + 膝只用 <code>L_KneeLower</code>，导出 ~45 骨干净 FBX 再进 UE<br><span class="tag info">注</span>严格说道具骨<u>不会</u>污染自动映射（名字不相似，不会匹配到目标链），真正的理由是同名膝骨歧义 + 选骨效率 + 后续离线验证需要</td></tr>
+<tr><td>3</td><td><b>目标侧无源骨</b></td>
+    <td>24 根 twist + 150 面部 + 披风链 + 护具骨在源侧都没有对应</td>
+    <td>twist 程序化驱动；面部留参考姿态（后续单独做）；披风用 AnimDynamics；护具骨跟父骨插值</td></tr>
+</table>
+
+<h2>7. 验收门禁（一票否决）</h2>
+<table>
+<tr><th>#</th><th>指标</th><th>测法</th><th>门槛</th><th>工具</th></tr>
+<tr><td>G1</td><td>骨骼朝向误差</td><td><span class="mono">angle(Q·源骨方向, 目标骨方向)</span>，与静止姿态无关</td><td>均值 &lt; 8.0°，P90 &lt; 20.0°，最大 &lt; 35.0°</td><td><code>blender_80</code></td></tr>
+<tr><td>G2</td><td><b>关节世界位置误差</b>（主判据）</td><td>缩放归一化后逐关节世界坐标距离 / 身高</td><td>中位 &lt; 1.5%，P90 &lt; 4.0%</td><td><code>blender_90</code>（M0 新建）</td></tr>
+<tr><td>G3a</td><td>支撑相局部脚滑</td><td>支撑段脚掌世界 XY 位移</td><td>&lt; 2.0 cm</td><td><code>blender_91</code>（M0 新建）</td></tr>
+<tr><td>G3b</td><td><b>速度闭环</b>（核心）</td><td>动画隐含接地速度 vs <span class="mono">MaxWalkSpeed</span></td><td>误差 &lt; 5.0%</td><td><code>blender_92</code>（M0 新建）</td></tr>
+<tr><td>G4</td><td>Idle 视线平视度</td><td>头骨前向 vs 地平线（<b>只约束慢变基线</b>，非逐帧）</td><td>Idle 基线 |Pitch| ≤ 4.0°；且<b>相对躯干偏置标准差 &lt; 4°</b>（防僵直）；攻击动作豁免</td><td><code>plan_05</code> 扩展</td></tr>
+<tr><td>G5</td><td>生理限位与幅度保留</td><td>逐帧膝/肘/肩/踝夹角</td><td>膝 0~150°、肘 0~145°、踝 −30~50°；且幅度保留 ≥ 85%（攻击/技能类）</td><td><code>blender_94</code>（M0 新建）</td></tr>
+<tr><td>G6</td><td><b>融合平滑度</b>（本轮新增）</td><td>Idle↔Run 切换过程中颈部/脊椎<b>角速度</b>的采样序列</td><td>角速度连续无跳变；峰值 &lt; 600 °/s；无方向反转</td><td>新建 <code>blender_95_blend_smooth.py</code></td></tr>
+<tr><td>G7</td><td>双手握斧 / 穿模</td><td>左手腕与斧柄插槽距离；护具/披风与躯干 AABB 重叠</td><td>残差 ≤ 2.0 cm；关键帧 0 处穿透</td><td>UE 数值审计（复用斧头那套 <code>ue_remote</code>）</td></tr>
+</table>
+
+<h2>8. 风险登记</h2>
+<table>
+<tr><th>风险</th><th>概率</th><th>影响</th><th>缓解 / 触发即换</th></tr>
+<tr><td>R1 源数据保真度不足（glTF 往返）</td><td>中</td><td>中</td><td>M1 若 G1/G2 卡住 → 试装 Aventurine 走原生 <span class="mono">.anm</span></td></tr>
+<tr><td>R2 Blender 5.2 与 Aventurine 不兼容</td><td>中</td><td>低</td><td>不影响主路径；先花 30 分钟试装，失败即放弃该增强项</td></tr>
+<tr><td>R3 Stride Warping 压不住滑步</td><td>中</td><td>高</td><td>允许在小范围内调 <span class="mono">MaxWalkSpeed</span>；仍不行则回 DCC 做步幅物理拉伸</td></tr>
+<tr><td>R4 去倾斜后剪影/性格下降</td><td>中</td><td>中</td><td>idle 只还原 70%；渲染 A/B 对比后再决定是否回退到 50%</td></tr>
+<tr><td>R5 速度曲线节点无实测依托</td><td>高</td><td>中</td><td><b>M0 必须先测出隐含速度</b>，禁止先填魔数</td></tr>
+<tr><td>R6 只做"能播"没做"自然"（重演 26.8°）</td><td>中</td><td>高</td><td>G1~G7 一票否决；M1 未全绿不许进 M2</td></tr>
+<tr><td>R7 非技术：提取资产使用范围</td><td>—</td><td>中</td><td>仅本地非商业验证；不打包分发、不上架</td></tr>
+</table>
+
+<h2>9. 明确不做的事</h2>
+<table>
+<tr><th>不做</th><th>理由</th></tr>
+<tr><td>不用一组全局比例做去倾斜</td><td>idle 与 run 补偿方向相反，被实测证伪</td></tr>
+<tr><td>不把去倾斜烘焙进 FBX</td><td>偏置的自变量是运行时速度，离线烘焙失去该自由度</td></tr>
+<tr><td>不用逐帧 <span class="mono">|Pitch| ≤ 5°</span> 硬约束</td><td>会剥夺自然点头、在发力帧造成头部卡住；改为约束慢变基线 + 偏置标准差</td></tr>
+<tr><td>不把 2XKO 官方动画当前置依赖</td><td>本机无资源；且它是增强项不是必需品</td></tr>
+<tr><td>不引入 Cascadeur</td><td>减少跨软件往返；源骨裁剪后无必要</td></tr>
+<tr><td>不做 root motion 提取</td><td>源动画本就是 in-place；选 in-place + CharacterMovement，提取是白做</td></tr>
+<tr><td>不手填补偿魔数</td><td>所有补偿量由 M0 实测反解得出（本版已作废我此前给的"6°~8° 外展"）</td></tr>
+</table>
+
+<h2>10. 工期</h2>
+<div class="grid3">
+  <div class="kpi"><b>0.5 天</b><span>M0 尺子与基线</span></div>
+  <div class="kpi"><b>3.5 天</b><span>M1 垂直切片（idle+run 走通）</span></div>
+  <div class="kpi"><b>4 天</b><span>M2 全量动作与风格</span></div>
+</div>
+<p>合计 <b>8 天</b>（含 1 天返工余量）。M3 可选增强按需追加。此前版本 12.5 天的估算里，阶段 0/1/2 与 M0/M1 内容重叠，本版已合并去重。</p>
+
+<h2>11. 第一步（立刻可执行）</h2>
+<div class="callout green">
+<b>M1-①：写源骨架净化脚本 <code>plan_10_src_clean.py</code></b> —— 输入 <code>darius_skin15_all_anims.glb</code>，
+输出剔除道具子树（<code>Lion_* / Throne* / Gem / Piece_* / *Buffbone*</code>）、
+以 <code>L_KneeLower.tail</code> 为踝关节真值、链中不出现 <code>L_KneeUpper</code> 的干净源 FBX（~45 骨，30fps）。
+<b>验收</b>：骨数 179 → ~45；重新导入后逐帧帧数与源一致（偏差 0）；踝关节世界坐标与用 <code>L_KneeLower.tail</code> 计算值一致。
+这一步收益最大、风险最低，且是后续所有步骤的前置。
+</div>
+
+</div>
+</body>
+</html>

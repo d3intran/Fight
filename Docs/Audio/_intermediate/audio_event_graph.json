@@ -1,0 +1,2209 @@
+{
+ "sfx/base": [
+  {
+   "event_id": 316043809,
+   "names": [],
+   "actions": [
+    164876240
+   ],
+   "wems": [
+    845746812
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 395094341,
+   "names": [
+    "Play_sfx_Darius_DariusExecute_OnHit"
+   ],
+   "actions": [
+    653160560
+   ],
+   "wems": [
+    943343047,
+    1008461292,
+    559748741,
+    464271686
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 507635288,
+   "names": [
+    "Play_sfx_Darius_DariusQCast_OnBuffDeactivate"
+   ],
+   "actions": [
+    267310835
+   ],
+   "wems": [
+    450092659,
+    170018532,
+    1040193103,
+    748710184
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 540919785,
+   "names": [
+    "Play_sfx_Darius_DariusNoxianTacticsONH_OnBuffDeactivate"
+   ],
+   "actions": [
+    236261621
+   ],
+   "wems": [
+    228328609
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 859704613,
+   "names": [
+    "Play_sfx_Darius_DariusAxeGrabCone_OnCast"
+   ],
+   "actions": [
+    588585102
+   ],
+   "wems": [
+    998086056,
+    712070769,
+    209340780,
+    785276538
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 937032453,
+   "names": [],
+   "actions": [
+    389138262
+   ],
+   "wems": [
+    847571742,
+    995422204,
+    1036474092,
+    877098507
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 944737042,
+   "names": [
+    "Play_sfx_Darius_DariusCleave_hit_inner"
+   ],
+   "actions": [
+    937970623
+   ],
+   "wems": [
+    1041461749,
+    569505691,
+    210703391
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 1148480006,
+   "names": [
+    "Play_sfx_Darius_DariusBasicAttack2_OnHit"
+   ],
+   "actions": [
+    722767944
+   ],
+   "wems": [
+    141715137,
+    71196676,
+    89654828,
+    157022166,
+    311785540,
+    329557927,
+    90169099,
+    86370382,
+    106115261,
+    12999786,
+    12063373,
+    222501163,
+    98679036,
+    64013170,
+    30627994,
+    256973450
+   ],
+   "wem_count": 16
+  },
+  {
+   "event_id": 1231644270,
+   "names": [],
+   "actions": [
+    174271205
+   ],
+   "wems": [
+    489880903,
+    182943585
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 1243824486,
+   "names": [
+    "Play_sfx_Darius_DariusBasicAttack_OnHit"
+   ],
+   "actions": [
+    933245638
+   ],
+   "wems": [
+    141715137,
+    71196676,
+    89654828,
+    157022166,
+    311785540,
+    329557927,
+    90169099,
+    86370382,
+    106115261,
+    12999786,
+    12063373,
+    222501163,
+    98679036,
+    64013170,
+    30627994,
+    256973450
+   ],
+   "wem_count": 16
+  },
+  {
+   "event_id": 1303248903,
+   "names": [
+    "Play_sfx_Darius_DariusNoxianTacticsONHAttack_OnHit"
+   ],
+   "actions": [
+    38498545
+   ],
+   "wems": [
+    30889466,
+    958963043,
+    364336933,
+    783560361
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 1319381383,
+   "names": [
+    "Play_sfx_Darius_DariusExecute_OnCast"
+   ],
+   "actions": [
+    464808456
+   ],
+   "wems": [
+    667872367,
+    235418659,
+    1010060182,
+    379884182
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 1545103287,
+   "names": [
+    "Play_sfx_Darius_Taunt3D_buffactivate"
+   ],
+   "actions": [
+    321183650
+   ],
+   "wems": [
+    658896417
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1552176039,
+   "names": [],
+   "actions": [
+    438199690
+   ],
+   "wems": [
+    545883039,
+    159254298,
+    848584531
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 1793996410,
+   "names": [
+    "Play_sfx_Darius_DariusCritAttack_OnCast"
+   ],
+   "actions": [
+    809569401
+   ],
+   "wems": [
+    300119636,
+    32439799,
+    18723205,
+    118543656
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 1798232281,
+   "names": [],
+   "actions": [
+    118509933
+   ],
+   "wems": [
+    742668008
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2260739923,
+   "names": [
+    "Play_sfx_Darius_DariusAxeGrabConeBump_buffactivate"
+   ],
+   "actions": [
+    1055484545
+   ],
+   "wems": [
+    653757986,
+    271001715,
+    978673885,
+    1056557875
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2277894975,
+   "names": [
+    "Play_sfx_Darius_DariusCleave_hit_outter"
+   ],
+   "actions": [
+    1072807866
+   ],
+   "wems": [
+    386105878,
+    263263092,
+    269810161,
+    879253519
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2535523864,
+   "names": [],
+   "actions": [
+    460085515
+   ],
+   "wems": [
+    728543462
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2589246306,
+   "names": [
+    "Play_sfx_Darius_DariusBasicAttack2_OnCast"
+   ],
+   "actions": [
+    299755797
+   ],
+   "wems": [
+    32439799,
+    300119636,
+    18723205,
+    118543656
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3069402566,
+   "names": [],
+   "actions": [
+    57917695
+   ],
+   "wems": [
+    728543462
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3491998417,
+   "names": [],
+   "actions": [
+    214331410
+   ],
+   "wems": [
+    653757986,
+    271001715,
+    978673885,
+    1056557875
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3504698460,
+   "names": [
+    "Play_sfx_Darius_Dance3D_buffactivate"
+   ],
+   "actions": [
+    273935949
+   ],
+   "wems": [
+    276130758
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3661532348,
+   "names": [
+    "Play_sfx_Darius_Death3D_cast"
+   ],
+   "actions": [
+    447430694
+   ],
+   "wems": [
+    890351513
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3678444199,
+   "names": [],
+   "actions": [
+    58504511
+   ],
+   "wems": [
+    228328609
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3731418279,
+   "names": [
+    "Play_sfx_Darius_DariusExecute_hit_kill"
+   ],
+   "actions": [
+    141504468
+   ],
+   "wems": [
+    180022127,
+    4330184,
+    439591571
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 3927298882,
+   "names": [
+    "Play_sfx_Darius_DariusBasicAttack_OnCast"
+   ],
+   "actions": [
+    512101373
+   ],
+   "wems": [
+    32439799,
+    300119636,
+    18723205,
+    118543656
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3945780270,
+   "names": [
+    "Play_sfx_Darius_DariusCritAttack_OnHit"
+   ],
+   "actions": [
+    320215027
+   ],
+   "wems": [
+    256973450,
+    30627994,
+    64013170,
+    98679036,
+    329557927,
+    311785540,
+    90169099,
+    86370382,
+    12063373,
+    12999786,
+    106115261,
+    222501163,
+    89654828,
+    141715137,
+    71196676,
+    157022166
+   ],
+   "wem_count": 16
+  },
+  {
+   "event_id": 4041471767,
+   "names": [
+    "Play_sfx_Darius_DariusHemoMax_loop"
+   ],
+   "actions": [
+    991587964
+   ],
+   "wems": [
+    845746812
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 4073844410,
+   "names": [
+    "Play_sfx_Darius_Joke3D_buffactivate"
+   ],
+   "actions": [
+    338089147
+   ],
+   "wems": [
+    588978278
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 4165135574,
+   "names": [
+    "Play_sfx_Darius_DariusCleave_OnCast"
+   ],
+   "actions": [
+    901012336
+   ],
+   "wems": [
+    997531811,
+    124118252
+   ],
+   "wem_count": 2
+  }
+ ],
+ "sfx/skin15": [
+  {
+   "event_id": 89647624,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusExecute_swing"
+   ],
+   "actions": [
+    985311249,
+    141861522
+   ],
+   "wems": [
+    403961969,
+    720487663,
+    181734504,
+    118095133
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 96057165,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusBasicAttack_OnCast"
+   ],
+   "actions": [
+    315569736
+   ],
+   "wems": [
+    416206401,
+    118095133,
+    638562403
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 96579760,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusAxeGrabConeBump_buffactivate"
+   ],
+   "actions": [
+    273948009
+   ],
+   "wems": [
+    422037407
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 341714346,
+   "names": [
+    "Play_sfx_DariusSkin15_joke_intro"
+   ],
+   "actions": [
+    294136576
+   ],
+   "wems": [
+    557065189
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 396241446,
+   "names": [
+    "Play_sfx_DariusSkin15_joke_loop"
+   ],
+   "actions": [
+    757063593
+   ],
+   "wems": [
+    10818490
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 400500259,
+   "names": [],
+   "actions": [
+    504487654
+   ],
+   "wems": [
+    43449754
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 600684079,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusBasicAttack2_OnCast"
+   ],
+   "actions": [
+    441760010
+   ],
+   "wems": [
+    416206401,
+    118095133,
+    638562403
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 602468476,
+   "names": [
+    "Play_sfx_DariusSkin15_recall_leadout"
+   ],
+   "actions": [
+    911127143
+   ],
+   "wems": [
+    537153261
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 666703839,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusBasicAttack_OnHit"
+   ],
+   "actions": [
+    942071681
+   ],
+   "wems": [
+    64359468,
+    116596741,
+    275411544,
+    228035728,
+    249300082,
+    559411525,
+    495100906,
+    88179713,
+    885067677,
+    599580072,
+    442177776,
+    939599859
+   ],
+   "wem_count": 12
+  },
+  {
+   "event_id": 994994658,
+   "names": [],
+   "actions": [
+    395099272
+   ],
+   "wems": [],
+   "wem_count": 0
+  },
+  {
+   "event_id": 1057232659,
+   "names": [],
+   "actions": [
+    327621413
+   ],
+   "wems": [
+    155871985
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1233636888,
+   "names": [],
+   "actions": [
+    264382689
+   ],
+   "wems": [
+    908399603
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1319504115,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusCleave_OnCast"
+   ],
+   "actions": [
+    459818487,
+    241391156
+   ],
+   "wems": [
+    433690810,
+    311482642
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 1353728136,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusExecute_OnHit"
+   ],
+   "actions": [
+    327308600,
+    31261961,
+    698147451
+   ],
+   "wems": [
+    586302477,
+    577420082,
+    31089407,
+    403961969,
+    720487663,
+    181734504
+   ],
+   "wem_count": 6
+  },
+  {
+   "event_id": 1388937781,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusHemoMax_OnBuffActivate"
+   ],
+   "actions": [
+    312298927
+   ],
+   "wems": [
+    1005889691
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1485272221,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusBasicAttack2_OnHit"
+   ],
+   "actions": [
+    287615314
+   ],
+   "wems": [
+    64359468,
+    116596741,
+    275411544,
+    228035728,
+    249300082,
+    559411525,
+    495100906,
+    88179713,
+    885067677,
+    599580072,
+    442177776,
+    939599859
+   ],
+   "wem_count": 12
+  },
+  {
+   "event_id": 1595525922,
+   "names": [],
+   "actions": [
+    144197651
+   ],
+   "wems": [
+    995503400
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1775598560,
+   "names": [],
+   "actions": [
+    180654085
+   ],
+   "wems": [
+    570674251
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1829443489,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusNoxianTacticsONH_OnBuffActivate"
+   ],
+   "actions": [
+    453631642
+   ],
+   "wems": [
+    155871985
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1997960416,
+   "names": [],
+   "actions": [
+    380663207
+   ],
+   "wems": [
+    1011132596
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2158664927,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusCritAttack_OnCast"
+   ],
+   "actions": [
+    321478518
+   ],
+   "wems": [
+    416206401,
+    118095133,
+    638562403
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 2205664603,
+   "names": [
+    "Play_sfx_DariusSkin15_death_oba"
+   ],
+   "actions": [
+    195598253
+   ],
+   "wems": [
+    1051466623
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2225826645,
+   "names": [
+    "Play_sfx_DariusSkin15_recall_leadin"
+   ],
+   "actions": [
+    1063229959
+   ],
+   "wems": [
+    274665129
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2335273079,
+   "names": [],
+   "actions": [
+    584542980
+   ],
+   "wems": [
+    274665129
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2396130710,
+   "names": [
+    "Play_sfx_DariusSkin15_dance_loop"
+   ],
+   "actions": [
+    475190599
+   ],
+   "wems": [
+    5971422
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2396552458,
+   "names": [],
+   "actions": [
+    893124516
+   ],
+   "wems": [
+    537153261
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2464559190,
+   "names": [],
+   "actions": [
+    703619942
+   ],
+   "wems": [
+    757021898
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2478570345,
+   "names": [],
+   "actions": [
+    21805217,
+    229098805
+   ],
+   "wems": [
+    433690810,
+    311482642
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 2606346903,
+   "names": [],
+   "actions": [
+    325288012
+   ],
+   "wems": [
+    380061102
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2661542901,
+   "names": [
+    "Play_sfx_DariusSkin15_respawn_oba"
+   ],
+   "actions": [
+    671445927
+   ],
+   "wems": [
+    43449754
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2698730112,
+   "names": [],
+   "actions": [
+    212069572
+   ],
+   "wems": [
+    5971422
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2900271203,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusQCast_OnBuffDeactivate"
+   ],
+   "actions": [
+    194280564
+   ],
+   "wems": [
+    125032709
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3030341800,
+   "names": [],
+   "actions": [
+    639232353
+   ],
+   "wems": [
+    10818490
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3356822102,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusCleave_hit_outter"
+   ],
+   "actions": [
+    633661822
+   ],
+   "wems": [
+    705099632,
+    1012433612
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 3498903800,
+   "names": [],
+   "actions": [
+    145912408
+   ],
+   "wems": [
+    757021898
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3514087637,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusCleave_hit_inner"
+   ],
+   "actions": [
+    359855375
+   ],
+   "wems": [
+    368630590
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3589870632,
+   "names": [],
+   "actions": [
+    826618399,
+    52773085
+   ],
+   "wems": [
+    637349338,
+    995503400
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 3621956088,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusExecute_OnCast"
+   ],
+   "actions": [
+    823285534,
+    985347463
+   ],
+   "wems": [
+    905314766,
+    805720248,
+    31089407
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 3842416374,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusAxeGrabCone_OnCast"
+   ],
+   "actions": [
+    415639879
+   ],
+   "wems": [
+    557430967
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3895706317,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusCritAttack_OnHit"
+   ],
+   "actions": [
+    188094200
+   ],
+   "wems": [
+    275411544,
+    64359468,
+    116596741,
+    885067677,
+    88179713,
+    495100906,
+    442177776,
+    939599859,
+    599580072,
+    228035728,
+    559411525,
+    249300082
+   ],
+   "wem_count": 12
+  },
+  {
+   "event_id": 3999648146,
+   "names": [],
+   "actions": [
+    726620625
+   ],
+   "wems": [
+    1034896787,
+    436870362
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 4034007130,
+   "names": [
+    "Play_sfx_DariusSkin15_dance_intro"
+   ],
+   "actions": [
+    442394503
+   ],
+   "wems": [
+    1053415821
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 4050291056,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusExecute_hit_kill"
+   ],
+   "actions": [
+    594013447,
+    104437038
+   ],
+   "wems": [
+    216864344,
+    918641828,
+    1005889691
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 4103663980,
+   "names": [
+    "Play_sfx_DariusSkin15_DariusBasicAttack_foley"
+   ],
+   "actions": [
+    999446078
+   ],
+   "wems": [
+    153082921,
+    15646436,
+    990346633,
+    1003072977
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 4216061565,
+   "names": [
+    "Play_sfx_DariusSkin15_taunt_oba"
+   ],
+   "actions": [
+    694544819
+   ],
+   "wems": [
+    380061102
+   ],
+   "wem_count": 1
+  }
+ ],
+ "vo/base": [
+  {
+   "event_id": 254187525,
+   "names": [
+    "Play_vo_Darius_DariusExecute_cast3D"
+   ],
+   "actions": [
+    559187641
+   ],
+   "wems": [
+    2024449683,
+    1966192228,
+    1136790169,
+    233097523
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 330921428,
+   "names": [
+    "Play_vo_Darius_Joke3DGeneralEnd"
+   ],
+   "actions": [
+    621432077
+   ],
+   "wems": [
+    790611467,
+    1255323910
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 362170396,
+   "names": [
+    "Play_vo_Darius_Spell3DPMax"
+   ],
+   "actions": [
+    95018332
+   ],
+   "wems": [
+    1660800068,
+    128340887
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 433222381,
+   "names": [
+    "Play_vo_Darius_Laugh3DGeneral"
+   ],
+   "actions": [
+    127702446
+   ],
+   "wems": [
+    1237338886,
+    1852271069,
+    1148180706
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 1169123200,
+   "names": [
+    "Play_vo_Darius_DariusBasicAttack_cast3D"
+   ],
+   "actions": [
+    845709465
+   ],
+   "wems": [
+    1988058024,
+    1290492208,
+    1034181395,
+    339160176
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 1416184295,
+   "names": [
+    "Play_vo_Darius_DariusNoxianTacticsONHAttack_cast3D"
+   ],
+   "actions": [
+    631041213
+   ],
+   "wems": [
+    1988058024,
+    1290492208,
+    1034181395,
+    339160176
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2449549080,
+   "names": [
+    "Play_vo_Darius_DariusCritAttack_cast3D"
+   ],
+   "actions": [
+    4077188
+   ],
+   "wems": [
+    1988058024,
+    1290492208,
+    1034181395,
+    339160176
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2513844744,
+   "names": [
+    "Play_vo_Darius_DariusBasicAttack2_cast3D"
+   ],
+   "actions": [
+    595694852
+   ],
+   "wems": [
+    1988058024,
+    1290492208,
+    1034181395,
+    339160176
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2561155350,
+   "names": [
+    "Play_vo_Darius_Death3D"
+   ],
+   "actions": [
+    610744540
+   ],
+   "wems": [
+    2085925522,
+    833746608,
+    397563770,
+    2128752955
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2870857668,
+   "names": [
+    "Play_vo_Darius_DariusCleave_cast3D"
+   ],
+   "actions": [
+    464703399
+   ],
+   "wems": [
+    541387022,
+    227092683,
+    3622186,
+    222017226
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3097131059,
+   "names": [
+    "Play_vo_Darius_Attack2DGeneral"
+   ],
+   "actions": [
+    1021639693
+   ],
+   "wems": [
+    1586054625,
+    1836268440,
+    960729356,
+    2079570073,
+    316157923
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 3997609961,
+   "names": [
+    "Play_vo_Darius_Move2DStandard"
+   ],
+   "actions": [
+    95735633
+   ],
+   "wems": [
+    721079636,
+    442972030,
+    895566884,
+    75808362,
+    605139493,
+    828220806,
+    619752849,
+    591787374,
+    40914222,
+    188329220
+   ],
+   "wem_count": 10
+  },
+  {
+   "event_id": 4058700100,
+   "names": [],
+   "actions": [
+    1029947632
+   ],
+   "wems": [
+    2577951,
+    1731843834
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 4112517621,
+   "names": [
+    "Play_vo_Darius_Joke3DGeneral"
+   ],
+   "actions": [
+    921403228
+   ],
+   "wems": [
+    790611467,
+    1255323910
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 4140460963,
+   "names": [],
+   "actions": [
+    949360652
+   ],
+   "wems": [
+    1157202123,
+    779115582,
+    1180705684,
+    305301373
+   ],
+   "wem_count": 4
+  }
+ ],
+ "vo/skin15": [
+  {
+   "event_id": 63291458,
+   "names": [
+    "Play_vo_DariusSkin15_Attack2DGarenSkin13"
+   ],
+   "actions": [
+    735198704
+   ],
+   "wems": [
+    1984930409,
+    1172556683,
+    810731625
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 178036462,
+   "names": [
+    "Play_vo_DariusSkin15_Attack2DGeneral"
+   ],
+   "actions": [
+    780638976
+   ],
+   "wems": [
+    1418681775,
+    2116940928,
+    915158370,
+    1019680483,
+    1480549220,
+    1467722383,
+    1432271006,
+    202096516,
+    1544087383,
+    1526998723,
+    967536847,
+    503107507,
+    1473969306,
+    1565529595,
+    215547350,
+    1403164389,
+    1933359584,
+    1365262658,
+    1738063260,
+    747976935,
+    738765532,
+    834013419,
+    308904869,
+    1698483483
+   ],
+   "wem_count": 24
+  },
+  {
+   "event_id": 186601112,
+   "names": [
+    "Play_vo_DariusSkin15_Joke3DGeneral"
+   ],
+   "actions": [
+    674875418
+   ],
+   "wems": [
+    1902592730,
+    844175818,
+    373027860
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 343754233,
+   "names": [
+    "Play_vo_DariusSkin15_BuyItem2DTitanicHydra"
+   ],
+   "actions": [
+    29539383
+   ],
+   "wems": [
+    1329728376
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 359168806,
+   "names": [
+    "Play_vo_DariusSkin15_Respawn2DGeneral"
+   ],
+   "actions": [
+    521313222
+   ],
+   "wems": [
+    1034326209,
+    978801678,
+    1557755486,
+    430622347,
+    694627382,
+    1567716919,
+    1920807653,
+    928551222
+   ],
+   "wem_count": 8
+  },
+  {
+   "event_id": 464599253,
+   "names": [
+    "Play_vo_DariusSkin15_DariusCritAttack_cast3D"
+   ],
+   "actions": [
+    301507499
+   ],
+   "wems": [
+    881659756,
+    1081543587,
+    576823283,
+    1778511647
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 501728415,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DLong"
+   ],
+   "actions": [
+    607782502
+   ],
+   "wems": [
+    2026698582,
+    546921563,
+    1868370587,
+    34462286,
+    1955697734,
+    260625424,
+    121137798,
+    965180369,
+    259332843,
+    1119875165,
+    1599881316,
+    747171164
+   ],
+   "wem_count": 12
+  },
+  {
+   "event_id": 602797047,
+   "names": [
+    "Play_vo_DariusSkin15_Kill3DGeneral"
+   ],
+   "actions": [
+    1024403160
+   ],
+   "wems": [
+    104704914,
+    1866473848,
+    762713522,
+    281132446,
+    2011098179,
+    967402119,
+    2067611783,
+    633733630,
+    1856561384,
+    1136908899,
+    1564315086,
+    1003942870,
+    1138217644,
+    594989025,
+    365372610,
+    388678212,
+    353068745,
+    1241612789,
+    1477704805,
+    476192079,
+    1689449707,
+    1214058688,
+    1796803699,
+    527225394,
+    350304296,
+    314469342,
+    1375217071
+   ],
+   "wem_count": 27
+  },
+  {
+   "event_id": 779709799,
+   "names": [
+    "Play_vo_DariusSkin15_Kill3DGarenSkin13"
+   ],
+   "actions": [
+    148547705
+   ],
+   "wems": [
+    1412549698,
+    825842647,
+    953015864,
+    1834210173
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 794241354,
+   "names": [
+    "Play_vo_DariusSkin15_Laugh3DGeneral"
+   ],
+   "actions": [
+    642481571
+   ],
+   "wems": [
+    23318179
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 795057995,
+   "names": [
+    "Play_vo_DariusSkin15_JokeResponse3DGeneral"
+   ],
+   "actions": [
+    888387889
+   ],
+   "wems": [
+    1779475730
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 841419901,
+   "names": [
+    "Play_vo_DariusSkin15_Spell3DPMax"
+   ],
+   "actions": [
+    740654316
+   ],
+   "wems": [
+    452445340,
+    376399031,
+    1533487200,
+    535483550,
+    916948484
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 1175321582,
+   "names": [
+    "Play_vo_DariusSkin15_Recall3DGeneral"
+   ],
+   "actions": [
+    427594079
+   ],
+   "wems": [
+    189451157,
+    1411723544,
+    677455961,
+    2062275606,
+    482149757
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 1301763858,
+   "names": [
+    "Play_vo_DariusSkin15_RallyTeam3DBehind"
+   ],
+   "actions": [
+    661528080
+   ],
+   "wems": [
+    1059999715,
+    837978659,
+    1776079016,
+    529873705,
+    1701885167
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 1309310917,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DAatrox"
+   ],
+   "actions": [
+    153172360
+   ],
+   "wems": [
+    1135393800
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1429784818,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DDraven"
+   ],
+   "actions": [
+    335407612
+   ],
+   "wems": [
+    1997670515
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1705292748,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DFirstAllyDemon"
+   ],
+   "actions": [
+    222879966
+   ],
+   "wems": [
+    265550560
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1719296930,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DSwain"
+   ],
+   "actions": [
+    541346387
+   ],
+   "wems": [
+    1061721224
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1800432532,
+   "names": [
+    "Play_vo_DariusSkin15_DariusAxeGrabCone_cast3D"
+   ],
+   "actions": [
+    293532304
+   ],
+   "wems": [
+    1093985216,
+    856881058,
+    777119475,
+    1333850865,
+    1016852551,
+    1328872395,
+    1601181465,
+    1797891224
+   ],
+   "wem_count": 8
+  },
+  {
+   "event_id": 1866105703,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DQuinn"
+   ],
+   "actions": [
+    202013171
+   ],
+   "wems": [
+    808402806
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 1962729034,
+   "names": [
+    "Play_vo_DariusSkin15_DariusNoxianTacticsONHAttack_cast3D"
+   ],
+   "actions": [
+    7612475
+   ],
+   "wems": [
+    881659756,
+    1081543587,
+    576823283,
+    1778511647
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 1966885506,
+   "names": [],
+   "actions": [
+    1054780614
+   ],
+   "wems": [
+    381237635,
+    996480017,
+    94818465,
+    281238345,
+    1127422695,
+    219022161,
+    1450004050
+   ],
+   "wem_count": 7
+  },
+  {
+   "event_id": 2318680435,
+   "names": [
+    "Play_vo_DariusSkin15_Kill3DPenta"
+   ],
+   "actions": [
+    724225923
+   ],
+   "wems": [
+    345484191,
+    830037441
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 2366475711,
+   "names": [
+    "Play_vo_DariusSkin15_Death3D"
+   ],
+   "actions": [
+    1067603531
+   ],
+   "wems": [
+    558997290,
+    992297797,
+    964258675,
+    1219971802,
+    2110623129,
+    21148
+   ],
+   "wem_count": 6
+  },
+  {
+   "event_id": 2478499410,
+   "names": [],
+   "actions": [
+    1016952174
+   ],
+   "wems": [
+    215972618,
+    1942911685,
+    1580201326,
+    1386704520,
+    347048198,
+    654060110,
+    970179710,
+    1490064449,
+    1816324418,
+    920262286,
+    1121871067,
+    862619989,
+    695366582
+   ],
+   "wem_count": 13
+  },
+  {
+   "event_id": 2567515357,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DDemon"
+   ],
+   "actions": [
+    334226120
+   ],
+   "wems": [
+    1760132297
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2586434907,
+   "names": [
+    "Play_vo_DariusSkin15_Taunt3DGeneral"
+   ],
+   "actions": [
+    694864805
+   ],
+   "wems": [
+    60632231,
+    1078310044,
+    830355460
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 2725612398,
+   "names": [
+    "Play_vo_DariusSkin15_BuyItem2DBlackCleaver"
+   ],
+   "actions": [
+    914991308
+   ],
+   "wems": [
+    131312562
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2746356623,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DFirstAllyAspect"
+   ],
+   "actions": [
+    172336847
+   ],
+   "wems": [
+    860390800
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2779737501,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DMorgana"
+   ],
+   "actions": [
+    597613669
+   ],
+   "wems": [
+    263846748
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2814478099,
+   "names": [
+    "Play_vo_DariusSkin15_Kill3DTurret"
+   ],
+   "actions": [
+    300754873
+   ],
+   "wems": [
+    514100803,
+    572775530,
+    466218566,
+    820630232,
+    805645478
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 2824988468,
+   "names": [],
+   "actions": [
+    389191265
+   ],
+   "wems": [
+    1890911304
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 2908384911,
+   "names": [
+    "Play_vo_DariusSkin15_DariusBasicAttack_cast3D"
+   ],
+   "actions": [
+    511242827
+   ],
+   "wems": [
+    881659756,
+    1081543587,
+    576823283,
+    1778511647
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 2940001093,
+   "names": [],
+   "actions": [
+    811965749
+   ],
+   "wems": [
+    1921965939,
+    1244481629
+   ],
+   "wem_count": 2
+  },
+  {
+   "event_id": 2942456605,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DFirst"
+   ],
+   "actions": [
+    161547796
+   ],
+   "wems": [
+    1572997046,
+    928120661,
+    1122994814
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 2952242649,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DLissandra"
+   ],
+   "actions": [
+    858847056
+   ],
+   "wems": [
+    45642545
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3130340985,
+   "names": [
+    "Play_vo_DariusSkin15_Kill3DFirst"
+   ],
+   "actions": [
+    22094534
+   ],
+   "wems": [
+    79584263,
+    750539812,
+    1778441698,
+    1351882523
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3258844085,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DFirstAllyDraven"
+   ],
+   "actions": [
+    737475403
+   ],
+   "wems": [
+    1895527861
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3302852304,
+   "names": [
+    "Play_vo_DariusSkin15_TauntResponse3DGarenSkin13"
+   ],
+   "actions": [
+    201661965
+   ],
+   "wems": [
+    910994816
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3303278717,
+   "names": [
+    "Play_vo_DariusSkin15_DariusBasicAttack2_cast3D"
+   ],
+   "actions": [
+    1069934023
+   ],
+   "wems": [
+    881659756,
+    1081543587,
+    576823283,
+    1778511647
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 3309569869,
+   "names": [
+    "Play_vo_DariusSkin15_Attack2DYasuoSkin09"
+   ],
+   "actions": [
+    33079200
+   ],
+   "wems": [
+    143740233
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3310435372,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DKayle"
+   ],
+   "actions": [
+    890248405
+   ],
+   "wems": [
+    831998235
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3339027352,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DGalio"
+   ],
+   "actions": [
+    949605957
+   ],
+   "wems": [
+    1682049069
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3478696089,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DFirstEnemyGarenSkin13"
+   ],
+   "actions": [
+    649133095
+   ],
+   "wems": [
+    1325399469,
+    1753204910,
+    394661267
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 3540679334,
+   "names": [
+    "Play_vo_DariusSkin15_Attack2DRivenSkin16"
+   ],
+   "actions": [
+    289751005
+   ],
+   "wems": [
+    1146537880
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3707778340,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DAspect"
+   ],
+   "actions": [
+    916751234
+   ],
+   "wems": [
+    2004341450
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3742676007,
+   "names": [],
+   "actions": [
+    917078350
+   ],
+   "wems": [
+    1417843040
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3743238161,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DYorick"
+   ],
+   "actions": [
+    891906451
+   ],
+   "wems": [
+    661379248
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 3786491126,
+   "names": [
+    "Play_vo_DariusSkin15_Move2DStandard"
+   ],
+   "actions": [
+    31227854
+   ],
+   "wems": [
+    2122799177,
+    617977021,
+    1694375497,
+    1284711669,
+    2119265084,
+    1592896996,
+    1699841404,
+    1189340475,
+    1877333282,
+    2015066261,
+    985157550,
+    1702555240,
+    1777212414,
+    1220133128,
+    485981252,
+    1692548182,
+    1897175438,
+    665799209,
+    1201944132,
+    1609529645,
+    442142861,
+    1031991558,
+    1575309713,
+    358277773,
+    1356203851,
+    533799115,
+    462555422,
+    1661294164,
+    472495041,
+    821109725
+   ],
+   "wem_count": 30
+  },
+  {
+   "event_id": 3820692600,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DGarenSkin13"
+   ],
+   "actions": [
+    305530448
+   ],
+   "wems": [
+    467535075,
+    1067247246,
+    1215292247
+   ],
+   "wem_count": 3
+  },
+  {
+   "event_id": 3996566469,
+   "names": [
+    "Play_vo_DariusSkin15_RallyTeam3DAhead"
+   ],
+   "actions": [
+    567492465
+   ],
+   "wems": [
+    1781940984,
+    449233776,
+    1822243005,
+    428282944,
+    2063497155
+   ],
+   "wem_count": 5
+  },
+  {
+   "event_id": 4033749360,
+   "names": [
+    "Play_vo_DariusSkin15_FirstEncounter3DChoGath"
+   ],
+   "actions": [
+    656430736
+   ],
+   "wems": [
+    1597953215
+   ],
+   "wem_count": 1
+  },
+  {
+   "event_id": 4073951986,
+   "names": [
+    "Play_vo_DariusSkin15_RallyTeam3DEven"
+   ],
+   "actions": [
+    835697028
+   ],
+   "wems": [
+    1611787288,
+    1017114616,
+    62767581,
+    1409084357
+   ],
+   "wem_count": 4
+  },
+  {
+   "event_id": 4180483417,
+   "names": [
+    "Play_vo_DariusSkin15_DariusCleave_cast3D"
+   ],
+   "actions": [
+    910692074
+   ],
+   "wems": [
+    420487803,
+    640387376,
+    27284280
+   ],
+   "wem_count": 3
+  }
+ ]
+}
