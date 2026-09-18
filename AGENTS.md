@@ -2,6 +2,13 @@
 
 本文件是为接入本项目的 AI Agent（如 WorkBuddy、Antigravity、Qoder CN 等）定制的全局上下文。接手本项目的 Agent 必须在开启新会话时首先阅读本文档。
 
+> ### 🔴 当前进行中的任务（2026-09-18）
+> **LOL 俯视角动画 → 2XKO 第三人称模型 重定向**，处于 **M1-② 第 2 步中段**。
+> **开工前先读 [`Docs/Retarget/HANDOFF.md`](Docs/Retarget/HANDOFF.md)** —— 那里有：
+> 编辑器当前状态、立刻要做的三件事（含可复制命令）、资产落盘清单、
+> 已打通的 IK Retargeter API 用法、7 条会再踩的坑、未决项。
+> 定稿计划全文：`Docs/Retarget/FINAL_Retarget_Plan.html`。
+
 ---
 
 ## 0. ⚠️ 美术资产处理铁律（最高优先级，任何 Agent 必读）
