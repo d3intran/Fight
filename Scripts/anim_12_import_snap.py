@@ -19,6 +19,13 @@ for p in dir(ad):
             print("   ", p, "<err>")
 print()
 
+# ⚠️ 输出契约已变更（2026-09-18）：
+#   blender_30 / blender_51 已从「每动作一个 FBX」改为
+#   「导出前清 rest pose + bake_anim_use_all_actions=True → 单文件多 take」。
+#   若要用修复后的产物，把下面改成 ["A_Darius_All_TP.fbx"] 并把源目录指向对应 OUTDIR
+#   （例如 Saved/Retarget/V5/）；UE 会一次建出全部 AnimSequence。
+# ⚠️ Saved/Retarget/Batch/ 与 V4/ 下的旧产物 bind pose 已全部损坏
+#   （plan_16 审计：17 个里 15 个 BROKEN，关节间距偏差最高 15.4%），不要再导入。
 files = ["A_Darius_Attack1_TP.fbx", "A_Darius_RunFast_TP.fbx", "A_Darius_TurnL_TP.fbx", "A_Darius_TurnR_TP.fbx"]
 at = unreal.AssetToolsHelpers.get_asset_tools()
 for fn in files:

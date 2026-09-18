@@ -131,11 +131,17 @@
 - 帧数换算：`sequence_length`(秒) × 30 + 1 = 帧数（attack1 2.4333s → 74 帧）。
 
 **🔴 DCC / 网关侧三条硬坑（已写入 `AGENTS.md` §5）**
-1. **FBX 导出前必须复位 rest pose**：否则 Blender 把**当前 pose** 写成骨架节点变换，
-   产物 bind pose 全错（实测 `R_Hand` 偏 58.5 单位）。修法：`action=None` +
-   逐个 `pb.matrix_basis = Matrix.Identity(4)`。
-   **`blender_51_retarget_v4.py` / `blender_30` / `blender_50` / `blender_10` 四个脚本全部中招**
-   （设了 `action=None` 但循环内又挂回去），M1-② 前须修并重新导出。
+1. **FBX 导出前必须复位 rest pose，且必须用 `bake_anim_use_all_actions=True` 单文件多 take 导出。**
+   `plan_17` 探针三选一实测：挂 action 导出 **5.843e-02 BROKEN** ／ 清 pose + `all_actions=False`
+   1.198e-07 但**只含 1 个动画** ／ 清 pose + `all_actions=True` **1.198e-07 且 46 个动画全保真**。
+   ⇒ **逐 action 导出无法保证 bind pose，只能选第三种。**
+   **`blender_51_retarget_v4.py` / `blender_30` / `blender_50` / `blender_10` 四个脚本已于
+   2026-09-18 全部修复**；输出契约变为**单文件多 take**（`A_Darius_All_TP.fbx`，UE 一次导入即建全部 AnimSequence）。
+   `plan_16` 审计：`Saved/Retarget/` 旧产物 17 个中 **15 个 BROKEN**（关节间距偏差最高 **15.4%**，
+   TurnL/TurnR 最差）⇒ **`Batch/` 与 `V4/` 下的旧产物已废弃，勿再导入 UE**；
+   修复后产物见 `Saved/Retarget/V5/`（实测 **5.926e-07** OK）。
+   新增审计工具：`plan_16_audit_fbx.py`（批量扫目录给 OK/WARN/BROKEN）、
+   `plan_17_export_probe.py`（改导出逻辑前先跑，3 分钟定死正确做法）。
 2. **改 `edit_bone.parent` 会触发 `Bone.matrix_local` 重建**，对短骨有数值损失。
    删骨后要用快照写回 `head/tail/roll`，且**先用两趟循环把全部 `use_connect=False` 再写**
    （否则设父骨 tail 时会拉走子骨 head）。

@@ -260,18 +260,26 @@ for want in WANT:
     results.append(new_act.name)
 
 # ---------------------------------------------------------------- 导出
-tgt.animation_data.action = None
-for act_name in results:
-    a = bpy.data.actions[act_name]
-    tgt.animation_data.action = a
-    fr = a.frame_range
-    sc.frame_start, sc.frame_end = int(fr[0]), int(fr[1])
-    bpy.ops.object.select_all(action='DESELECT')
-    tgt.select_set(True); bpy.context.view_layer.objects.active = tgt
-    out = os.path.join(OUTDIR, act_name + ".fbx").replace("\\", "/")
-    bpy.ops.export_scene.fbx(filepath=out, use_selection=True, bake_anim=True,
-        bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False, bake_anim_use_all_actions=False,
-        add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
-        apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
-    print("导出:", out)
+# ⚠️⚠️ 关键修复（2026-09-18）：原先「循环内挂 action 逐个导出」会让 Blender 把
+#      「当前帧的 pose」写成骨架节点变换 ⇒ bind pose 完全错误。
+# 实测（plan_17 探针）：挂 action 导出 → 间距偏差 5.843e-02；清 pose + all_actions=True → 1.198e-07。
+# 历史影响（plan_16 审计）：Saved/Retarget/V3 下产物已 BROKEN（偏差最高 6.7%）。
+# 注：v3 已由 v4（blender_51）取代，本文件保留作对照。
+if tgt.animation_data:
+    tgt.animation_data.action = None
+for _pb in tgt.pose.bones:
+    _pb.matrix_basis = Matrix.Identity(4)
+bpy.context.view_layer.update()
+
+bpy.ops.object.select_all(action='DESELECT')
+tgt.select_set(True); bpy.context.view_layer.objects.active = tgt
+out = os.path.join(OUTDIR, "A_Darius_All_TP.fbx").replace("\\", "/")
+bpy.ops.export_scene.fbx(filepath=out, use_selection=True, bake_anim=True,
+    bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
+    bake_anim_use_all_actions=True,
+    bake_anim_force_startend_keying=True, bake_anim_simplify_factor=0.0,
+    add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
+    apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
+print("导出（单文件多 take）:", out)
+print("  ⚠️ 输出契约已变更：%d 个动作 → 1 个 FBX（多 take）。" % len(results))
 print("=== V3 DONE:", results, "===")

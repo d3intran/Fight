@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>FBX 导出 bind pose 污染 · 定位与修复报告</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --panel:#ffffff; --ink:#1a1d21; --ink2:#4a5058; --ink3:#7b828c;
+    --line:#e2e5ea; --accent:#1f6feb; --ok:#0f7b3f; --okbg:#e8f6ed;
+    --warn:#8a5a00; --warnbg:#fdf3e0; --bad:#b3261e; --badbg:#fdecea;
+    --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Consolas",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 30px 90px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:var(--ink3);font-size:13.5px;margin-bottom:30px}
+  h2{font-size:19px;margin:44px 0 14px;padding-bottom:9px;border-bottom:2px solid var(--line)}
+  h3{font-size:15.5px;margin:26px 0 9px;color:var(--ink2)}
+  code{font-family:var(--mono);font-size:12.8px;background:#eef0f4;padding:1.5px 5px;border-radius:4px;color:#243b53}
+  pre{font-family:var(--mono);font-size:12.5px;background:#f2f4f8;border:1px solid var(--line);
+    border-radius:8px;padding:14px 16px;overflow-x:auto;line-height:1.6;color:#243b53}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.6px;background:var(--panel)}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f2f6;font-weight:600;color:var(--ink2)}
+  td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.6px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 16px}
+  .kpi .v{font-size:21px;font-weight:650;font-family:var(--mono);letter-spacing:-.5px}
+  .kpi .k{font-size:12px;color:var(--ink3);margin-top:3px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:1.5px 8px;border-radius:20px;font-weight:600}
+  .p-ok{background:var(--okbg);color:var(--ok)}
+  .p-warn{background:var(--warnbg);color:var(--warn)}
+  .p-bad{background:var(--badbg);color:var(--bad)}
+  .note{border-left:3px solid var(--accent);background:#eef4fd;padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+  .note.alarm{border-left-color:var(--bad);background:var(--badbg)}
+  .note.good{border-left-color:var(--ok);background:var(--okbg)}
+  ul,ol{margin:10px 0;padding-left:24px}
+  li{margin:5px 0}
+  .cap{color:var(--ink3);font-size:12.5px;margin-top:6px}
+  hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>FBX 导出 bind pose 污染 · 定位与修复报告</h1>
+<div class="sub">
+  阶段：<b>M1-② 第 1 步</b>（前置修复）<br>
+  日期：2026-09-18 ｜ 工具：Blender 5.2.1 LTS（无头）<br>
+  新增脚本：<code>plan_16_audit_fbx.py</code>（批量审计）、<code>plan_17_export_probe.py</code>（导出行为探针）
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">15 / 17</div><div class="k">历史 FBX 的 bind pose 已损坏</div></div>
+  <div class="kpi"><div class="v">15.4%</div><div class="k">最差关节间距偏差</div></div>
+  <div class="kpi"><div class="v">26 万倍</div><div class="k">修复后偏差降低幅度</div></div>
+  <div class="kpi"><div class="v">4</div><div class="k">已修复的导出脚本</div></div>
+</div>
+
+<div class="note good">
+<b>结论：</b>项目历史上四个批量重定向脚本都在「挂着 action 的状态下导出 FBX」，
+导致 Blender 把<b>导出瞬间的 pose</b> 写成骨架的节点变换。产出的 FBX 里
+<b>bind pose 完全错误</b>（关节间距偏差最高 15.4%）。四个脚本已全部修复，
+修复后实测偏差 <b>5.926e-07</b>。
+</div>
+
+<h2>一、问题规模：先量化，不靠猜</h2>
+
+<p>判据用 <b>关节间距</b>（缩放不变量，免疫单位换算与骨骼朝向约定差异）。
+把待检 FBX 与参考骨架 <code>SK_Darius_GodKing_Clean.fbx</code>（<code>bake_anim=False</code> 产出，无 pose 污染）比对：</p>
+
+<table>
+<tr><th style="width:40%">产物</th><th class="num">maxRelDev</th><th class="num">meanRelDev</th><th>判定</th></tr>
+<tr><td><code>V4/A_Darius_TurnL_TP.fbx</code></td><td class="num">1.541e-01</td><td class="num">1.713e-02</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><code>V4/A_Darius_TurnR_TP.fbx</code></td><td class="num">1.541e-01</td><td class="num">1.713e-02</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><code>V4/A_Darius_Attack1_TP.fbx</code></td><td class="num">1.276e-01</td><td class="num">1.418e-02</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><code>V4/A_Darius_RunFast_TP.fbx</code></td><td class="num">9.759e-02</td><td class="num">1.084e-02</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><code>V4/A_Darius_Run_TP.fbx</code></td><td class="num">4.879e-02</td><td class="num">5.421e-03</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><code>Batch/A_Darius_Idle1_TP.fbx</code>（另一批）</td><td class="num">4.447e-02</td><td class="num">4.941e-03</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td colspan="4" class="cap">… 共 17 个文件中 <b>15 个 BROKEN</b>（另 2 个也达 3.7e-3~9.5e-3，远超 1e-3 阈值）</td></tr>
+</table>
+
+<div class="note alarm">
+<b>关键线索：</b>同一个动作在 <code>Batch/</code> 与 <code>V4/</code> 两批里的偏差<b>互不相同</b>
+（Attack1：1.0e-2 vs 1.276e-01）。这说明每个文件记录的是「导出那一刻 frame 停在哪」，
+<b>逐文件随机</b> —— 典型的「当前状态泄漏进资产」特征，而不是某个固定参数错了。
+</div>
+
+<h2>二、根因定位：三选一实验</h2>
+
+<p>纯推理无法判断 Blender 导出器的行为，所以直接做<b>对照实验</b>
+（<code>plan_17_export_probe.py</code>）：同一场景内用三种方式各导一个 FBX，
+再把三个文件<b>逐个重新导入</b>回读比对。</p>
+
+<table>
+<tr><th style="width:44%">导出方式</th><th class="num">骨骼</th><th class="num">动画数</th><th class="num">间距偏差</th><th>判定</th></tr>
+<tr><td><b>A</b> 挂 action + <code>frame_set(20)</code>（<b>= 历史做法</b>）<br><span class="cap">all_actions=False</span></td>
+    <td class="num">179</td><td class="num">1</td><td class="num">5.843e-02</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><b>B</b> 先清 pose<br><span class="cap">all_actions=False</span></td>
+    <td class="num">179</td><td class="num">1</td><td class="num">1.198e-07</td><td><span class="pill p-ok">OK</span></td></tr>
+<tr><td><b>C</b> 先清 pose<br><span class="cap">all_actions=True</span></td>
+    <td class="num">179</td><td class="num"><b>46</b></td><td class="num">1.198e-07</td><td><span class="pill p-ok">OK</span></td></tr>
+</table>
+
+<p><b>读法：</b></p>
+<ul>
+<li><b>A 直接复现了历史 bug</b>（5.8% 偏差）—— 确认根因就是「挂着 action 导出」。</li>
+<li><b>B 证明</b>「清 pose」是修 bind pose 的<b>必要且充分</b>条件 —— 但它只导出 1 个动画，
+    且在 <code>all_actions=False</code> 下导出器究竟选哪个 action 是不确定的 ⇒ <b>不能用于批量</b>。</li>
+<li><b>C 是唯一可行的方案</b>：bind pose 正确 <b>且</b> 46 个动画全部保真。</li>
+</ul>
+
+<div class="note">
+<b>为什么「逐 action 导出」不可行：</b>导出器需要 action 处于挂载状态才能烘焙它的动画，
+但挂载动作就会让 pose 变成该动作在当前帧的值，从而污染骨架节点。
+两者在同一时刻互斥 —— 所以<b>只能一次性导出全部 take</b>，让导出器自己管理 action 的挂载/卸载。
+</div>
+
+<h3>2.1 四个受影响的脚本</h3>
+<table>
+<tr><th style="width:34%">脚本</th><th>原写法</th></tr>
+<tr><td><code>blender_51_retarget_v4.py</code></td><td>第 286 行 <code>action = None</code>，<b>但循环内第 289 行又挂回 action</b>，且循环里没有 <code>frame_set</code> ⇒ frame 停在上一个循环遗留处</td></tr>
+<tr><td><code>blender_30_batch_retarget.py</code></td><td>同模式（第 175 / 178 行）</td></tr>
+<tr><td><code>blender_50_retarget_v3.py</code></td><td>同模式（第 263 / 266 行）</td></tr>
+<tr><td><code>blender_10_retarget.py</code></td><td>无 <code>action = None</code>，直接在烘焙循环后导出 ⇒ frame 停在最后烘焙帧</td></tr>
+</table>
+
+<h2>三、修复</h2>
+
+<pre># 导出前：断开 action 并清空全部 matrix_basis
+if arm.animation_data:
+    arm.animation_data.action = None
+for pb in arm.pose.bones:
+    pb.matrix_basis = Matrix.Identity(4)      # 光设 action=None 不够稳，必须逐个清
+bpy.context.view_layer.update()
+
+# 再以「单文件多 take」导出（all_actions=False 无法保证 bind pose）
+bpy.ops.export_scene.fbx(
+    filepath=out, use_selection=True, bake_anim=True,
+    bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
+    bake_anim_use_all_actions=True,                 # ← 关键
+    bake_anim_force_startend_keying=True,
+    bake_anim_simplify_factor=0.0,                  # ← 不简化曲线
+    add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
+    apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')</pre>
+
+<ul>
+<li><code>blender_51_retarget_v4.py</code> / <code>blender_30_batch_retarget.py</code> / <code>blender_50_retarget_v3.py</code>：
+    导出循环改为上述写法，输出契约变为<b>单文件多 take</b>（<code>A_Darius_All_TP.fbx</code>）。</li>
+<li><code>blender_10_retarget.py</code>：补 rest 复位，并标注 <b>DEPRECATED</b>
+    （其「单文件单动作 + <code>all_actions=False</code>」契约未经验证，勿用于新工作）。</li>
+<li><code>anim_12_import_snap.py</code>：加注释说明输出契约变更与旧产物废弃。</li>
+</ul>
+
+<h2>四、验收（闭环）</h2>
+
+<p>跑修复后的 v4（<code>run, idle1</code> 两个动作）→ 产出
+<code>Saved/Retarget/V5/A_Darius_All_TP.fbx</code>（5.2 MB，2 个 take）→ 再用 <code>plan_16</code> 审计：</p>
+
+<table>
+<tr><th style="width:50%">产物</th><th class="num">maxRelDev</th><th>判定</th></tr>
+<tr><td><code>V4/A_Darius_TurnL_TP.fbx</code>（修复前，同一管线）</td><td class="num">1.541e-01</td><td><span class="pill p-bad">BROKEN</span></td></tr>
+<tr><td><b><code>V5/A_Darius_All_TP.fbx</code>（修复后）</b></td><td class="num"><b>5.926e-07</b></td><td><span class="pill p-ok">OK</span></td></tr>
+</table>
+
+<p class="cap">偏差降低约 <b>26 万倍</b>。同时 v4 正常跑完、导出、可回读 —— 脚本改动无副作用。</p>
+
+<h2>五、影响与后续</h2>
+
+<table>
+<tr><th style="width:32%">项</th><th>处置</th></tr>
+<tr><td><code>Saved/Retarget/</code> 下 17 个旧 FBX（<code>Batch/</code>、<code>V3/</code>、<code>V4/</code>）</td>
+    <td><span class="pill p-bad">废弃</span> bind pose 已损坏，<b>勿再导入 UE</b>。已在 <code>anim_12_import_snap.py</code> 与文档中标注。</td></tr>
+<tr><td><b>UE 里已导入的那批动画</b>（<code>/Game/Character/Darius/Anims/</code>）</td>
+    <td><span class="pill p-warn">待处理</span> 它们是**基于损坏的 bind pose** 导入的 ——
+        其 Skeleton 的参考姿势不可信。这是 26.8° 系统性偏斜的<b>强候选共因</b>，
+        待 M1-② 用新产物验证归因。</td></tr>
+<tr><td>是否批量重导旧的 8 个动作</td>
+    <td><span class="pill p-ok">不重导</span> M1-② 主线走 UE IK Retargeter，会重新产出一整套动画，
+        旧的 Blender 重定向产物不再使用。重导是纯浪费。</td></tr>
+<tr><td>防复发</td>
+    <td>新增 <code>plan_16_audit_fbx.py</code>（<b>任何批量重导后先跑它</b>，一条命令扫一个目录给 OK/WARN/BROKEN）
+        与 <code>plan_17_export_probe.py</code>（<b>改导出逻辑前先跑它</b>，3 分钟定死正确做法）。</td></tr>
+</table>
+
+<div class="note alarm">
+<b>一条更普适的教训：</b>「脚本没报错、文件也生成了」与「产物正确」之间没有必然联系。
+本轮 17 个文件全部生成成功、大小正常、导入 Blender 与 UE 都不报错 —— 但其中 15 个是坏的。
+<b>批量导出必须配一个独立的外部审计器，且审计判据要选「缩放不变量」这类与实现无关的量。</b>
+</div>
+
+<hr>
+<p class="cap">原始输出：<code>Saved/Retarget/Clean/audit_bindpose.txt</code>（历史产物审计）、
+<code>Saved/Retarget/Clean/export_probe.txt</code>（三选一探针）、
+<code>Saved/Retarget/Clean/audit_fix_verify.txt</code>（修复前后对比）。
+复现命令见各脚本头部注释。</p>
+
+</div>
+</body>
+</html>

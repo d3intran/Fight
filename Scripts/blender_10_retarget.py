@@ -283,6 +283,20 @@ sc.frame_start, sc.frame_end = F0, F1
 print("   烘焙完成，帧数:", F1 - F0 + 1, "关键帧曲线:", len(_fcs))
 
 # ---------------------------------------------------------------- 导出
+# ⚠️ 关键修复（2026-09-18）：导出前必须把骨架复位到 rest pose。
+#    否则 Blender 会把「导出瞬间的 pose」（此处就是刚烘焙完的最后一帧）写成骨架的
+#    节点变换，产物 bind pose 完全错误 —— 实测同类写法偏差 5.843e-02，
+#    plan_16 审计历史产物 17 个 FBX 中 15 个 BROKEN（间距偏差最高 15.4%）。
+#
+# ⚠️ DEPRECATED：本脚本是重定向管线的最早版本，已被 blender_51_retarget_v4.py 取代
+#    （AGENTS.md §3.3 未收录本文件）。它的「单文件单动作 + all_actions=False」输出契约
+#    未经过 plan_17 探针的完整验证 —— 清 pose 后导出器究竟选哪个 action 仍有不确定性。
+#    需要批量重定向请使用 blender_51_retarget_v4.py（已改为「清 pose + all_actions=True」）。
+tgt_arm.animation_data.action = None
+for _pb in tgt_arm.pose.bones:
+    _pb.matrix_basis = Matrix.Identity(4)
+bpy.context.view_layer.update()
+
 bpy.ops.object.select_all(action='DESELECT')
 tgt_arm.select_set(True)
 bpy.context.view_layer.objects.active = tgt_arm

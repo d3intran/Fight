@@ -171,20 +171,26 @@ for want in WANT:
     print(f"    烘焙 {new_act.name} 曲线数 {len(iter_fcurves(new_act))}")
     results.append(new_act.name)
 
-# 导出：每个动作一个 FBX（最稳）
-tgt_arm.animation_data.action = None
-for act_name in results:
-    act = bpy.data.actions[act_name]
-    tgt_arm.animation_data.action = act
-    fr = act.frame_range
-    sc.frame_start, sc.frame_end = int(fr[0]), int(fr[1])
-    bpy.ops.object.select_all(action='DESELECT')
-    tgt_arm.select_set(True); bpy.context.view_layer.objects.active = tgt_arm
-    out = os.path.join(OUTDIR, act_name + ".fbx").replace("\\", "/")
-    bpy.ops.export_scene.fbx(
-        filepath=out, use_selection=True, bake_anim=True, bake_anim_use_all_bones=True,
-        bake_anim_use_nla_strips=False, bake_anim_use_all_actions=False,
-        add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
-        apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
-    print("导出:", out)
+# 导出
+# ⚠️⚠️ 关键修复（2026-09-18）：原先是「循环内挂 action 逐个导出」，那会让 Blender 把
+#      「当前帧的 pose」写成骨架节点变换 ⇒ bind pose 完全错误。
+# 实测（plan_17）：挂 action 导出 → 间距偏差 5.843e-02；清 pose + all_actions=True → 1.198e-07。
+# 历史影响（plan_16）：本脚本产出的 Saved/Retarget/Batch/*.fbx 已全部 BROKEN（偏差最高 15.4%）。
+if tgt_arm.animation_data:
+    tgt_arm.animation_data.action = None
+for _pb in tgt_arm.pose.bones:
+    _pb.matrix_basis = Matrix.Identity(4)
+bpy.context.view_layer.update()
+
+bpy.ops.object.select_all(action='DESELECT')
+tgt_arm.select_set(True); bpy.context.view_layer.objects.active = tgt_arm
+out = os.path.join(OUTDIR, "A_Darius_All_TP.fbx").replace("\\", "/")
+bpy.ops.export_scene.fbx(
+    filepath=out, use_selection=True, bake_anim=True, bake_anim_use_all_bones=True,
+    bake_anim_use_nla_strips=False, bake_anim_use_all_actions=True,
+    bake_anim_force_startend_keying=True, bake_anim_simplify_factor=0.0,
+    add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
+    apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
+print("导出（单文件多 take）:", out)
+print("  ⚠️ 输出契约已变更：%d 个动作 → 1 个 FBX（多 take）。" % len(results))
 print("=== BATCH DONE:", results, "===")

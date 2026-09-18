@@ -53,6 +53,8 @@
 | `blender_60/61/62_ab*.py` | A/B 并排渲染（同相机同帧） |
 | **`plan_13_verify_fbx.py`** | **★ 跨会话端到端验收**：源与产物**各导入一次**再比。判据用「关节间距（缩放不变量）」+「逐帧关节轨迹」+「帧数」。**导出/导入环节的损失只有它能发现** |
 | `plan_12_rest_stability.py` | **归因用对照实验器**：分层加压（零修改 → 删无关骨 → 全量手术），把「工具固有行为」与「本次操作引入」分开 |
+| **`plan_16_audit_fbx.py`** | **★ 批量审计 FBX 的 bind pose**：与参考骨架比对关节间距。一条命令扫一个目录，直接给出 OK / WARN / BROKEN。**任何批量重导后都应先跑它** |
+| **`plan_17_export_probe.py`** | **导出行为探针**：同一场景用三种方式各导一个 FBX 再回读，回答「怎样导出才能保证 bind pose 正确」。修导出逻辑前先跑它 |
 
 **验证器的三条硬规矩（2026-09-18 从本轮实践提炼）**
 1. **跨会话，不在同一会话内自比** —— 同进程自比永远发现不了导出/导入环节的损失。
@@ -179,8 +181,11 @@
 | 脚本 | 作用 |
 | :--- | :--- |
 | **`blender_51_retarget_v4.py`** | **★ 正式版重定向器**。纯几何帧驱动 + 逐骨骼静止基准对齐矩阵 K。
-`blender -b -P ... -- <SRC_GLB> <TGT_FBX> <spine_pitch> <OUTDIR> <anim1,anim2,...>` |
-| `blender_30_batch_retarget.py` | 批量版（v3 逻辑，已由 v4 取代，保留作对照） |
+`blender -b -P ... -- <SRC_GLB> <TGT_FBX> <spine_pitch> <OUTDIR> <anim1,anim2,...>`。
+**输出契约（2026-09-18 已变更）**：导出前清 rest pose + `bake_anim_use_all_actions=True`
+⇒ 产出**单文件多 take**（`A_Darius_All_TP.fbx`），不再是「每动作一个 FBX」 |
+| `blender_30_batch_retarget.py` | 批量版（v3 逻辑，已由 v4 取代，保留作对照）。**导出段已同步修复** |
+| `blender_50_retarget_v3.py` / `blender_10_retarget.py` | 更早版本，仅作对照；导出段已补 rest 复位，但 `blender_10` 的输出契约未经验证，**勿用于新工作** |
 | `blender_41/42/70/80_*.py` | 验证器组（见 0.3） |
 
 **M1-① 源骨架净化组（2026-09-18 新增，`plan_*` 前缀）**
@@ -313,7 +318,10 @@
 | **`EditorAssetLibrary.unload_asset`** | 该版本不存在 | 复核存盘值重新 `unreal.load_asset` 再读属性即可 |
 | **FBX↔UE 局部轴语义翻转** | Blender 直方图显示大刃在 −Y，UE 里实际在 **+Y**；包围盒 Y 对称，数值上分辨不出 | 用「无遮挡渲染 + 已知机位」反证，别靠数值推断轴的正负 |
 | **"物体好像被删了"** | 单张截图上「真被删」与「被身体挡住」无法区分 | 四步收敛：①顶点计数 ②材质链路 ③同变换无遮挡对照 ④世界坐标核算 |
-| 🔴 **FBX 导出前未复位 rest pose** | Blender 把**当前 pose**（导出时 frame 停在哪帧就是哪帧）写成骨架的节点变换 ⇒ 产出的 FBX **bind pose 完全错误**。实测 R_Hand 偏 58.5 单位、Root 偏 20.8 单位、肩宽差 2.0%。对 IK Retargeter 是致命伤 | 导出前：`arm.animation_data.action = None` + 逐个 `pb.matrix_basis = Matrix.Identity(4)` + `view_layer.update()`。**项目里 `blender_51_retarget_v4.py` / `blender_30` / `blender_50` / `blender_10` 四个脚本均中招**（设了 `action=None` 但循环内又挂回去），M1-② 前须修 |
+| 🔴 **FBX 导出前未复位 rest pose** | Blender 把**导出瞬间的 pose**写成骨架的节点变换 ⇒ 产物 **bind pose 完全错误**。对 IK Retargeter 是致命伤 | **导出前**：`arm.animation_data.action = None` + 逐个 `pb.matrix_basis = Matrix.Identity(4)` + `view_layer.update()`；**同时必须用 `bake_anim_use_all_actions=True` 单文件多 take 导出** |
+| 🔴 **逐 action 导出无法保证 bind pose**（同上一条的推论） | `plan_17` 探针实测（同一场景三种方式各导一个 FBX 再回读）：<br>**A** 挂 action + `frame_set` 后导出（历史做法）→ 间距偏差 **5.843e-02 BROKEN**<br>**B** 清 pose，`all_actions=False` → **1.198e-07 OK**，但**只含 1 个动画**<br>**C** 清 pose，`all_actions=True` → **1.198e-07 OK**，46 个动画全保真 | 要导多个动作**只能选 C**。`all_actions=False` 时挂回 action 必然污染；而清 pose 后该模式导哪个动画不确定 ⇒ 不可用 |
+| 🔴 **历史产物规模（`plan_16` 审计）** | `Saved/Retarget/` 下 17 个 FBX，**15 个 BROKEN**：关节间距偏差 1.4%~**15.4%**（TurnL/TurnR 最差、Attack1 12.8%、RunFast 9.8%）。同一动作在 Batch 与 V4 两批里偏差还不同 ⇒ 每个文件记录的是「导出那刻 frame 停在哪」 | `blender_51_retarget_v4` / `blender_30` / `blender_50` / `blender_10` **四个脚本已全部修复**。**Batch/ 与 V4/ 下的旧产物已废弃，勿再导入 UE**；修复后的产物见 `Saved/Retarget/V5/`（实测 5.926e-07 OK） |
+| **改导出逻辑前先跑 `plan_17_export_probe.py`** | 目测/推理判断不了 Blender 的导出器行为 | 探针成本约 3 分钟，能一次定死「哪种导出方式正确」，比改完再验证省得多 |
 | **改 `edit_bone.parent` 会触发 rest 重建** | `Bone.matrix_local` 被重算，对短骨有数值损失（`R_Foot` 0.014 单位 ⇒ 2.68e-04 偏差，经骨链放大成 0.0135 单位世界偏差）。对照实验：零修改进出 edit mode 与「只删骨不改 parent」均为 **0 偏差** | 删除骨后**用快照写回** `head/tail/roll`；先用两趟循环把全部 `use_connect=False` 再写，否则设父骨 tail 时会拉走子骨 head。若仍残留 ~1e-4，量级可忽略，如实记录即可 |
 | **Blender 5.x 的 `Action.fcurves` 已移除** | 4.4 起改用 slotted action：`action.layers[].strips[].channelbags[].fcurves`，直接访问 `action.fcurves` 抛 `AttributeError` | 写兼容读取函数；action 名在 FBX 导入后会带前缀（`skinned_mesh\|skinned_mesh\|xxx`），比对前 `name.split("\|")[-1]` |
 | **身高/标尺类指标不能用「全部骨」** | 源骨架混有道具骨（`Gem` tail z=836、`Axe_Handle` z=−90.8），算出的「身高」是 927 而非 191.6；两侧骨集合不同时会得出 2.36 倍的假缩放因子 | 用**固定的同一组骨** + 只用 `head_local` 算标尺；优先选**缩放不变量**（关节间距）作判据 |

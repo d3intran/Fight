@@ -283,18 +283,37 @@ for act_name in results:
 print()
 
 # ---------------------------------------------------------------- 导出
-tgt.animation_data.action = None
-for act_name in results:
-    a = bpy.data.actions[act_name]
-    tgt.animation_data.action = a
-    fr = a.frame_range
-    sc.frame_start, sc.frame_end = int(fr[0]), int(fr[1])
-    bpy.ops.object.select_all(action='DESELECT')
-    tgt.select_set(True); bpy.context.view_layer.objects.active = tgt
-    out = os.path.join(OUTDIR, act_name + ".fbx").replace("\\", "/")
-    bpy.ops.export_scene.fbx(filepath=out, use_selection=True, bake_anim=True,
-        bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False, bake_anim_use_all_actions=False,
-        add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
-        apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
-    print("导出:", out)
+# ⚠️⚠️ 关键修复（2026-09-18）：导出前必须把骨架复位到 rest pose，且必须改用
+#      all_actions=True 单文件多 take 导出。原先「循环内挂 action 逐个导出」是错的。
+#
+# 实测依据（plan_17 导出行为探针，同一场景三种方式各导一个 FBX 再回读）：
+#   A. 挂 action + frame_set 后导出（本脚本原先的做法）→ bind pose 偏差 5.843e-02  **BROKEN**
+#   B. 清 pose 后导出，all_actions=False                → 1.198e-07 OK，但只含 1 个动画
+#   C. 清 pose 后导出，all_actions=True                 → 1.198e-07 OK，46 个动画全保真
+#
+# 机理：Blender 的 FBX 导出器用「导出瞬间的 pose」写骨架的节点变换，而不是 rest pose。
+#   挂 action 时 pose 就是该 action 在当前 frame 的值 ⇒ bind pose 被污染。
+#   bind pose 是所有动画共同的参考系，一旦错位，IK Retargeter 与动画导入会整体偏斜。
+#
+# 历史影响（plan_16 审计 Saved/Retarget 下 17 个 FBX）：15 个 BROKEN，
+#   关节间距偏差 1.4% ~ 15.4%（TurnL/TurnR 最差，Attack1 12.8%）。
+if tgt.animation_data:
+    tgt.animation_data.action = None
+for _pb in tgt.pose.bones:
+    _pb.matrix_basis = Matrix.Identity(4)
+bpy.context.view_layer.update()
+
+bpy.ops.object.select_all(action='DESELECT')
+tgt.select_set(True); bpy.context.view_layer.objects.active = tgt
+out = os.path.join(OUTDIR, "A_Darius_All_TP.fbx").replace("\\", "/")
+bpy.ops.export_scene.fbx(filepath=out, use_selection=True, bake_anim=True,
+    bake_anim_use_all_bones=True, bake_anim_use_nla_strips=False,
+    bake_anim_use_all_actions=True,
+    bake_anim_force_startend_keying=True, bake_anim_simplify_factor=0.0,
+    add_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X',
+    apply_unit_scale=True, global_scale=1.0, armature_nodetype='NULL')
+print("导出（单文件多 take）:", out)
+print("  ⚠️ 输出契约已变更：原先「每个动作一个 FBX」→ 现在「一个 FBX 含全部 %d 个 take」。" % len(results))
+print("     UE 侧仍需显式指定 FbxImportUI.skeleton；一次导入即建出全部 AnimSequence")
+print("     （已实测：48 资产 = 1 Skeleton + 1 Mesh + 46 AnimSequence）。")
 print("=== V3 DONE:", results, "===")
