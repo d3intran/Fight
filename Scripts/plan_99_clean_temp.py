@@ -20,7 +20,10 @@ left = eal.list_assets("/Game", recursive=False, include_folder=True)
 unreal.log("剩余 /Game 顶层: %s" % [str(x) for x in left])
 
 # 删除本管线/验证期生成的临时 actor（按已知前缀白名单，绝不动基线 actor）
-TEMP_PREFIX = ("SIM_", "ABTest_", "XYZ_", "DBG_", "TMP_", "CAP_", "PROBE_")
+# 2026-09-19 补：`PoseRnd_` / `SceneCapture2D_` / `AnimChk_` 是本轮渲染脚本留下的，
+#   之前不在白名单里，`plan_99` 跑完仍残留 3 个 actor，关卡回不到 7 基线。
+TEMP_PREFIX = ("SIM_", "ABTest_", "XYZ_", "DBG_", "TMP_", "CAP_", "PROBE_",
+               "PoseRnd_", "SceneCapture2D_", "AnimChk_", "Probe_")
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 for a in list(eas.get_all_level_actors()):
     lb = a.get_actor_label()

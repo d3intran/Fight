@@ -36,6 +36,19 @@ if les.is_in_play_in_editor():
     LW("!! PIE 运行中，先退出 PIE")
     raise SystemExit
 
+# ---------------------------------------------------------------- 前置门禁（必读）
+# UE 5.8 用 Interchange 导入 FBX。**目标包名已存在时会静默跳过动画工厂**
+# （只重建 SkeletalMesh，不报错）。实测三组对照：
+#     包名已存在 -> 1 资产 / 0 动画 ｜ 同目录换新名 -> 48/46 ｜ 全新目录 -> 48/46
+# ⇒ 导入前目标必须是空目录。先跑清理脚本，或改用全新的 destination_name。
+_existing = eal.list_assets(DEST, recursive=False, include_folder=False)
+if _existing:
+    LW("!! 目标 %s 非空（%d 个资产），Interchange 会静默丢掉全部动画。" % (DEST, len(_existing)))
+    LW("!! 请先执行清理脚本，或换 DEST_NAME。已中止。")
+    for _a in sorted(_existing)[:6]:
+        LW("      %s" % str(_a).split(".")[0])
+    raise SystemExit
+
 at = unreal.AssetToolsHelpers.get_asset_tools()
 ui = unreal.FbxImportUI()
 ui.set_editor_property("import_mesh", True)
@@ -120,6 +133,17 @@ L("")
 L("磁盘落盘检查（关键：动画必须真的写到 .uasset）：")
 import os
 disk = os.listdir("E:/UE/Fight/Content/Character/Darius/LOL_Source")
-L("   目录下 .uasset 数 = %d" % len([f for f in disk if f.endswith(".uasset")]))
+n_disk = len([f for f in disk if f.endswith(".uasset")])
+L("   目录下 .uasset 数 = %d" % n_disk)
+
+# ---------------------------------------------------------------- 后置门禁
+if len(anims) != 46:
+    LW("!! 期望 46 个 AnimSequence，实际 %d 个 —— 导入链路丢动画了。" % len(anims))
+    LW("!! 先查目标目录是否非空（Interchange 重导入路径会静默跳过动画工厂）。")
+    raise SystemExit(1)
+if n_disk < 48:
+    LW("!! 磁盘上应至少 48 个 .uasset，实际 %d 个 —— 资产没落盘。" % n_disk)
+    raise SystemExit(1)
+L("门禁通过：46 个动画 + 骨架/网格全部落盘。")
 
 L("=== DONE ===")

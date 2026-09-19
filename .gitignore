@@ -47,5 +47,8 @@ Scripts/tools/
 # 诊断期临时 UE 资产（渲染目标、探针蓝图等），随时可重建
 Content/Temp/
 Content/Character/Darius/Blueprints/ABP_NodeTest.uasset
-Content/Character/Darius/Blueprints/ABP_Darius_Test.uasset
 Scripts/_ue_remote_run.py
+
+# 重定向实验产物目录（对照用，选定赢家后清）；tw_feet 是正式交付物，保留
+Content/Character/Darius/Anims_TP_*/
+!Content/Character/Darius/Anims_TP_tw_feet/

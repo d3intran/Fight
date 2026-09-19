@@ -214,10 +214,19 @@
 | `anim_10_import_batch.py` | 批量导入 FBX 动画到指定骨架（`FbxImportUI.skeleton` 必须显式指定） |
 | `anim_12_import_snap.py` | 同上，但开启 `snap_to_closest_frame_boundary`（30fps 帧边界对齐） |
 | `disable_throttling.py` | 关闭视口后台节流（`t.IdleWhenNotForeground 0`），解决截图冻结假帧。 |
-| `ik_01_import_source.py` | 把净化后的 LOL 源骨架（59 骨 + 46 动画）导入 `/Game/Character/Darius/LOL_Source/` |
-| `ik_03_target_rig.py` / `ik_04_src_rig.py` | 建目标 / 源 IK Rig（含链定义） |
+| `ik_01_import_source.py` | 把净化后的 LOL 源骨架（59 骨 + 46 动画）导入 `/Game/Character/Darius/LOL_Source/`。**含前置/后置门禁**（目标必须为空、必须出 46 个动画） |
+| **`ik_12_purge_source.py`** | **★ 导入前必跑**：清空 `LOL_Source` / `/Game/Temp/ImportExp`，让 Interchange 走「全新导入」路径 |
+| `ik_03_target_rig.py` / `ik_04_src_rig.py` | 建目标 / 源 IK Rig（含链定义）。`ik_04` 幂等，**重导网格后必须再跑一次**以修 `set_skeletal_mesh` 引用 |
 | `ik_05_retargeter.py` / `ik_06_verify_map.py` / `ik_07_default_ops.py` | 建 IK Retargeter、加 op 栈、自动映射链 |
-| **`ik_11_batch_retarget.py`** | **★ 批量重定向**（`IKRetargetBatchOperation`） |
+| **`ik_11_batch_retarget.py`** | **★ 批量重定向**（`IKRetargetBatchOperation`）。**自带输出目录清理 + 显式存盘 + 落盘门禁** |
+| `ik_08_probe_import.py` / `ik_09_import_experiment.py` / `ik_10_reexport_probe.py` | 导入行为探针与对照实验器（定位「动画被静默丢掉」时用） |
+| **`Scripts/editor.deno.ts`** | **★ UE 编辑器自主启停 + 就绪轮询**。`deno task editor:up -- --hold` / `editor:down` / `editor:status` |
+| **`ik_27_optionB_config.py`** | **★ 修 retarget root 层级 + 给 pelvis 加 FK 链**（修 §3.7 坑 D）。幂等 |
+| **`ik_31_fix_root_scale.py`** | **★ 删最外层骨的假缩放轨道**（修 §3.7 坑 E）。**产出并存盘之后跑**；自带副本验证 + 双指标门禁 |
+| `ik_23_purge_animstp.py` | 清空 `Anims_TP`。**必须单独跑，且要在编辑器刚启动、资产未被加载时跑** |
+| `ik_28_verify_component.py` | **★ 验收器**：算关节的组件空间坐标（含缩放），并检查动画是否真的在动 |
+| `ik_16_diag_ratio.py` / `ik_21_diag_rest_pose.py` | 逐骨比值诊断 / 取骨架 rest pose 作权威基线 |
+| `ik_13/14/15/29/30/32/33_*` | 诊断探针链：数据是否存在 → 多帧 → 世界坐标 → 缩放 → API 发现 → 对照组实验 → 轨道事实 |
 
 ### 3.5 IK Rig / IK Retargeter 的 Python 自动化（2026-09-18 打通）
 
@@ -272,6 +281,108 @@
 **EXCEPTION_ACCESS_VIOLATION，编辑器整个挂掉**（2026-09-18 实测崩溃一次）。
 ⇒ 一律先 `pkg = a.split(".")[0]`。
 ⇒ 另外 `rename_asset()` 即使传对路径，**未 save 前效果会回退**（实测返回 True 但列表未变）。
+
+### 3.6 🔴 「目标冲突」双坑 —— 都会静默丢资产或直接崩编辑器（2026-09-18 实测）
+
+这两件事是**同一类根因**：UE 的批量资产操作**不幂等**，目标已存在时行为完全变样。
+
+#### 坑 A：Interchange 导入时，目标包名已存在 ⇒ **静默跳过整个动画工厂**
+
+UE 5.8 的 FBX 导入走 **Interchange**（`LogInterchangeEngine: Interchange start importing source`），
+`FbxImportUI` 只当"提示"用。当**目标包名已存在**时，Interchange 走重导入路径，
+**只重建 SkeletalMesh，46 个动画一个都不建，而且不报错、不打日志**。
+
+实测对照（同一 FBX / 同一 pipeline / 只改目标）：
+
+| 条件 | 产出 |
+| :--- | :--- |
+| 目标包名**已存在** | **1 个资产 / 0 动画** ← 故障 |
+| 同目录、换全新包名 | 48 个资产 / 46 动画 ✅ |
+| 全新目录 | 48 个资产 / 46 动画 ✅ |
+| 不传 `options`（默认 pipeline） | 49 个 / 46 动画（多一个 PhysicsAsset）✅ |
+
+⇒ **目录无关，包名才是变量。**
+⇒ 导入前**必须**跑 `ik_12_purge_source.py` 清空目标；`ik_01` 已加前置门禁（目标非空直接中止）。
+
+**副作用**：重导网格会让 `IK_LOL_Source` 的 `set_skeletal_mesh` 引用失效，
+**必须重跑 `ik_04_src_rig.py`**（幂等，只补引用不动链定义）才能继续重定向。
+
+#### 坑 B：`run_batch_retarget` 不幂等 ⇒ **EXCEPTION_ACCESS_VIOLATION 崩编辑器**
+
+输出目录里已有同名资产时，`IKRetargetBatchOperation.run_batch_retarget()` 会：
+先把新资产改名成 `A_Darius_idle1` / `A_Darius_run1` …，再 **Force Delete** 旧包，
+在第二个包上直接 `EXCEPTION_ACCESS_VIOLATION`（调用栈穿 `python311.dll`），**编辑器整个挂掉**。
+
+⇒ `ik_11_batch_retarget.py` 已加**输出目录清理 + 清理后复查**（未清空就中止）。
+⇒ `A_Darius_*` 这批名字在 `Anims_TP/` 里**不要手工重名**。
+
+#### 坑 C：`run_batch_retarget` **不写盘**
+
+实测返回 6 项、内存里资产齐全，但 `Anims_TP/` 下 **0 个 `.uasset`**。
+⇒ 必须逐个 `EditorAssetLibrary.save_asset(pkg)`，并复查磁盘 `.uasset` 数（`ik_11` 已加门禁）。
+
+### 3.7 🔴 重定向产物的两个「几何坏了但看起来没事」的坑（2026-09-18 实测）
+
+产出能不能用，**只看「导入成功 / 帧数对得上」是发现不了的**。必须把关节位置算出来比。
+
+#### 坑 D：`pelvis` 平移被放大 100 倍 ⇒ 角色被甩到 147 米外
+
+`IK_Darius_Target` 的 **retarget root 原本设成 `pelvis`**，而 `pelvis` 上面还有
+`root` → `darius_godking_mesh_LOD0_Skeleton`(scale **100**) 两层。重定向器写 retarget root 的
+平移时**没把祖先骨的 100× 算进去**，直接把**组件空间 cm 值**写进了**骨骼局部槽位**。
+
+| 对象 | `pelvis` 局部平移模长 |
+| :--- | :--- |
+| 骨架 rest pose（应然） | **1.0967** |
+| 正常动画（旧一套） | **1.0967** ✅ |
+| 重定向产物（坏） | **109.6706** ❌ 恰好 ×100 |
+
+**修法（已验证）**：
+1. 目标 IK Rig 的 retarget root：`pelvis` → **`root`**（与源的 `Root` 同层级）
+2. 两边各加一条 `Pelvis` 单骨链（`pelvis→pelvis` / `Pelvis→Pelvis`），`auto_map_chains` 后
+   `pelvis` 变成**普通 FK 骨**，走 FK Chains 的 `translation_mode = None` 路径
+   ⇒ 平移精确等于 rest。**实测 22 根关键骨全部比值 1.00。**
+3. 脚本：`ik_27_optionB_config.py`（幂等）
+
+⚠️ 排查时先排除的错误方向：停用 `Root Motion` op / 停用 `Pelvis Motion` op /
+调 `translation_alpha` —— 三个都试过，**数值一字未变**。写入方是重定向器自身，不是某个开关。
+
+#### 坑 E：最外层骨多一条 `scale = 1` 的轨道 ⇒ 角色被缩成 1.85 厘米
+
+重定向产物比正常动画**多一条轨道**：`darius_godking_mesh_lod0_skeleton`，值 `scale = 1`。
+
+| | 轨道数 | 最外层骨轨道 | `scale` |
+| :--- | :--- | :--- | :--- |
+| 正常动画 | 309 | **没有** ⇒ 回落 reference pose | **100** ✅ |
+| 重定向产物 | **310** | 有，值为 1 | **1** ❌ |
+
+外加坑 D 修好之后，**角色就只有 1.85 厘米高，Persona 里同样是空的**。
+两个坑的症状一模一样（看不见），必须分别量。
+
+**修法**：把那条轨道**整条删掉**（让它回落 rest，不写任何数值 ⇒ 无魔数）。
+`Scripts/ik_31_fix_root_scale.py`。**实测把 `scale` 1.0 → 100.0 且动画完好。**
+
+**API 与陷阱（全部实测）**：
+
+| 想做 | 正确做法 | 错的后果 |
+| :--- | :--- | :--- |
+| 删一条骨轨道 | `anim.get_editor_property("controller").remove_bone_track(bone_name)`，参数是**骨名** | 传索引 ⇒ `Failed to convert parameter 'bone_name'` |
+| 取轨道索引 | `data_model_interface.get_bone_track_names()` 的**位置** | `get_bone_track_index_by_name` **恒返回 -1**，不可用 |
+| 读轨道名 | 注意返回的是**小写**（`camera_cameraSocket` → `camera_camerasocket`） | 大小写不匹配 ⇒ 误判「无此轨道」 |
+| ~~删骨轨道~~ | ~~`AnimationLibrary.remove_bone_animation`~~ | 🔴 **会把整段动画清成静止姿态**（所有骨逐帧四元数相同） |
+| ~~收尾~~ | ~~`AnimationLibrary.finalize_bone_animation`~~ | 🔴 同样清空动画，且已 deprecated |
+
+**两条硬规矩（本轮用两批作废产物换来的）**：
+
+1. **改完必须同时验两项：目标数值 + 「动画是否还在动」。**
+   只量 scale 会漏掉「动画被清空」这种失败 —— 这正是上面那两个 🔴 没被当场发现的原因。
+   自查方式：同一根骨采样 5 帧，局部四元数必须出现 >1 种取值。
+2. **危险的数据改写先在 `/Game/Temp` 的副本上验证，通过了才动正式资产。**
+   `ik_31` 已把「副本验证 + 双指标门禁」写进流程。
+
+⚠️ 另外：**刚由 `run_batch_retarget` 生成、还没落盘重载的 AnimSequence，其数据模型是空的**
+（`get_bone_track_names()` 返回 0 条，正常动画是 309 条）。此时做任何数据改写都会拿空模型覆盖回去。
+⇒ 后处理要放在**产出并存盘之后**的独立步骤里。
 
 ---
 

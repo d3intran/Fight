@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "editor:up": "deno run -A Scripts/editor.deno.ts up",
+    "editor:down": "deno run -A Scripts/editor.deno.ts down",
+    "editor:status": "deno run -A Scripts/editor.deno.ts status"
+  },
+  "fmt": {
+    "lineWidth": 100
+  }
+}
