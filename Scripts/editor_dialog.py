@@ -18,6 +18,7 @@
 import ctypes
 import ctypes.wintypes as wt
 import sys
+import time
 
 u32 = ctypes.windll.user32
 psapi = ctypes.windll.psapi
@@ -105,6 +106,16 @@ def main():
             return
         h = blocking[0]
         print("\n[auto] 关闭 hwnd=%s (%s)" % (h, title(h)[:50]))
+        # ⚠️ 2026-09-19 二次实测：keybd_event 的 Esc 对部分 Slate 模态框**无效**
+        #    （SetForegroundWindow 被系统的前台锁定策略拒绝时，按键会落到别的窗口）。
+        #    **PostMessage WM_CLOSE 有效**——「PostMessage 对 Slate 无效」只对键盘消息成立，
+        #    WM_CLOSE 是窗口消息，Slate 窗口过程照收。先 WM_CLOSE，不行再退回真实 Esc。
+        u32.PostMessageW(h, WM_CLOSE, 0, 0)
+        time.sleep(2.0)
+        if not (bool(u32.IsWindowVisible(h)) and title(h)):
+            print("[auto] WM_CLOSE 已关闭")
+            return
+        print("[auto] WM_CLOSE 无效，退回真实 Esc…")
         u32.ShowWindow(h, SW_RESTORE)
         u32.SetForegroundWindow(h)
         u32.BringWindowToTop(h)

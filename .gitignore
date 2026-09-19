@@ -49,6 +49,7 @@ Content/Temp/
 Content/Character/Darius/Blueprints/ABP_NodeTest.uasset
 Scripts/_ue_remote_run.py
 
-# 重定向实验产物目录（对照用，选定赢家后清）；tw_feet 是正式交付物，保留
+# 重定向实验产物目录（对照用，选定赢家后清）；tw_feet / v2 是正式交付物，保留
 Content/Character/Darius/Anims_TP_*/
 !Content/Character/Darius/Anims_TP_tw_feet/
+!Content/Character/Darius/Anims_TP_v2/

@@ -76,6 +76,22 @@ def ik36_with(**deltas):
     return t
 
 
+def c6_base(**extra):
+    """当前最优姿势（c6）+ 指定骨的**增量**（叠加，不是替换）。
+
+    c6 = ik36 全表 + `spine_03` yaw+48（修锁骨/颈/头）
+        + `upperarm_l` yaw+49 / `upperarm_r` yaw−49（镜像补偿下游）
+        + `lowerarm_l` yaw+30（修小臂L/肘面L）。
+    `best` 交付物 = c6 + 脚部 twist 修正。
+    """
+    base = {"spine_03": (0, 0, 48), "upperarm_l": (0, 0, 49),
+            "upperarm_r": (0, 0, -49), "lowerarm_l": (0, 0, 30)}
+    for k, v in extra.items():
+        b = base.get(k, (0.0, 0.0, 0.0))
+        base[k] = tuple(b[i] + v[i] for i in range(3))
+    return ik36_with(**base)
+
+
 # tag -> (restore_mode, align_jobs, 说明)
 EXPS = {
     "z0": ("zero", [{"method": "NOOP"}],
@@ -263,6 +279,34 @@ EXPS = {
                        "jobs": [["foot_l", "ball_l", "L_Toe"],
                                 ["foot_r", "ball_r", "R_Toe"]]}],
               "★★ 交付物：c6 姿势 + 脚部 twist 修正"),
+    # ---------------------------------------------------------------- 收敛扫描（d 系列，2026-09-19 第五轮）
+    # c6 基础上收敛剩余段：大臂L 24.58（ay48 显示最小值在 +30~49 之间，c3 证明 +77 过冲）、
+    # 躯干 21.85（spine_01 从未探过）、头 21.93（neck_01 从未探过）。
+    "d1": ("ik36", [{"method": "SET_BONE", "table": c6_base(upperarm_l=(0, 0, -14))}],
+           "收敛：upperarm_l yaw 49→35（细扫）"),
+    "d2": ("ik36", [{"method": "SET_BONE", "table": c6_base(upperarm_l=(0, 0, -7))}],
+           "收敛：upperarm_l yaw 49→42（细扫）"),
+    "d3": ("ik36", [{"method": "SET_BONE", "table": c6_base(spine_01=(30, 0, 0))}],
+           "探针：spine_01 +30 roll（管躯干）"),
+    "d4": ("ik36", [{"method": "SET_BONE", "table": c6_base(spine_01=(0, 30, 0))}],
+           "探针：spine_01 +30 pitch（管躯干）"),
+    "d5": ("ik36", [{"method": "SET_BONE", "table": c6_base(spine_01=(0, 0, 30))}],
+           "探针：spine_01 +30 yaw（管躯干）"),
+    "d6": ("ik36", [{"method": "SET_BONE", "table": c6_base(neck_01=(30, 0, 0))}],
+           "探针：neck_01 +30 roll（管头）"),
+    "d7": ("ik36", [{"method": "SET_BONE", "table": c6_base(neck_01=(0, 30, 0))}],
+           "探针：neck_01 +30 pitch（管头）"),
+    "d8": ("ik36", [{"method": "SET_BONE", "table": c6_base(neck_01=(0, 0, 30))}],
+           "探针：neck_01 +30 yaw（管头）"),
+    # ---------------------------------------------------------------- 交付物 v2（d 系列收敛结论）
+    # d1/d2：uL yaw 42 优于 49（大臂L 24.58→21.34，小臂L 10.25 保持）；d3~d5：spine_01
+    # 三个 +30 探针全部恶化 ⇒ 躯干不动（要试只能负向）；d8：neck_01 +30 yaw 把
+    # 颈面 94.78→6.01（头绕颈轴的平面扭曲被修正，代价 头 +2.3）。
+    # ⚠️ 脚部 twist 已在 Saved/pose_extra.json 里，随 ik_48 还原自动带上（d 系列脚L/R
+    #    全程 5.06/15.64 可证），无需再挂 FIX_TWIST 作业。
+    "v2": ("ik36", [{"method": "SET_BONE",
+                     "table": c6_base(upperarm_l=(0, 0, -7), neck_01=(0, 0, 30))}],
+           "★★ 交付物 v2：c6 + uL yaw42 + neck_01 yaw30"),
 }
 
 # ⚠️ `ue_remote.py` 会给 UE 侧每一行加 `[Info] ` / `[Warning] ` 前缀，

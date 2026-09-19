@@ -1,6 +1,6 @@
 # 会话交接 —— LOL → 2XKO 握斧行走
 
-> 更新时间：2026-09-19 11:05 GMT+8
+> 更新时间：2026-09-19 12:35 GMT+8（v2 交付物已出，见 §2.10）
 > **本文件是临时进度快照。任务走完请删除或归档。**
 > 配套阅读：
 > - `Docs/Retarget/FOUNDATIONS.md` —— UE 5.8 / LOL 资产 / 我们模型三方面的特性，与收窄后的 M1' 计划
@@ -26,9 +26,9 @@
 2. **Retarget Pose 的现状（数字）**：最好的姿势是 **`ik_36`（= `CHAIN_TO_CHAIN` 全量对齐）**，
    13 段里 **腿 4 段已到 0.01°~5.8°（完美）**，剩 **9 段上半身超门限**
    （小臂L 56.4 / 锁骨R 66.9 / 锁骨L 49.2 / 颈 39.9 / 头 62.7 / 躯干 21.9 / 大臂R 16.9 / 小臂R 17.8 / 大臂L 9.5）。
-3. **交付物状态**：**`Anims_TP_tw_feet/`** 6 个资产 = **目前最好的产物**
-   （ik36 姿势 + 脚部 twist 修正 + 根骨 scale 已修 + 骨架一致 + 动画在动）。
-   **这是唯一能直接拿去 Persona 看的完整产物。**（`Anims_TP_t3/` 是它的上一版：没修 twist。）
+3. **交付物状态**：**`Anims_TP_v2/`** 6 个资产 = **目前最好的产物**
+   （c6 姿势 + uL yaw42 + neck_01 yaw30 + 脚部 twist 累加 + scale 已修 + 骨架一致 + 动画在动）。
+   **这是唯一能直接拿去 Persona 看的完整产物。**（`Anims_TP_tw_feet/` / `Anims_TP_best/` 是它的前两版。）
 
 ---
 
@@ -38,8 +38,9 @@
 |---|---|---|
 | 源骨架 + 网格 + **46 源动画** | `/Game/Character/Darius/LOL_Source/` | ✅ 48 个，已落盘 |
 | `IK_LOL_Source` / `IK_Darius_Target` / `RTG_LOL_to_Darius` | `/Game/Character/Darius/Retarget/` | ✅ 链已映射；retarget root：源=`Root`、目标=**`root`** |
-| **`Anims_TP_tw_feet/`** | `/Game/Character/Darius/Anims_TP_tw_feet/` | ✅ **★ 目前最好的产物**（见 §2.5） |
-| `Anims_TP_t3/` | 同上 | ✅ 上一版（ik36 姿势 + 已修 scale，**未修 twist**） |
+| **`Anims_TP_v2/`** | `/Game/Character/Darius/Anims_TP_v2/` | ✅ **★ 目前最好的产物（v2）**：c6 姿势 + uL yaw42 + neck_01 yaw30 + 脚 twist 累加 + scale 已修。**Persona 看这个** |
+| **`Anims_TP_tw_feet/`** | `/Game/Character/Darius/Anims_TP_tw_feet/` | ✅ 前一版交付物（ik36 姿势 + 脚 twist） |
+| `Anims_TP_best/` / `Anims_TP_t3/` | 同上 | 前两版（best = c6+twist；t3 = 纯 ik36+scale 修） |
 | `Anims_TP/` | 同上 | ⚠️ **已过时**（标定前导出，且未修 scale） |
 | 实验产物 20+ 个目录 | `Anims_TP_{z0,z02,e1..e4,h1,h2,c1,m1,g1,t1,t2,t3,cr,cp,cy,tw_*}/` | 供对照；**选定赢家后可清** |
 | `ABP_Darius_Test` | `/Game/Character/Darius/Blueprints/` | ✅ **已挂到 `CharacterMesh0`**（本轮的修复） |
@@ -372,6 +373,33 @@
 
 ---
 
+### 2.10 d 系列收敛（2026-09-19 第五轮）+ 交付物 v2
+
+基线全部 = `c6`（spine_03+48y / upperarm_l+49y / upperarm_r−49y / lowerarm_l+30y）。
+
+**结论：**
+1. **uL yaw 最优在 42**：+49 大臂L 24.58；+42 大臂L **21.34**（小臂L 10.25 不动）；+35 大臂L 19.71
+   但小臂L 涨到 13.0、肘面L 42 ⇒ **d2（42）是平衡点**；c3 的 +77 已证过冲（44.7）。
+2. **spine_01（管躯干）三轴 +30 探针全部恶化**（roll→躯干 48.8 / pitch→30.1 且大臂L 崩到 8.6 的同时
+   锁骨L 21.1 / yaw→大臂R 43.3）⇒ 躯干 21.85 用正向探针修不动，要试只能**负向小步长**。留待后续。
+3. **★ `neck_01` +30 yaw 把「颈面」94.78→6.01** —— 此前被判「冗余」的颈面其实抓到了
+   「头绕颈轴的平面扭曲」（两个方向判据的**相对**扭转，不是它们各自的绝对误差）。
+   代价：头 21.93→24.20。这是本轮最重要的认知修正。
+4. **脚部 twist 已在 `Saved/pose_extra.json` 里随 `ik_48` 还原自动带上**（d 系列全程脚L/R
+   5.06/15.64 可证）⇒ 后续轮次无需再挂 FIX_TWIST 作业。
+5. **`v2` = c6 + uL yaw42 + neck_01 yaw30**，已导出 + `ik_31` 修 scale（6/6 OK，动画 4~5 姿态）。
+
+**v2 实测（ik_37，idle1 均值）：** 腿 4 段 0.01~5.8 ✅ / 锁骨L 2.85 ✅ / 肘面R 2.09 ✅ /
+颈面 6.01 ✅ / 脚L 5.06 ✅ / 小臂L 10.21 ≈✅；仍超门限：大臂L 21.3、大臂R 17.9、小臂R 16.8、
+锁骨R 22.6、躯干 21.9、颈 15.7、头 24.2、肘面L 36.7、脚R 15.6、手L/R（存疑，见 §2.5）。
+
+**⚠️ 编辑器状态坑（新）**：崩溃重启后的 `Restore Packages` 模态框，**keybd_event 的 Esc 可能无效**
+（SetForegroundWindow 被前台锁定策略拒绝时按键落到别处）。**`PostMessage WM_CLOSE` 有效**
+——「PostMessage 对 Slate 无效」只针对键盘消息，WM_CLOSE 是窗口消息照收。
+`editor_dialog.py --auto` 已改为先 WM_CLOSE、失败再退回真实 Esc。
+
+---
+
 ## 3. 渲染检查（可用，但要修冻结）
 
 ### 3.1 已有的成熟做法
@@ -431,8 +459,8 @@ md5 显示 `idle1_f40` == `run_f00` == `run_f09` —— 第 4 张之后**每帧�
 ## 4. 现在的第一步（按这个顺序）
 
 1. **★ 先看产物**：在 Persona 里打开
-   **`/Game/Character/Darius/Anims_TP_tw_feet/A_Darius_idle1`**
-   —— 它是「ik36 姿势 + 脚部 twist 修正 + 已修 scale」，骨架一致、动画在动。
+   **`/Game/Character/Darius/Anims_TP_v2/A_Darius_idle1`**
+   —— 它是「c6 姿势 + neck 平面修正 + 脚部 twist + 已修 scale」，骨架一致、动画在动。
    这是判断「还剩多少错」的最快路径。
 2. ~~给 `ik_37` 补 twist 判据~~ —— **✅ 已完成（§2.5）**。`脚L/R` 已从 66.6/44.4 压到 **5.1/15.6**。
 3. **上半身 5 段（锁骨L/R + 颈 + 躯干 + 头）** —— 控制骨 `spine_01` / `spine_03` / `neck_01`
