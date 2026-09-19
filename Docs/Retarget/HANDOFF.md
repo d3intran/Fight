@@ -185,7 +185,7 @@
   `auto_align_all_bones(CHAIN_TO_CHAIN)` 靠「链里子骨方向」定朝向，
   而 `spine_03` / `neck_01` / `clavicle_*` 这些骨**所在的链没有源对应**，所以偏移恒为 0。
   把源侧的链补齐，让 auto_align 自己去对齐 —— 这是**根因级**的修法。
-  `Scripts/ik_50_api_dump.py` 已写好，用来一次问清 controller 到底暴露了哪些链接口。
+  `Scripts/archive/ik_50_api_dump.py` 已写好（已跑过，结论在 §2.7），用来一次问清 controller 到底暴露了哪些链接口。
 - 或者：把「正确参照系」用**实测标定**出来 —— 对同一根骨加 3 个正交探针（`+30°` 各绕一轴），
   从观测到的方向变化反解 3×3 映射矩阵，而不是猜 `self`/`parent`/`world`。
 
@@ -438,7 +438,7 @@ md5 显示 `idle1_f40` == `run_f00` == `run_f09` —— 第 4 张之后**每帧�
 3. **上半身 5 段（锁骨L/R + 颈 + 躯干 + 头）** —— 控制骨 `spine_01` / `spine_03` / `neck_01`
    在 ik36 里偏移都是 0。⚠️ **「用 `Q` 折 offset」这条解析路已被否（§2.6）**，换下面两条：
    - **首选（根因级）**：给**源 IK Rig 补上缺失的链**，让 `auto_align_all_bones(CHAIN_TO_CHAIN)`
-     自己把 `spine_03` / `neck_01` / `clavicle_*` 对齐。先跑 `Scripts/ik_50_api_dump.py`
+     自己把 `spine_03` / `neck_01` / `clavicle_*` 对齐。接口清单已由 `Scripts/archive/ik_50_api_dump.py` 问清（§2.7）。
      问清链接口（`add_new_subchain` 之类）。
    - **备选**：**实测标定参照系** —— 对同一根骨加 3 个正交探针（各 `+30°` 绕一轴），
      从观测到的方向变化反解 3×3 映射矩阵，而不是猜 `self`/`parent`/`world`。
@@ -549,9 +549,9 @@ md5 显示 `idle1_f40` == `run_f00` == `run_f09` —— 第 4 张之后**每帧�
 | `ik_36_calibrate_retarget_pose.py` | Retarget Pose 标定（auto align + 复位脚 + 贴地） |
 | **`ik_37_verify_orientation.py`** | **★ 朝向验收器（G1）**。⚠️ **对 twist 免疫**（§2.2）；内含 `Sampler` 类（**修掉了崩编辑器的 `find_bone_path_to_root` 热点**）。现已加 **twist 判据**（膝面/肘面/颈面 + 脚/手） |
 | `ik_43_align_probe.py` | 按配置施加对齐；支持 `CHAIN_TO_CHAIN`/`MESH_TO_MESH`/`LOCAL_ROTATION_AXES`/`GLOBAL_ROTATION_AXES` + **`SET_BONE`**（显式逐骨写）+ `KEEP_IK36` |
-| **`ik_55_add_source_chains.py`** | 给**源** IK Rig 补链（`IKRigController.add_retarget_chain`）+ `set_source_chain` 接链。⚠️ **效果被否**（§2.7） |
-| **`ik_56_fix_chain_spans.py`** | 改链的起止骨（`set_retarget_chain_start_bone/end_bone`）。⚠️ **效果被否且把手臂搞坏**（§2.7） |
-| **`ik_57_revert_chain_spans.py`** | 把 `ik_55`/`ik_56` 的改动**全部回滚**（API 层）。字节级备份在 `Saved/Backup_ikrig/` |
+| **`ik_55_add_source_chains.py`**（archive/） | 给**源** IK Rig 补链（`IKRigController.add_retarget_chain`）+ `set_source_chain` 接链。⚠️ **效果被否**（§2.7） |
+| **`ik_56_fix_chain_spans.py`**（archive/） | 改链的起止骨（`set_retarget_chain_start_bone/end_bone`）。⚠️ **效果被否且把手臂搞坏**（§2.7） |
+| **`ik_57_revert_chain_spans.py`**（archive/） | 把 `ik_55`/`ik_56` 的改动**全部回滚**（API 层）。字节级备份在 `Saved/Backup_ikrig/` |
 | **`ik_53_fix_twist.py`** | **★ 修 twist**：算 `Q = rot_diff(d_tgt, d_src)` 折进 offset。约定 `self`/`parent`/`world` 三选一，**实测 `self` 正确**。⚠️ 三个坑：变量名 `anim_dir` 与 FK 函数**重名**、`unreal.Vector` 没有 `rotation_difference`、读姿势要指向**当前姿势已导出的那批** |
 | `ik_48_restore_pose.py` | 回滚 retarget pose（`zero` / `ik36`），**不重启编辑器** |
 | `anim_40_render_check.py` | 渲染动画供肉眼检查（EXR，需转码）；含 `wait_tick()` 等世界推进 |
