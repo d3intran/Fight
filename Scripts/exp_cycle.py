@@ -58,7 +58,10 @@ RESET_ANCESTORS = {
 
 # 已知良好姿势（ik36 = CHAIN_TO_CHAIN 全量）**已经导出并修过 scale** 的那批产物。
 # `ik_53`（修 twist）要拿它当「当前姿势」的参考来算修正量 —— 不能指向本轮的新目录。
-IK36_ANIM_DIR = "/Game/Character/Darius/Anims_TP_t3"
+# ⚠️ t3 已被清理。当前「已知良好且已带脚部 twist」的那批是 v2。
+#    不过现在 twist 修正已累加在 Saved/pose_extra.json 里、随 ik_48 还原自动带上
+#    ⇒ 新实验其实不再需要挂 FIX_TWIST 作业；这里保留只是为了兼容旧配置。
+IK36_ANIM_DIR = "/Game/Character/Darius/Anims_TP_v2"
 
 
 def ik36_with(**deltas):
@@ -323,7 +326,10 @@ def pick_out_dir(tag):
     而「在编辑器开着的时候删内容目录」也有风险 ⇒ 最省事的办法是**换名**。
     崩溃/中断留下的半成品目录因此不会挡住下一轮。
     """
-    base = "/Game/Character/Darius/Anims_TP_" + tag
+    # ⚠️ 2026-09-19：实验产物一律写到 /Game/Temp 下，别再污染
+    #    /Game/Character/Darius/（那次一口气堆了 75 个 Anims_TP_* 目录）。
+    #    /Game/Temp* 由 plan_99_clean_temp.py 定期清掉。
+    base = "/Game/Temp/Anims_TP_" + tag
     disk = ROOT + "/Content" + base[len("/Game"):]
     if not os.path.exists(disk):
         return base
