@@ -48,6 +48,10 @@ def run_ue_code(code_str):
     return res.get('success', False), output
 
 if __name__ == '__main__':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r', encoding='utf-8') as f:
             code = f.read()

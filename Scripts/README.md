@@ -13,10 +13,10 @@
 
 | 目录 | 内容 | 代表脚本 |
 | :--- | :--- | :--- |
-| **（顶层）** | 入口 / 运维工具，**别移走**（全员按这个路径在用） | `ue_remote.py`（★ 网关）、`editor.deno.ts`（启停编辑器，`deno.json` 引用）、`editor_dialog.py`（关模态框）、`editor_focus.py`（窗口前置）、`disable_throttling.py` |
+| **（顶层）** | 入口 / 运维工具，**别移走**（全员按这个路径在用） | `ue_remote.py`（★ 网关）、`ue_mcp.py`（内置 MCP 客户端）、`editor.deno.ts`（启停编辑器，`deno.json` 引用）、`editor_dialog.py`（关模态框）、`editor_focus.py`（窗口前置）、`disable_throttling.py` |
 | **`retarget/`** | LOL → 2XKO 重定向管线：IK Rig / Retargeter 标定、逐骨偏移实验回路、离线验收 | `ik_36_calibrate_retarget_pose`、`ik_37_verify_orientation`（★ 朝向验收器）、`ik_60_contact_audit`（★ 接触/落点审计）、`exp_cycle`（实验回路驱动器）、`blender_51_retarget_v4`、`plan_13/16/17` |
-| **`anim/`** | 动画资产的生产与验收：分层合并、待机、披风、战斧、跳跃参数、渲染检查 | `axw_10_merge`（★ 上/下半身分层合并器）、`axw_17_phase`（步态相位/接缝复核）、`idle_20_build2`、`axe_42_tune`（握斧调参）、`cape_04_save`（披风物理资产挂载）、`jump_02_fix`、`anim_78_make_videos` |
-| **`dcc/`** | Blender 侧工具（无头执行） | `blender_04_render`（预览渲染）、`blender_22_strip_all`（剔斧头几何）、`blender_split_weapon`、`blender_80_orient_verify` |
+| **`anim/`** | 动画资产的生产与验收：分层合并、待机、披风、战斧、行走移动体验、跳跃、渲染检查 | `axw_10_merge`（★ 上/下半身分层合并器）、`axw_17_phase`（步态相位/接缝复核）、`loco_02_tune_character`（★ 相机阻尼与 CMC 动力学调参）、`loco_03_tune_blendspace`（★ 混合空间速度轴适配）、`loco_04_pie_verify`（★ PIE 动力学测量探针）、`loco_05_cleanup`（关卡清理）、`cape_35_build_and_bind`（★ 披风布料 Dataflow 绑定）、`cape_33_cloth_probe`（★ 布料 PIE 探针）、`idle_20_build2`、`axe_42_tune`（握斧调参）、`jump_02_fix` |
+| **`dcc/`** | Blender 侧工具（无头执行） | `blender_23_strip_cape_shell`（★ 剔披风描边壳）、`blender_04_render`（预览渲染）、`blender_22_strip_all`（剔斧头几何）、`blender_split_weapon`、`blender_80_orient_verify` |
 | **`asset/`** | 资产解包 / 导入 | `extract_godking_assets`（一键解包全套 LOL 资产）、`import_weapon_asset`、`glb_list_anims` |
 | **`core/`** | 工程维护 | `plan_99_clean_temp`（清临时 actor 与 `/Game/Temp*`） |
 | **`archive/`** | **踩坑过程的证据链**，不是死代码 | 见 `archive/README.md`；子目录 `audio/ retarget/ anim/ ue_api/ misc/` |
