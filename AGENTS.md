@@ -98,16 +98,23 @@
 
 ## 4. 现役脚本索引（`Scripts/`；一次性脚本见 `archive/`）
 
-| 类别 | 脚本 |
-|:---|:---|
-| 网关 / 编辑器 | `ue_remote.py`（唯一网关）、`editor.deno.ts`（`deno task editor:up -- --hold`）、`editor_dialog.py --auto`、`editor_focus.py`、`disable_throttling.py` |
-| 实验回路 | `exp_cycle.py` `<tag>`、`exp_reparse.py`（**⚠️ 汇总只取 idle1，见 §0.1**） |
-| 重定向现役环 | `ik_11_batch_retarget.py`（⚠️ `endswith` 筛选，见 §0.1）、`ik_23_purge_animstp.py`、`ik_27_optionB_config.py`、`ik_31_fix_root_scale.py`、`ik_36_calibrate_retarget_pose.py`、`ik_48_restore_pose.py`、`ik_43_align_probe.py`、`ik_53_fix_twist.py` |
-| 验收器 | **`ik_37_verify_orientation.py`**（朝向+twist；**对「落点/交叉」盲**）、`ik_28_verify_component.py` |
-| DCC 产线（Blender） | `blender_51_retarget_v4.py`（主力）、`blender_30_batch_retarget.py`、`blender_22_strip_all.py`、`blender_split_weapon.py`、`blender_04_render.py` |
-| 跨会话/离线验收 | `plan_13_verify_fbx.py`、`plan_16_audit_fbx.py`、`plan_17_export_probe.py`、`plan_12_rest_stability.py`、`blender_80_orient_verify.py`、`blender_41/42/70`、`blender_60/61/62` |
-| 解包/清理 | `extract_godking_assets.py`、`glb_list_anims.py`、`import_weapon_asset.py`、`plan_10_src_clean.py`、`plan_99_clean_temp.py` |
-| 一次性/已否路线 | `archive/`（ik_02~10/13~26/28~30/32~35/38~50/55~57、anim_01~45、axe_01~23、diag_*、inspect_*、fix_*、probe_*、shot_*、audio_* 等 230 个） |
+> **2026-09-20 重构**：按主题分了子目录，并删掉 101 个一次性 UE API 探针。
+> **顶层只留入口/运维工具**（`ue_remote.py` / `editor.deno.ts` / `editor_dialog.py` / `editor_focus.py` / `disable_throttling.py`），
+> 其余在 `retarget/` `anim/` `dcc/` `asset/` `core/`。完整索引见 **`Scripts/README.md`**。
+
+| 目录 | 类别 | 脚本 |
+|:---|:---|:---|
+| 顶层 | 网关 / 编辑器 | `ue_remote.py`（唯一网关）、`editor.deno.ts`（`deno task editor:up -- --hold`）、`editor_dialog.py --auto`、`editor_focus.py`、`disable_throttling.py` |
+| `retarget/` | 实验回路 | `exp_cycle.py` `<tag>`、`exp_reparse.py`（**⚠️ 汇总只取 idle1，见 §0.1**） |
+| `retarget/` | 重定向现役环 | `ik_11_batch_retarget.py`（⚠️ `endswith` 筛选，见 §0.1）、`ik_23_purge_animstp.py`、`ik_27_optionB_config.py`、`ik_31_fix_root_scale.py`、`ik_36_calibrate_retarget_pose.py`、`ik_48_restore_pose.py`、`ik_43_align_probe.py`、`ik_53_fix_twist.py` |
+| `retarget/` | 验收器 | **`ik_37_verify_orientation.py`**（朝向+twist；**对「落点/交叉」盲**）、`ik_60_contact_audit.py`（★ 接触/落点，需自校准）、`ik_61_raw_dump.py` |
+| `retarget/` | 跨会话/离线验收 | `plan_13_verify_fbx.py`、`plan_16_audit_fbx.py`、`plan_17_export_probe.py`、`plan_12_rest_stability.py`、`plan_10_src_clean.py` |
+| `dcc/` | DCC 产线（Blender） | `blender_51_retarget_v4.py`（重定向主力）、`blender_30_batch_retarget.py`、`blender_22_strip_all.py`、`blender_split_weapon.py`、`blender_04_render.py`、`blender_80_orient_verify.py`、`blender_41/42/70`、`blender_60/61/62` |
+| `anim/` | **分层合并（上下半身拼装）** | `axw_10_merge.py`（★ 合并器，幂等，相位常量 `UPPER_PHASE_SHIFT`）、`axw_11_export.py`（AnimSequence→FBX + 逐帧骨位 JSON）、`axw_17_phase.py`（离线步态相位/循环接缝/落地复核）、`axw_19_audit.py`（武器偏置骨 + 引用链终检）、`axw_15_wire_bs.py`（混合空间换源）、`axw_16_final.py`（编辑器/资产状态自检）、`axw_12_bl_render.py` + `axw_03_bl_bbox.py`（Blender 渲染与网格包围盒审计） |
+| `anim/` | 待机 / 披风 / 战斧 / 跳跃 | `idle_20_build2.py`（★ 待机重建）、`idle_12_wire_abp.py`、`cape_04_save.py`（挂披风物理资产）、`axe_42_tune.py`（★ 握斧调参，幂等）、`axe_43_verify.py`、`axe_31_socket.py`、`jump_02_fix.py`、`axe_14_scene_capture_char.py`、`axe_21_apply_and_verify.py` |
+| `anim/` | 动画渲染/检查 | `anim_40_render_check.py`、`anim_47_abp_audit.py`、`anim_48_set_animclass.py`、`anim_51_pose_render.py`、`anim_78_make_videos.py`、`anim_80_axe_retarget.py`、`anim_81_layered_walk.py` |
+| `asset/` `core/` | 解包/导入/清理 | `extract_godking_assets.py`、`glb_list_anims.py`、`import_weapon_asset.py`、`core/plan_99_clean_temp.py` |
+| `archive/` | 一次性/已否路线 | 分子目录 `audio/ retarget/ anim/ ue_api/ misc/`；删除清单见 `archive/_deleted_step_probes.md` |
 
 ---
 
@@ -125,7 +132,9 @@
 | 🔴 FBX 导出前未复位 rest pose | bind pose 全错。清 pose + `bake_anim_use_all_actions=True`；逐 action 导出必坏 |
 | 🔴 `ue_remote.py` 脚本内容里出现 `xxx.py` 字样 | UE 误判为路径 ⇒ **静默不执行**。不要在 docstring 里写自己的文件名 |
 | 🔴 编辑器不 tick ⇒ `capture_scene()` 永不更新 | 按帧截图死路；节流 CVar/前台化/realtime 开关全无效 |
-| 🔴 Slate 模态框阻塞游戏线程 | Remote Execution 完全无响应。`editor_dialog.py --auto`：**先 `PostMessage WM_CLOSE`**（Esc 对部分框无效） |
+| 🔴 远程执行脚本里的 `time.sleep` **阻塞游戏线程** | `get_game_time_in_seconds` 不动是**测量假象**，不代表世界真没 tick；要跨 tick 分步执行用 `register_slate_post_tick_callback` |
+| 🔴 **在 slate post-tick 回调里 `destroy_actor` 会崩编辑器** | `EXCEPTION_ACCESS_VIOLATION`（已实测踩过）。清理放回主线程脚本，别写在回调里 |
+| 🔴 Slate 模态框阻塞游戏线程 | Remote Execution 完全无响应。`editor_dialog.py --auto`：**先 `PostMessage WM_CLOSE`**（Esc 对部分框无效）。该脚本的 `WM_CLOSE` 常量曾漏定义（崩溃重启卡 `Restore Packages` 时抛 `NameError`），已补 `0x0010` |
 | `unreal.Rotator` 位置参数 = (roll, pitch, yaw) | 一律关键字参数 |
 | socket 旋转组合 `World = Compose(Rel, Parent)` | 与直觉相反 |
 | `MathLibrary` 缺 `invert_rotator`/`rotate_vector`/`quat_*` | 坐标下降 + `compose_rotators` 纯数值求解 |
@@ -138,6 +147,7 @@
 ## 6. 相关文档
 
 - `Docs/Retarget/HANDOFF.md` —— 战术快照：现状数字、已证/已否、下一步
+- `Docs/Locomotion/AxeWalk_Layered_Merge.md` —— ★ 行走动画分层合并：产物、验收数字、步态相位、髋部零起伏
 - `Docs/Retarget/FOUNDATIONS.md`、`Retarget_Pose_Guide.md`、`FINAL_Retarget_Plan.html`
 - `Docs/Axe/Axe_Display_Fix_Report.html`
 - `.workbuddy/memory/` —— 每日过程日志 + `MEMORY.md`（长期硬约束）

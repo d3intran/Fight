@@ -25,6 +25,7 @@ psapi = ctypes.windll.psapi
 
 SW_RESTORE = 9
 WM_KEYDOWN, WM_KEYUP = 0x0100, 0x0101
+WM_CLOSE = 0x0010
 VK_RETURN, VK_ESCAPE = 0x0D, 0x1B
 
 CB = ctypes.WINFUNCTYPE(wt.BOOL, wt.HWND, wt.LPARAM)

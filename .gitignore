@@ -53,3 +53,7 @@ Scripts/_ue_remote_run.py
 Content/Character/Darius/Anims_TP_*/
 !Content/Character/Darius/Anims_TP_tw_feet/
 !Content/Character/Darius/Anims_TP_v2/
+
+# Mixamo 导入测试残留（2026-09-20，待确认是否要留）
+Content/Mixamo/
+Content/Mixamo_Upright/

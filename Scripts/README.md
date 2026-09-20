@@ -1,73 +1,74 @@
-# UE5 Fight 项目自动化与管线脚本库 (Scripts)
+# Scripts —— 脚本库索引
 
-本目录汇总了在虚幻引擎项目（God-King Darius 角色接入与武器管线处理）中开发与沉淀的高价值自动化脚本，供后续学习、复用与参考。
+> 2026-09-20 重构：按主题分目录；删掉 101 个一次性 UE API 探针（清单见 `archive/_deleted_step_probes.md`）。
+> 删除前的完整快照：`Saved/_backup_scripts_20260920_165857.zip`（本地备份，不进 git）。
 
----
+## 三条铁律
 
-## 核心管线脚本 (Core Pipeline)
+1. **UE 侧一律走 `ue_remote.py`**（唯一网关，UDP 发现 + TCP 执行）。
+2. **Python 一律 `uv run --no-project python <脚本>`**。
+3. **Bash 工具的 PATH 残缺** —— 每条命令前加 `export PATH="/usr/bin:/bin:/mingw64/bin:$PATH"`。
 
-### 1. `blender_split_weapon.py`
-- **功能**: 无头（Headless）Blender 脚本，自动从合体/绑骨角色 FBX 中提取武器网格。
-- **关键技术**:
-  - `bpy.ops.import_scene.fbx`: 无界面导入复杂模型。
-  - 网格分离与 LOD 筛选: 识别武器子网格（`LOD0.007`）并解除与骨骼的硬绑定。
-  - **旋转轴心重校准 (Pivot Calibration)**: 默认导出的模型轴心往往在原点或脚底。该脚本计算武器局部 Bounds，自动将 Pivot 平移对齐至主手握持点（手柄约 35% 黄金分割处），使挂接到角色 `hand_rSocket` 时天然贴合掌心。
-  - **坐标系转换**: Blender `+Z Up` 转虚幻引擎标准坐标系（厘米制、法线重计算与变换应用）。
-  - **无头执行方法**:
-    ```bash
-    blender -b -P blender_split_weapon.py -- <FBX_IN> <FBX_OUT>
-    ```
+## 目录结构
 
-### 2. `import_weapon_asset.py`
-- **功能**: 虚幻引擎内 Python 资产自动化导入与配置。
-- **关键技术**:
-  - 使用 `unreal.FbxFactory` 与 `unreal.AssetImportTask` 程序化导入 FBX。
-  - 自动创建 StaticMesh 碰撞体（Simplified Collision）。
-  - **程序化插槽添加 (Sockets)**: 通过 `unreal.StaticMeshSocket` 自动在武器 StaticMesh 上添加刀刃尖端（`Socket_Blade_Tip`）、刀刃中段打击点（`Socket_Blade_Edge`）和握柄底部（`Socket_Pommel`），为后续近战攻击判定（Trace/Hitbox）做好数据准备。
-  - 自动绑定材质实例 `MI_Darius_Axe`。
+| 目录 | 内容 | 代表脚本 |
+| :--- | :--- | :--- |
+| **（顶层）** | 入口 / 运维工具，**别移走**（全员按这个路径在用） | `ue_remote.py`（★ 网关）、`editor.deno.ts`（启停编辑器，`deno.json` 引用）、`editor_dialog.py`（关模态框）、`editor_focus.py`（窗口前置）、`disable_throttling.py` |
+| **`retarget/`** | LOL → 2XKO 重定向管线：IK Rig / Retargeter 标定、逐骨偏移实验回路、离线验收 | `ik_36_calibrate_retarget_pose`、`ik_37_verify_orientation`（★ 朝向验收器）、`ik_60_contact_audit`（★ 接触/落点审计）、`exp_cycle`（实验回路驱动器）、`blender_51_retarget_v4`、`plan_13/16/17` |
+| **`anim/`** | 动画资产的生产与验收：分层合并、待机、披风、战斧、跳跃参数、渲染检查 | `axw_10_merge`（★ 上/下半身分层合并器）、`axw_17_phase`（步态相位/接缝复核）、`idle_20_build2`、`axe_42_tune`（握斧调参）、`cape_04_save`（披风物理资产挂载）、`jump_02_fix`、`anim_78_make_videos` |
+| **`dcc/`** | Blender 侧工具（无头执行） | `blender_04_render`（预览渲染）、`blender_22_strip_all`（剔斧头几何）、`blender_split_weapon`、`blender_80_orient_verify` |
+| **`asset/`** | 资产解包 / 导入 | `extract_godking_assets`（一键解包全套 LOL 资产）、`import_weapon_asset`、`glb_list_anims` |
+| **`core/`** | 工程维护 | `plan_99_clean_temp`（清临时 actor 与 `/Game/Temp*`） |
+| **`archive/`** | **踩坑过程的证据链**，不是死代码 | 见 `archive/README.md`；子目录 `audio/ retarget/ anim/ ue_api/ misc/` |
+| `tools/`、`darius_extracted/` | 第三方二进制与解包中间产物 | **已 gitignore** |
 
-### 3. `extract_godking_assets.py`
-- **功能**: **一键全量解包与转换神王德莱厄斯全套官方资产**（动画、音效、全量中英文语音、特效粒子）。
-- **执行内容**:
-  - 自动扫描本地 LOL 客户端 WAD 包（`Darius.wad.client`、`Darius.zh_CN.wad.client`、`Darius.en_US.wad.client`）。
-  - 提取 46 个 `.anm` 动画并通过 `lol2gltf` 自动转换为标准 `.glb`（包含 46 动作合辑与 Run/Q/W/E/R 独立动画）。
-  - 自动解密并转换 Wwise `.bnk` 音效为 56 个标准无损 `.wav` 音频。
-  - 自动解包并转换 Riot `.wpk` 语音包为 225 个纯正中文语音 `.wav` 及 225 个英文语音 `.wav`。
-  - 产物集中归档至 `E:\UE\Assets\Darius_GodKing_LOL_Original`。
+## 常用命令
 
-### 4. `ue_remote.py`
-- **功能**: **轻量级虚幻引擎 Python 远程执行网关**。
-- **原理与机制**:
-  - 无需安装第三方 HTTP 插件，利用 UE 内置的 `Python Remote Execution` 协议。
-  - 发送 UDP 组播广播（Multicast 239.0.0.1:6766）寻找活跃的 Editor 实例节点。
-  - 建立 TCP Socket，以 JSON 协议发送 Python 代码字符串并在 GameThread 上无缝执行，捕获标准输出和异常。
-  - **使用方式**:
-    ```bash
-    python Scripts/ue_remote.py "import unreal; print(unreal.EditorLevelLibrary.get_editor_world().get_name())"
-    ```
+```bash
+# 编辑器
+deno task editor:up -- --hold        # 启动（停这个后台任务 = 杀编辑器）
+deno task editor:status
+uv run --no-project python Scripts/editor_dialog.py --auto      # 卡模态框时
 
----
+# 跑一个 UE 侧脚本
+uv run --no-project python Scripts/ue_remote.py Scripts/anim/axw_16_final.py
 
-## 视口与渲染调试脚本 (Viewport & Diagnostics)
+# 跑一个 Blender 脚本
+"<Blender 5.2>" -b -P Scripts/dcc/blender_04_render.py -- <FBX> <OUTDIR> <LABEL>
+```
 
-### 4. `disable_throttling.py`
-- **痛点解决**: 当 UE 处于后台时，编辑器视口默认会降低帧率甚至冻结渲染缓冲区（`HighResShot` 抓取到的帧 md5 完全一致，出现“假连续帧”）。
-- **执行命令**:
-  - `t.IdleWhenNotForeground 0` (后台不节流)
-  - `r.Editor.Viewport.Throttle 0`
-  - `Editor.bThrottleWhenHidden 0`
-  - 将所有 Viewport 客户端置为 `Realtime=True`。
+## 关键技术笔记（历史沉淀，值得复用）
 
-### 5. `shot_showcase_frontal.py` / `capture_axe_in_hand.py`
-- **机位与构图推导**:
-  - 在 UE 中，`CharacterMesh0` 的默认相对旋转通常为 `Yaw = -90°`（以面向正 X 轴）。
-  - 该脚本演示了如何使用几何推导计算摄影机世界坐标与 `LookAt` 俯仰角，自动对焦角色上半身、右手握持的战斧刃面与材质发光细节，完成自验抓图。
+### 武器分离与挂接 SOP
 
----
+1. **DCC**：`dcc/blender_split_weapon.py` 切分网格并**重定义握持原点**
+   （算武器局部 bounds，把 pivot 平移到手柄约 35% 处，挂到 `hand_rSocket` 时天然贴合掌心）。
+2. **UE 资产化**：`asset/import_weapon_asset.py` 导入 `SM_Darius_GodKing_Axe`，
+   自动加简化碰撞 + 3 个打击判定 socket（`Blade_Tip` / `Blade_Edge` / `Pommel`）+ 绑材质实例。
+3. **骨骼挂接**：在 `SK_Darius_GodKing` 的 `hand_r` 下建 `hand_rSocket`，设定握持朝向补偿。
+   ⚠️ socket 的 `relative_scale` 必须是 **0.01**（抵消骨架最外层 100× 缩放）。
+4. **隐藏原模**：`SK_Darius_GodKing` 材质槽 7（原地面斧头）指向全透明 Masked 材质 `M_Invisible`；
+   描边壳（槽 0）里的斧头副本要用 `blender_22_strip_all.py` 从几何上剔除（材质挡不住）。
+5. **蓝图挂载**：`BP_DariusCharacter` 里加 `StaticMeshComponent`，Attach 到 `hand_rSocket`。
 
-## 快速回顾：诺手武器分离流程 SOP
-1. **DCC 阶段**: 使用 `blender_split_weapon.py` 切分网格并重新定义手柄握持原点。
-2. **UE 资产化**: 通过 `import_weapon_asset.py` 导入 `SM_Darius_GodKing_Axe`，附加 3 个打击判定 Socket。
-3. **骨骼挂接**: 在 `SK_Darius_GodKing` 骨骼的 `hand_r` 骨骼下创建 `hand_rSocket`，设定初始握持朝向补偿。
-4. **原模型隐藏**: 在 `SK_Darius_GodKing` 的 Material Slot 7（原地面斧头网格）赋予全透明 Masked 材质 `M_Invisible`，原地面斧头完全消失。
-5. **角色蓝图挂载**: 在 `BP_DariusCharacter` 中添加 `StaticMeshComponent`（武器），Attach 到 `hand_rSocket`。
+### `ue_remote.py` 的两个坑
+
+- **脚本内容里出现 `xxx.py` 字样** ⇒ UE 会把整段内容误判成文件路径，**静默不执行**。
+  `ue_remote.py` 已修（先落盘再传路径），但**写脚本时别在 docstring 里写自己的文件名**。
+- **PIE 期间** `EditorAssetLibrary.load_asset` 会被拒（`The Editor is currently in a play mode`），
+  但 `unreal.load_object` / `unreal.find_object` 照常可用；`save_asset` 会返回 False。
+
+### 编辑器运维
+
+- **世界 tick 由 Realtime 视口的绘制驱动**：窗口被遮挡/最小化 ⇒ 世界不 tick ⇒
+  `SceneCapture2D.capture_scene()` 产出**姿势完全相同的假帧**（md5 全同）。
+  `disable_throttling.py` 治不了（那不是节流问题）。判据：`get_game_time_in_seconds()` 是否前进。
+- **Slate 模态框会阻塞游戏线程** ⇒ Remote Execution 完全无响应，现象像「编辑器没起来」。
+  `editor_dialog.py --auto`：先 `PostMessage WM_CLOSE`（Esc 对部分 Slate 框无效）。
+- **别在 slate post-tick 回调里 `destroy_actor`** —— 会 `EXCEPTION_ACCESS_VIOLATION` 崩编辑器。
+
+## 历史
+
+- `archive/README.md` —— 归档规则与分类说明
+- `archive/_deleted_step_probes.md` —— 2026-09-20 删除的 101 个一次性探针清单（含各自在探什么）
+- 过程日志：`.workbuddy/memory/YYYY-MM-DD.md`；长期约束：`.workbuddy/memory/MEMORY.md`

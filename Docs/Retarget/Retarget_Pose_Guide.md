@@ -95,7 +95,7 @@ difference between 'usable' and 'correct'**"*。
 
 ### 3.6 重导出
 12. **改完 retarget pose，之前导出的动画全部作废**（导出的是快照）⇒ 必须重跑批量重定向
-    （`Scripts/ik_11_batch_retarget.py` → `Scripts/ik_31_fix_root_scale.py`）
+    （`Scripts/retarget/ik_11_batch_retarget.py` → `Scripts/retarget/ik_31_fix_root_scale.py`）
 
 ### 3.7 一边调一边验
 13. 在 Retargeter 的 Asset Browser 里双击源动画实时预览；
