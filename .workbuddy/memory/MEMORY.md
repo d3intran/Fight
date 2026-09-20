@@ -6,8 +6,21 @@
 ## 环境与目录
 - Python 走 `uv run --no-project python`；JS/TS 走 `deno`。
 - Bash PATH 残缺：每条命令前 `export PATH="/usr/bin:/bin:/mingw64/bin:$PATH"`；`/tmp` 与 python 不互通，临时脚本写项目内文件。
-- 报告→`Docs/<主题>/`；中转→`Saved/`（不进 git，**交付物严禁**）；脚本→`Scripts/`（一次性在 `archive/`）；改资产前备份 + git 检查点。
-- 关卡基线 **7 actor**；跑完 UE 脚本必须清临时 actor 与 `/Game/Temp*`（`plan_99_clean_temp.py`）；清理时 name/label 都要匹配。
+- 报告→`Docs/<主题>/`；中转→`Saved/`（不进 git，**交付物严禁**）；改资产前备份 + git 检查点。
+- **`Scripts/` 布局（2026-09-20 重构，详见 `Scripts/README.md`）**：
+  - **顶层只留入口/运维**：`ue_remote.py`（唯一网关）、`editor.deno.ts`、`editor_dialog.py`、`editor_focus.py`、`disable_throttling.py` —— **别移走**（`deno.json` / `exp_cycle.py` 按这些路径调用）。
+  - 主题子目录：`retarget/`（重定向环+验收器+实验回路）、`anim/`（动画生产/验收：分层合并、待机、披风、战斧、跳跃）、`dcc/`（Blender）、`asset/`（解包/导入）、`core/`（工程维护）。
+  - `archive/` 再分 `audio/ retarget/ anim/ ue_api/ misc/`（**证据链，不是死代码**；子目录里脚本的路径引用已失效）。
+- 关卡基线 **7 actor**；跑完 UE 脚本必须清临时 actor 与 `/Game/Temp*`（`Scripts/core/plan_99_clean_temp.py`）；清理时 name/label 都要匹配。
+
+## 动画分层合并（2026-09-20 打通，见 `Docs/Locomotion/AxeWalk_Layered_Merge.md`）
+- **UE 侧直接改骨骼轨道**（`AnimationDataController`）比进 Blender 省事：`duplicate_asset` 基准 → 按 `spine_01` 子树切上下半身 → `set_bone_track_keys` → FK 反解约束骨（`weapon_jnt`）。
+- `AnimationLibrary.get_raw_track_data` 对压缩动画返回空 ⇒ 用 `get_bone_poses_for_frame`（一次取全部骨）。
+- **FK 必须把最外层骨补进链**，否则丢掉 ref pose 的 `scale=100`，所有距离缩 100 倍、跨资产比高度就错。
+- `find_bone_path_to_root` 返回 `[骨,父,…,root]`；FName **大小写敏感**（轨道名小写 vs 路径里的 `LOD0`）⇒ 建 `.lower()` 映射。
+- 拼上下半身**必须量腿-臂相位**（一阶谐波，自然走路 ≈180°）；相位对位移**非线性**，改完必须复测；用**循环**平移还能顺带把循环接缝收到 0。
+- 量腿是否交叉**必须自校准**：用锁骨线定角色右轴（actor 轴与网格轴差 90°，直接用会得出相反结论）。
+- 武器世界姿态 = **SkeletalMesh 上那个 socket** 的姿态（`mesh.find_socket`，不在 Skeleton）；socket `relative_scale` 必须 0.01；改 socket 的脚本**必须幂等**（从原始常量算，别读当前值）。
 
 ## UE 自动化坑
 - `ue_remote.py` 是唯一网关：脚本 docstring 里写自己的 .py 文件名 ⇒ **静默不执行**。
