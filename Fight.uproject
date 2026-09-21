@@ -33,6 +33,13 @@
 		{
 			"Name": "DataflowAgent",
 			"Enabled": true
+		},
+		{
+			"Name": "AllToolsets",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
 		}
 	]
 }

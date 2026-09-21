@@ -12,7 +12,7 @@ ew = ues.get_editor_world()
 destroyed = 0
 for a in unreal.GameplayStatics.get_all_actors_of_class(ew, unreal.Actor):
     lb = a.get_actor_label()
-    if lb in ["LocoShotCapture", "CapeShotCapture"]:
+    if lb in ["LocoShotCapture", "CapeShotCapture", "JumpShotCapture"]:
         eas.destroy_actor(a)
         destroyed += 1
 
