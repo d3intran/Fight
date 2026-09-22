@@ -39,11 +39,20 @@
   切 `MaxWalkSpeed` 220↔440；ABP Idle 状态序列已换 `A_Darius_idle1`。
 - **披风碰撞修复**：`SK_Darius_GodKing_Physics` 原本 12 个球全在骨骼原点（长骨两端 8~13cm 无覆盖、
   手臂无 body）⇒ 腿的 4 根长骨换成**沿骨全长胶囊**（`wp_101`，脚本库有）。
-- **遗留**：① BP 的 Parent Socket 需手点 `weapon_jnt_l`（编辑器曾回滚一次，改完必须 Compile+Save）；
-  ② Foot IK 未做（run 约 1/4 帧穿地至 -31.7cm 交给它）；③ 对称度残余 1.16 待查 IK goal。
+- **遗留与下一步（2026-09-22 下午更新）**：
+  - ① BP 的 Parent Socket 需手点 `weapon_jnt_l`（编辑器曾回滚一次，改完必须 Compile+Save）；
+  - ② 对称度残余 1.16（源 0.92）待查 IK goal 与源/目标腿骨链长比例；
+  - ③ **穿地（run 支撑脚 min -31.7，约 1/4 帧数）必须用 ABP 运行时 Foot IK 解决**。
+    ⚠️ **数据侧四条路已全部实测证伪，禁止再试**：逐帧 root 平移（对称 1.16→1.92，全局平移牵连双脚）、
+    骨盆压缩（1.22→1.68，左右相位不同）、绕髋刚性旋转（41cm 需 27°+ 打满上限不够）、
+    两骨 IK 烘焙（蹬直帧 pole 向量退化，脚被甩到 113cm）。过程与恢复脚本见
+    `wp_108_foot_ik_bake.py` / `wp_109_restore_tracks.py`（保留作教训与应急工具）。
+    下一步实现要点：查 `ABP_Darius_Test` 里 `AnimGraphNode_ControlRig` 挂的 Rig →
+    CR 加 Foot IK 或 ABP 加 `TwoBoneIK`+trace；平地可先不 trace（地面 z=0）；
+    验收 = `wp_94`（min ≥ 0）+ `wp_102`（对称不回退）+ PIE 视觉。
 
 ### 0.2 下一阶段核心战役（战略跃迁）
-**资产与表现打样已经稳定，从本阶段起，全面进入【基于现代 C++ 的核心战斗玩法框架】研发**：
+**M2 动画管线已通（§0.1b），表现层仅剩 Foot IK 一项收尾（见 §0.1b 遗留③）。完成它之后，全面进入【基于现代 C++ 的核心战斗玩法框架】研发**：
 1. **C++ 角色与输入框架**：创建 `AFightCharacter` 与 `AFightPlayerController`，基于 Enhanced Input 建立输入动作与机位控制；
 2. **移动与身位派生**：继承 `UCharacterMovementComponent` 实现冲刺（Sprint）、闪避翻滚（Dodge/Roll）与无敌帧；
 3. **战斗连招与输入缓冲器**：建立 C++ Input Buffer 预输入窗口、连招派生树、打击检测扫掠（Hitbox Sweep）；
