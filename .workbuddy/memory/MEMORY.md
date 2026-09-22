@@ -132,7 +132,7 @@
   ② **重写前必须 `remove_bone_track`**（否则读到上次烘焙值 ⇒ 复合污染）。
 - BP 侧 `WeaponAxe` 相对变换 = 「axe mesh 相对武器骨」的固定偏移：
   `loc=(0,-0.8383,0.1249)`（源 `Axe_Head` 相对 `Weapon` 84.76cm×0.01）、`rot=单位阵`、`scale=0.01`。
-- 🖐️ **Parent Socket 确实无 Python API**（`wp_52` 实测 `AttachSocketName` 写不进）⇒ 只能手点。
+- 🖐️ **Parent Socket 确实无 Python API**（`wp_52` 实测 `AttachSocketName` 写不进）⇒ 只能手点；用户已改好并保存在 BP。⚠️ 经 SubobjectData 读 BP 组件可能拿到 **CDO 旧值**（未重编译时），与 PIE/uasset 矛盾时以后者为权威。
 - **源是右手武器**（44/46 条 `Weapon` 离 `R_Hand` 更近；仅 `death`(已脱手) 与 `joke_loop` 模糊）。
 - **源里握法是动画数据**：46 条片段 **17 条刚性**（idle/walk/run/turn，0.000cm/0.000°）、**29 条有漂移**
   （attack1 42cm/82°、attack2 46cm/90°、spell4_5 54.8cm/140°、death **404cm/179.8°**）。

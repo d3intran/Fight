@@ -109,6 +109,10 @@ L("   产物总数 %d；删掉假轨 %d 条" % (total, len(fixed)))
 L("   复核 scale == 100 通过 %d 条；异常 %d 条 %s" % (ok_cnt, len(bad), bad[:8]))
 
 # ---------------------------------------------------------------- 4. BP socket 复查
+# ⚠️ 2026-09-22 实测：本段读数可能与实际不符——用户已把 Parent Socket 改成 weapon_jnt_l
+#    （uasset 字符串 + PIE 斧头位置双重验证），但这里打印出 hand_rSocket。
+#    SubobjectData 枚举到的对象不一定是 SCS 生效模板，勿据此让用户重改。
+#    PIE 表现才是权威：斧头在 weapon_jnt_l 上位置正常。
 sock = None
 sub = unreal.get_engine_subsystem(unreal.SubobjectDataSubsystem)
 bp = unreal.load_object(None, BP)
@@ -121,7 +125,7 @@ for h in sub.k2_gather_subobject_data_for_blueprint(bp):
         s = oo.get_editor_property("relative_scale3d")
         L("")
         L("=== BP WeaponAxe ===")
-        L("   socket = '%s'    (期望 weapon_jnt_l)" % sock)
+        L("   socket = '%s'    (此读数可能是 CDO 旧值; 权威判定看 PIE 斧头位置/uasset)" % sock)
         L("   rel_loc = (%.6f, %.6f, %.6f)   rel_scale = (%.4f, %.4f, %.4f)" % (
             v.x, v.y, v.z, s.x, s.y, s.z))
 

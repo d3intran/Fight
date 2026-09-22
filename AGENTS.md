@@ -40,7 +40,10 @@
 - **披风碰撞修复**：`SK_Darius_GodKing_Physics` 原本 12 个球全在骨骼原点（长骨两端 8~13cm 无覆盖、
   手臂无 body）⇒ 腿的 4 根长骨换成**沿骨全长胶囊**（`wp_101`，脚本库有）。
 - **遗留与下一步（2026-09-22 下午更新）**：
-  - ① BP 的 Parent Socket 需手点 `weapon_jnt_l`（编辑器曾回滚一次，改完必须 Compile+Save）；
+  - ① ~~BP 的 Parent Socket 需手点~~ **已确认用户早已改好并保存在 BP 里**。
+    ⚠️ **读 BP 组件属性的坑**：`get_default_object()`（CDO）上的组件在 SCS 改动未重新 Compile 前
+    仍是旧值——wp_60/wp_51 读 CDO 打印出 `hand_rSocket` 是**假象**（PIE 用 SCS，实际已是
+    `weapon_jnt_l`，`uasset` 字符串与 PIE 斧头位置双重验证）。**读用户改动必须走 SCS 节点**。
   - ② 对称度残余 1.16（源 0.92）待查 IK goal 与源/目标腿骨链长比例；
   - ③ **穿地（run 支撑脚 min -31.7，约 1/4 帧数）必须用 ABP 运行时 Foot IK 解决**。
     ⚠️ **数据侧四条路已全部实测证伪，禁止再试**：逐帧 root 平移（对称 1.16→1.92，全局平移牵连双脚）、
@@ -83,7 +86,7 @@
   **relative_location = (0, -0.838344, 0.124911)**、relative_rotation = 单位阵、**relative_scale = 0.01**。
   该值 = 「axe mesh 原点对齐源 `Axe_Head` 骨」换算，配合 `weapon_jnt_l` 的烘焙握法轨使用。
   ⚠️ 旧的 `hand_rSocket` 配置（rot=(-13.7,-35.1,121.7) 等）已废弃 —— 那是挂在解剖左手上的错误锚点。
-  ⚠️ Parent Socket **无 Python API** 只能编辑器手点；改完必须 Compile + Save（有一次未保存被回滚的教训）。
+  ⚠️ Parent Socket **无 Python API** 只能编辑器手点（2026-09-22 确认用户已改好并保存在 BP；wp_60/wp_51 经 SubobjectData 读到的 hand_rSocket 是 CDO 旧值假象，勿据此重改）。
 - **握法是动画数据**：46 条 LOL 线动画的 `weapon_jnt_l` 局部轨由 `wp_50` 从源 `R_Hand/Weapon`
   离线烘焙（`L_raw(t)=K∘(W_R_Hand⁻¹∘W_Weapon)`，K 只取旋转、平移置零）；
   验收硬指标：`|L_raw(t0)|` 必须等于源 `Weapon↔R_Hand` 距离（17.37/19.51/12.63 cm 逐条吻合）。
